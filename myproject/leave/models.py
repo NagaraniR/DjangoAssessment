@@ -31,5 +31,5 @@ class LeaveForm(models.Model):
 	no_days_or_hours = models.IntegerField()
 	current_balance = models.FloatField(max_length=10)
 	applied = models.IntegerField()
-	balance_after_approval = models.IntegerField()
+	#balance_after_approval = models.IntegerField()
 	#lop = models.IntegerField()
