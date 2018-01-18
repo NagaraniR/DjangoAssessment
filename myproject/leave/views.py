@@ -14,4 +14,4 @@ from django.http import HttpResponse, JsonResponse
 def get(request):
 	query = LeaveForm.objects.all()
 	serializer = UserLeave(query, many=True)
-	return JsonResponse(serializer.data, safe=False)
+	#return JsonResponse(serializer.data, safe=False)
