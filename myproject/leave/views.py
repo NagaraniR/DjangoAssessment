@@ -13,3 +13,5 @@ def get(request):
 	query = LeaveRequest.objects.all()
 	serializer = UserLeave(query, many=True)
 	return JsonResponse(serializer.data, safe=False)
+
+#class ApplyLeave()
