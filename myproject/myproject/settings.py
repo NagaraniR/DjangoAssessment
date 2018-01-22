@@ -83,6 +83,7 @@ DATABASES = {
         'PASSWORD': 'root',                  # Not used with sqlite3.
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '3306',
+        'HOST': '127.0.0.1',
     }
 }
 # Password validation
