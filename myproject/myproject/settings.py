@@ -83,7 +83,7 @@ DATABASES = {
         'PASSWORD': 'root',                  # Not used with sqlite3.
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '3306',
-    }
+    } 
 }
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
