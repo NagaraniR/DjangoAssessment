@@ -7,6 +7,9 @@ class Designation(models.Model):
 	code = models.IntegerField()
 	name = models.CharField(max_length=30)
 
+	def __str__(self):
+		return self.name
+
 class User(models.Model):
 	code = models.IntegerField()
 	name = models.CharField(max_length = 30)
@@ -17,15 +20,24 @@ class User(models.Model):
 		on_delete=models.CASCADE)
 	reporting_senior =models.CharField(max_length = 30)
 
+	def __str__(self):
+		return self.name
+
 class Status(models.Model):
 	code = models.IntegerField()
 	status = models.CharField(max_length=30)  
 
+	def __str__(self):
+		return self.status
+
 class LeaveType(models.Model):
 	code = models.IntegerField()
 	catagory = models.CharField(max_length=30)
+
+	def __str__(self):
+		return self.catagory
 	
-class LeaveCredit(object):
+class LeaveCredit(models.Model):
 	user_name = models.ForeignKey(User,
 		on_delete=models.CASCADE)
 	leave_type = models.ForeignKey(LeaveType,
