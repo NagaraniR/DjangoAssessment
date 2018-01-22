@@ -44,6 +44,9 @@ class LeaveCredit(models.Model):
 		on_delete=models.CASCADE)
 	available = models.IntegerField()
 
+	def __str__(self):
+		return str(self.user_name), 
+
 class LeaveRequest(models.Model):
 	employee_name = models.ForeignKey(User, null=True, related_name='employee_name')
 	reporter = models.ForeignKey(User, null=True, related_name='reporter')
@@ -54,3 +57,6 @@ class LeaveRequest(models.Model):
 	reason = models.CharField(max_length=500)
 	status = models.ForeignKey(Status,
 		on_delete=models.CASCADE)
+
+	def __str__(self):
+		return str(self.employee_name)

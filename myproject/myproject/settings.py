@@ -81,7 +81,6 @@ DATABASES = {
         'NAME': 'leave_application',
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'root',                  # Not used with sqlite3.
-        # Set to empty string for default. Not used with sqlite3.
         'PORT': '3306',
     } 
 }

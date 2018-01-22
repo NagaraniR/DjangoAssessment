@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.views import APIView
-from models import User, LeaveRequest
+from models import LeaveRequest
 from serializers import UserLeave
 from django.http import HttpResponse, JsonResponse
 
