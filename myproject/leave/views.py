@@ -9,10 +9,7 @@ from serializers import UserLeave
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
 
-def apply(request, employee_name):
-	queryset = User.objects.filter(name = employee_name)
+def apply(request, name):
+	queryset = User.objects.filter(name=name)
 	serializer = UserLeave(queryset, many=True)
 	return JsonResponse(serializer.data, safe=False)
-	
-
-	
