@@ -5,4 +5,4 @@ from models import LeaveRequest
 class UserLeave(serializers.ModelSerializer):
 	class Meta:
 		model = LeaveRequest
-		fields = '__all__'
+		fields = 'employee_name', 

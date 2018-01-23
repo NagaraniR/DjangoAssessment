@@ -45,7 +45,7 @@ class LeaveCredit(models.Model):
 	available = models.IntegerField()
 
 	def __str__(self):
-		return str(self.user_name), 
+		return str(self.user_name)
 
 class LeaveRequest(models.Model):
 	employee_name = models.ForeignKey(User, null=True, related_name='employee_name')
