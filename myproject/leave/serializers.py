@@ -1,8 +1,13 @@
 from rest_framework import serializers
-from models import User
+from models import User, LeaveType
 
 
-class UserLeave(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = '__all__'
+		fields = ('name', 'reporting_senior')
+
+class LeaveSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = LeaveType
+		fields = ('catagory',)
