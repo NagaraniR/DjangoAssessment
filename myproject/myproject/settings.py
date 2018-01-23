@@ -82,8 +82,9 @@ DATABASES = {
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'root',                  # Not used with sqlite3.
         'PORT': '3306',
-    } 
-}
+        'HOST': '127.0.0.1',
+    }
+} 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

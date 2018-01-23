@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-	url(r'', views.get, name='get'),
+	url(r'^apply/(?P<employee_name>\w+)/$', views.apply, name='apply'),
 ]

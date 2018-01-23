@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from models import LeaveRequest
+from models import User
 
 
 class UserLeave(serializers.ModelSerializer):
 	class Meta:
-		model = LeaveRequest
-		fields = 'employee_name', 
+		model = User
+		fields = '__all__'
