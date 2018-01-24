@@ -18,12 +18,17 @@ class ApplyForm(generics.ListCreateAPIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, employee_name):
-    	import pdb;pdb.set_trace()
+
+    	#import pdb;pdb.set_trace()
     	user = User.objects.filter(name=employee_name)
-        serializer = UserSerializer(user, many=True)
-        data = JSONRenderer().render(serializer.data)
-        parsed = json.loads(data)
-        return Response({'user_data': parsed}, template_name='leave/apply.html')
+    	credits = LeaveCredit.objects.filter(user_name__name=employee_name)
+        user_serializer = UserSerializer(user, many=True)
+        credit_serializer = LeaveCreditSerializer(credits, many=True )
+        user_data = JSONRenderer().render(user_serializer.data)
+        name_info=json.loads(user_data)
+        credits_data = JSONRenderer().render(credit_serializer.data)
+        leave_credit=json.loads(credits_data)
+        return Response({'user_data': name_info, 'credits_data':leave_credit}, template_name='leave/apply.html')
 
 # class ApplyForm(generics.ListCreateAPIView):
 
@@ -50,4 +55,3 @@ class ApplyForm(generics.ListCreateAPIView):
 #         serializer = UserSerializer(user, many=True)
 #         data = serializer.data
 #         return Response({'user_data':data},apply.html)
-	
