@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Leave application</title>
+	<meta charset="UTF-8">
+	<title>Leave application</title>
 </head>
 
 <body>
+<<<<<<< HEAD
 <h1>User details</h1>
 <ul>
     {% for data in user_data %}
@@ -16,6 +17,35 @@
     <li>{{data}}</li>
     {% endfor %}
 </ul>
+=======
+	<form>
+		{% for data in user_data %}
+		Name: <input type="text", name="name" value={{data.name}}>
+		Reporter: <input type="text", name="reporter" value="{{data.reporting_senior}}">
+		{% endfor %}
+	</form>
+
+>>>>>>> 55755d1b4a60753b7c75208a54a387377b6152ed
 </body>
 
-</html> 
+
+
+<!-- <!DOCTYPE html>
++<html>
++<head>
++<meta charset="UTF-8">
++<title>Leave application</title>
++</head>
++
++<body>
++<h1>User details</h1>
++<ul>
++    {% for data in user_data %}
++    <li>{{ data }}</li>
++    {% endfor %}
++</ul>
++</body>
++
++</html> -->
+
+

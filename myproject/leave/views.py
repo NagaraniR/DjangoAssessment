@@ -11,7 +11,7 @@ from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
+import json
 class ApplyForm(generics.ListCreateAPIView):
 
     queryset = User.objects.all()
@@ -22,12 +22,11 @@ class ApplyForm(generics.ListCreateAPIView):
     	credits = LeaveCredit.objects.filter(user_name__name=employee_name)
         user_serializer = UserSerializer(user, many=True)
         credit_serializer = LeaveCreditSerializer(credits, many=True )
-        user_data = user_serializer.data
-        credits_data = credit_serializer.data
-        return Response({'user_data': user_data, 'credits_data':credits_data}, template_name='leave/apply.html')
-
-    def post(self, request):
-    	
+        user_data = JSONRenderer().render(user_serializer.data)
+        name_info=json.loads(user_data)
+        credits_data = JSONRenderer().render(credit_serializer.data)
+        leave_credit=json.loads(credits_data)
+        return Response({'user_data': name_info, 'credits_data':leave_credit}, template_name='leave/apply.html')
 
 
 # class ApplyForm(generics.ListCreateAPIView):
