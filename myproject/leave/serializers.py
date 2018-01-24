@@ -1,9 +1,5 @@
 from rest_framework import serializers
-<<<<<<< HEAD
-from models import LeaveRequest, User
-=======
 from models import User, LeaveCredit
->>>>>>> 28df6504d02b6d1322b269961832646c425cd5fe
 
 
 class UserSerializer(serializers.ModelSerializer):
