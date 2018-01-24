@@ -19,9 +19,16 @@ class ApplyForm(generics.ListCreateAPIView):
 
     def get(self, request, employee_name):
     	user = User.objects.filter(name=employee_name)
-        serializer = UserSerializer(user, many=True)
-        data = serializer.data
-        return Response({'user_data': data}, template_name='leave/apply.html')
+    	credits = LeaveCredit.objects.filter(user_name__name=employee_name)
+        user_serializer = UserSerializer(user, many=True)
+        credit_serializer = LeaveCreditSerializer(credits, many=True )
+        user_data = user_serializer.data
+        credits_data = credit_serializer.data
+        return Response({'user_data': user_data, 'credits_data':credits_data}, template_name='leave/apply.html')
+
+    def post(self, request):
+    	
+
 
 # class ApplyForm(generics.ListCreateAPIView):
 

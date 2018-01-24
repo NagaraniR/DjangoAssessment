@@ -8,5 +8,5 @@ from leave import views
 # 	# url(r'^apply/credits/(?P<employee_name>\w+)/$', ApplyForm.as_views(), name='get_credits'),
 # ]
 urlpatterns = [
-url(r'^apply/user/(?P<employee_name>\w+)/$', views.ApplyForm.as_view(), name= 'apply'),
+	url(r'^apply/user/(?P<employee_name>\w+)/$', views.ApplyForm.as_view(), name= 'apply'),
 ]
