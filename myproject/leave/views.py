@@ -18,13 +18,12 @@ class ApplyForm(generics.ListCreateAPIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, employee_name):
-    	#import pdb;pdb.set_trace()
+    	import pdb;pdb.set_trace()
     	user = User.objects.filter(name=employee_name)
         serializer = UserSerializer(user, many=True)
         data = JSONRenderer().render(serializer.data)
         parsed = json.loads(data)
         return Response({'user_data': parsed}, template_name='leave/apply.html')
-
 
 # class ApplyForm(generics.ListCreateAPIView):
 
