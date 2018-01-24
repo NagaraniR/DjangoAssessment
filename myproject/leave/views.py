@@ -11,17 +11,19 @@ from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
+import json
 class ApplyForm(generics.ListCreateAPIView):
 
     queryset = User.objects.all()
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, employee_name):
+    	#import pdb;pdb.set_trace()
     	user = User.objects.filter(name=employee_name)
         serializer = UserSerializer(user, many=True)
-        data = serializer.data
-        return Response({'user_data': data}, template_name='leave/apply.html')
+        data = JSONRenderer().render(serializer.data)
+        parsed = json.loads(data)
+        return Response({'user_data': parsed}, template_name='leave/apply.html')
 
 
 # class ApplyForm(generics.ListCreateAPIView):
