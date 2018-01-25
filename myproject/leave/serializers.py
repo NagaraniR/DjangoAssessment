@@ -5,7 +5,7 @@ from models import User, LeaveCredit, LeaveRequest
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = "__all__"
+		fields = ('name', 'reporting_senior')
 
 class LeaveCreditSerializer(serializers.ModelSerializer):
 	leave_type_name = serializers.CharField(source='leave_type.catagory')
@@ -13,6 +13,7 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 		model = LeaveCredit
 		fields = ('leave_type_name', 'available')
 
+<<<<<<< HEAD
 
 
 
@@ -27,3 +28,24 @@ class LeaveRequestSerializer(serializers.ModelSerializer):
 		model=LeaveRequest
 		fields = ('employee_name', 'reporter', 'leave_type_name', 'from_date', 
 			'to_date', 'no_days', 'reason', 'approval_status')
+=======
+# class UserDetailsSerializers(serializers.Serializer):
+# 	user_details = UserSerializer(many=True)
+# 	leave_credits = LeaveCreditSerializer(many=True)
+				
+
+
+
+# class TweetSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Tweet
+
+# class ArticleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Article
+
+# class TimelineSerializer(serializers.Serializer):
+#     tweets = TweetSerializer(many=True)
+#     articles = ArticleSerializer(many=True)
+
+>>>>>>> ea1300ec5a970e21e6e871aec82ce6c84b134365

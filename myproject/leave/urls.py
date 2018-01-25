@@ -8,6 +8,12 @@ from leave import views
 # 	# url(r'^apply/credits/(?P<employee_name>\w+)/$', ApplyForm.as_views(), name='get_credits'),
 # ]
 urlpatterns = [
+<<<<<<< HEAD
 	url(r'^apply/user/(?P<employee_name>\w+)/$', views.ApplyForm.as_view(), name= 'apply'),
 	url(r'^approval/(?P<employee_name>\w+)/$', views.ApprovalForm.as_view(), name='approval'),
+=======
+	url(r'^apply/user/(?P<employee_name>\w+)/$', views.UserView.as_view(), name= 'user'),
+	url(r'^apply/credits/(?P<employee_name>\w+)/$', views.LeaveCreditView.as_view(), name= 'user'),
+	
+>>>>>>> ea1300ec5a970e21e6e871aec82ce6c84b134365
 ]

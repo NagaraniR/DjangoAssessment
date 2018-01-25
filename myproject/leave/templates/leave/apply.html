@@ -13,8 +13,14 @@
 <body>
 	<form>
 		{% for data in user_data %}
+<<<<<<< HEAD
 		Name: <input type="text", name="name" value={{data.name}}><br>
 		Reporter: <input type="text", name="reporter" value="{{data.reporting_senior}}">
+=======
+		Name: {{data.name}}
+		<br>
+		Reporter: {{data.reporting_senior}}
+>>>>>>> ea1300ec5a970e21e6e871aec82ce6c84b134365
 		{% endfor %}
 	</form>
 </body>
