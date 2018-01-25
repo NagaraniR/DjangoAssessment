@@ -9,4 +9,5 @@ from leave import views
 # ]
 urlpatterns = [
 	url(r'^apply/user/(?P<employee_name>\w+)/$', views.ApplyForm.as_view(), name= 'apply'),
+	url(r'^approval/(?P<employee_name>\w+)/$', views.ApprovalForm.as_view(), name='approval'),
 ]

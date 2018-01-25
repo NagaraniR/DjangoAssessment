@@ -4,28 +4,19 @@
 	<meta charset="UTF-8">
 	<title>Leave application</title>
 </head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div class="container" role="banner">
+	<h2> Leave Application</h2>
+</div>
 
 <body>
-<<<<<<< HEAD
-<h1>User details</h1>
-<ul>
-    {% for data in user_data %}
-    <li>{{ data }}</li>
-    {% endfor %}
-    
-    {% for data in credits_data %}
-    <li>{{data}}</li>
-    {% endfor %}
-</ul>
-=======
 	<form>
 		{% for data in user_data %}
-		Name: <input type="text", name="name" value={{data.name}}>
+		Name: <input type="text", name="name" value={{data.name}}><br>
 		Reporter: <input type="text", name="reporter" value="{{data.reporting_senior}}">
 		{% endfor %}
 	</form>
-
->>>>>>> 55755d1b4a60753b7c75208a54a387377b6152ed
 </body>
 
 
