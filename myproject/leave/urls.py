@@ -11,5 +11,12 @@ urlpatterns = [
 	url(r'^user/(?P<employee_name>\w+)/$', views.UserView.as_view(), name= 'user'),
 	url(r'^credits/(?P<employee_name>\w+)/$', views.LeaveCreditView.as_view(), name= 'credits'),
 	#url(r'^apply/$', views.ApplyLeave.as_view(), name="apply"),
+
+	url(r'^apply/user/(?P<employee_name>\w+)/$', views.ApplyForm.as_view(), name= 'apply'),
+	url(r'^approval/(?P<employee_name>\w+)/$', views.ApprovalForm.as_view(), name='approval'),
+
+	# url(r'^apply/user/(?P<employee_name>\w+)/$', views.UserView.as_view(), name= 'user'),
+	# url(r'^apply/credits/(?P<employee_name>\w+)/$', views.LeaveCreditView.as_view(), name= 'user'),
+
 	
 ]
