@@ -1,38 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Leave application</title>
+<title>JavaScript - read JSON from URL</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 </head>
 
 <body>
-	<form>
-		{% for data in user_data %}
-		Name: {{data.name}}
-		<br>
-		Reporter: {{data.reporting_senior}}
-		{% endfor %}
-	</form>
+    <h1 style="color:blue;"><center> Leave Application </center></h1>
+    <label for="name">Name:</label>
+    <input name="user" id="user"><br>
+    <label for="reporter">Reporting Senior:</label>
+    <input name="reporter" id="reporter"><br>
+    <script type="text/javascript">
+        $(function(){
+            // var $user_name = $('#user')
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:8000/leave/user/naga/?format=json',
+                success: function(data){
+                    $.each(data, function(index, data){
+                        $("#user").val(data.name)
+                        $("#reporter").val(data.reporting_senior)
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- <script>
+        function delete_fun(id){
+            $.ajax({ 
+                url: '/birthday/delete_employee/', 
+                type: 'GET',
+                dataType: 'json' 
+                success: function(json) {
+                    location.reload(); 
+                    $("#name").html(json.name);
+                   }});
+    </script> -->
+    
 </body>
+</html>
 
 
-
-<!-- <!DOCTYPE html>
-+<html>
-+<head>
-+<meta charset="UTF-8">
-+<title>Leave application</title>
-+</head>
-+
-+<body>
-+<h1>User details</h1>
-+<ul>
-+    {% for data in user_data %}
-+    <li>{{ data }}</li>
-+    {% endfor %}
-+</ul>
-+</body>
-+
-+</html> -->
-
-
+<!-- <form>
+        Name:<br>
+        <input type="text" name="name"><br>
+        Reporting Senerior:<br>
+        <input type="text" name="repoting Senerior"><br>
+        From Date: <input type="text" name="date"><br>
+    </form> -->

@@ -22,6 +22,11 @@ class LeaveCreditView(APIView):
         credit_serializer = LeaveCreditSerializer(credits, many=True )
         return Response(credit_serializer.data)
 
+# @api_view(['GET', 'POST'])
+# def apply_leave(self, request):
+#     return
+
+
 
             
     	#import pdb;pdb.set_trace()
