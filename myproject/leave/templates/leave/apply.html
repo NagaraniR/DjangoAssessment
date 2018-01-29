@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>JavaScript - read JSON from URL</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <title>JavaScript - read JSON from URL</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
 
+    <script>
+        $( function() {
+            $( "#fromDate" ).datepicker({dateFormat: 'dd-mm-yy'});
+            $( "#toDate" ).datepicker({dateFormat: 'dd-mm-yy'});
+            var start = $("#fromDate").val();
+            var end = $("#toDate" ).val();
+            var diff = new Date(end - start);
+            var day = diff/1000/60/60/24;
+            $("#days").val(day);
+            // console.log(days)
+            // alert(Math.round(days));
+        } );
+    </script>
 </head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-<div class="container" role="banner">
-	<h2> Leave Application</h2>
-</div>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ -->
 
 <body>
     <h1 style="color:blue;"><center> Leave Application </center></h1>
@@ -17,38 +31,77 @@
     <input name="user" id="user"><br>
     <label for="reporter">Reporting Senior:</label>
     <input name="reporter" id="reporter"><br>
+    <select id="credits" >
+        <option value="select">Select Leave</option>
+    </select><br>
+    <label for="date">From Date:</label>
+    <input id="fromDate" type="text"><br>
+    <label for="date">To Date:</label>
+    <input id="toDate" type="text" onselect="myfunc()"><br>
+    <label for="day">Days:</label>
+    <input id="days" type="text"><br>
     <script type="text/javascript">
+        // $("#fromDate").datepicker({
+        //     dateFormat: 'dd-mm-yy'
+        // }); 
+        // $("#toDate").datepicker({
+        //     alert("nithya");
+        //     dateFormat: 'dd-mm-yy'
+
+        //     onSelect: function () {
+        //         alert("nithya");
+        //         myfunc();
+        //     }
+        // }); 
+        // <script>
+        // $( function() {
+        //     $( "#fromDate" ).datepicker({dateFormat: 'dd-mm-yy'});
+        //     $( "#toDate" ).datepicker({dateFormat: 'dd-mm-yy'});
+        //     onSelect: function () {
+        //         myfunc();
+        //     }
+        // } );
+        // function myfunc(){
+        //     alert("hi");
+        //     var start= $("#fromDate").datepicker("getDate");
+        //     var end= $("#toDate").datepicker("getDate");
+        //     days = (end- start) / (1000 * 60 * 60 * 24);
+        //     alert(Math.round(days));
+        // }
+        
+        var base_URL = 'http://127.0.0.1:8000/leave'
         $(function(){
+            
             // var $user_name = $('#user')
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/leave/user/naga/?format=json',
+                url: base_URL + '/user/naga/?format=json',
                 success: function(data){
                     $.each(data, function(index, data){
-                        $("#user").val(data.name)
-                        $("#reporter").val(data.reporting_senior)
-                    });
+                        $("#user").val(data.name);
+                        $("#reporter").val(data.reporting_senior);
+                   });
                 }
-            });
+                 
+            }); 
+            $.ajax({
+                type: 'GET',
+                url : base_URL + '/credits/naga/?format=json',
+                success :function(result){
+                    $.each(result, function(index, result){
+                        // console.log(result)
+                        var credit="<option>"+result.leave_type_name +"-"+ result.available+"</option>";
+                        // alert(credit);
+                        $(credit).appendTo('#credits');
+                   }); 
+                }
+
+            }); 
+
         });
+
     </script>
 
-</body>
-
-
-
-    <!-- <script>
-        function delete_fun(id){
-            $.ajax({ 
-                url: '/birthday/delete_employee/', 
-                type: 'GET',
-                dataType: 'json' 
-                success: function(json) {
-                    location.reload(); 
-                    $("#name").html(json.name);
-                   }});
-    </script> -->
-    
 </body>
 </html>
 
