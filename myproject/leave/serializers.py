@@ -13,10 +13,6 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 		model = LeaveCredit
 		fields = ('leave_type_name', 'available')
 
-
-
-
-
 ##for Approval serializer creation 
 class LeaveRequestSerializer(serializers.ModelSerializer):
 	employee_name = serializers.CharField(source='employee_name.name')
