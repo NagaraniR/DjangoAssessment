@@ -11,6 +11,7 @@ header{
 	color: maroon;
 }
 ul{
+    position:all;
 	font-family: arial, sans-serif;
 	color: maroon;
 }
@@ -51,11 +52,25 @@ tr:nth-child(even) {
 </style>
 
 <script type="text/javascript">
-	var base_url = 'http://127.0.0.1:8000/leave/'; 
+    var base_url = 'http://127.0.0.1:8000/leave/'; 
+    function getValue(varname)
+    {
+      var url = window.location.href;
+      var vars = {}
+      var hashes = url.split("?")[1];
+      var hash = hashes.split("&");
+      
+      for (i=0; i<hash.length; i++){
+        params = hash[i].split("=");
+        vars[params[0]] = params[1];
+      }return vars;
+    }
+    var username = (getValue()["username"]);
+
 	$(function(){
 		$.ajax({
             type: 'GET',
-            url: base_url+'approval/OmPrakash/?format=json',
+            url: base_url+'approval/'+username+'/?format=json',
             success: function(data){
                 $.each(data, function(index, data){
                 	$("#employee_name").val(data.employee_name)
@@ -75,7 +90,7 @@ tr:nth-child(even) {
 	$(function(){
 		$.ajax({
             type: 'GET',
-            url: base_url+'credits/OmPrakash/?format=json',
+            url: base_url+'credits/'+username+'/?format=json',
             success: function(data){
                 $.each(data, function(index, data){
                 	$('#leave_balance').append("<tr><td>"+data.leave_type_name+"</td>"+
@@ -85,9 +100,25 @@ tr:nth-child(even) {
             }
         });
     });
+
+    /*$(function(){
+        $.ajax({
+            type:'GET'
+            url:base_url+'approval/'+username+'/?format=json'$filter =leave_type_name eq 'Pending',
+            $.each(data, function(index, data){
+                    $('#leave_balance').append("<tr><td>"+data.from_date+"</td>"+
+                        "<td>"+data.to_date+"</td>"+
+                        "<td>"+data.no_days+"</td>"+
+                        "<td>"+data.leave_type_name+"</td>"+
+                        "<td>"+data.reason+"</td>"+
+                    )
+                });
+            })
+        })*/
 </script>
 </head>
-<body  style=" background-color: cornsilk">
+
+<body style=" background-color: cornsilk">
     <header style=" background-color: cornsilk"><center><h2>Leave Application</h2></center></header>
     <div >
     	<ul>
@@ -97,6 +128,11 @@ tr:nth-child(even) {
   	  		<input name="reporter" id="reporter">
   	  	</ul>
 	</div>
+
+    <div>
+        
+    </div>
+
 
 	<div>
 		<ul>
@@ -109,7 +145,8 @@ tr:nth-child(even) {
 			</table>
 		</ul>
 	</div>
-	<div>
+	
+    <div>
 		<ul>
 			<h4><p>History of Leave</p></h4>
     		<table id="leave_history">

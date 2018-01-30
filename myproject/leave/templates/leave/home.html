@@ -3,10 +3,14 @@
 	<meta charset="utf-8">
 	<title>Login</title>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js">
+		function getusername(){
+			var username = getValue("username");
+			document.write(username);
+			return username
+		}
 	</script>
 	<style>
 	header{
-	position:all;
 	top: 100%;
 	font-family: arial, sans-serif;
 	font-size: 20px;
@@ -18,25 +22,15 @@
 	color: maroon;
 	}
 	</style>
-	<script type="text/javascript">
-		function passing(){
-			var username = document.getElementsByName("username")
-			var Password = document.getElementsByName("password")
-			window.location.href = "templates/approval.html"
-		}
-	</script>
 	</head>
 	<body>
-		<header>
-			<center>
-				Login
-			</center>
-		</header>
-		<div style="position: absolute; top: 200px; left: 350px;">
-			<form method="get" action="" ">
+		<header><center>Leave Application</center></header><br>
+		<div style="position: absolute; top: 180px; left: 350px;">
+			<header><center>Login</center></header><br>
+			<form action="approval.html" method="get" >
 		      	<input type="text" name=username placeholder="username"><br><br>
 		      	<input type="Password" placeholder="Password"><br><br>
-		      	<center><input type="button" name="Login" value="Login"></center>
+		      	<center><input type="submit" name="Login" value="Login"></center>
 		    </form>
      	</div>	
 	</body>

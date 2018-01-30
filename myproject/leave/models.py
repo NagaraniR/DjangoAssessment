@@ -19,7 +19,7 @@ class User(models.Model):
 	designation = models.ForeignKey(Designation,
 		on_delete=models.CASCADE)
 	reporting_senior =models.CharField(max_length = 30)
-
+	
 	def __str__(self):
 		return self.name
 

@@ -75,7 +75,7 @@
             // var $user_name = $('#user')
             $.ajax({
                 type: 'GET',
-                url: base_URL + '/user/naga/?format=json',
+                url: base_URL + '/user/OmPrakash/?format=json',
                 success: function(data){
                     $.each(data, function(index, data){
                         $("#user").val(data.name);
@@ -86,7 +86,7 @@
             }); 
             $.ajax({
                 type: 'GET',
-                url : base_URL + '/credits/naga/?format=json',
+                url : base_URL + '/credits/OmPrakash/?format=json',
                 success :function(result){
                     $.each(result, function(index, result){
                         // console.log(result)

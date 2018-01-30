@@ -20,10 +20,6 @@ class ApplyForm(APIView):
 		user_serializer = UserSerializer(queryset_one, many=True)
 		return Response(user_serializer.data)
 
-
-
-
-
 ##For Approval  
 class ApprovalForm(APIView):
 
@@ -57,9 +53,6 @@ class LeaveCreditView(APIView):
 # def apply_leave(self, request):
 #     return
 
-
-
-            
     	#import pdb;pdb.set_trace()
     	# user = User.objects.filter(name=employee_name)
     	# 
