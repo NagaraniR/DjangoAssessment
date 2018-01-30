@@ -13,12 +13,15 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 import json
 
-class ApplyForm(APIView):
+class Post(APIView):
+    print "dsfsd";
+    def post(self, request):
+        print "sdff";
+        user = User.objects.all()
+        return Response(User)
+
     
-	def get(self, request, employee_name):
-		queryset_one = User.objects.filter(name=employee_name)
-		user_serializer = UserSerializer(queryset_one, many=True)
-		return Response(user_serializer.data)
+
 
 
 
@@ -27,11 +30,16 @@ class ApplyForm(APIView):
 ##For Approval  
 class ApprovalForm(APIView):
 
+    
+
     def get(self, request, employee_name):
-       
+
         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
         user = LeaveRequestSerializer(user, many=True)
         return Response(user.data)
+
+
+        
 
     # def put(self, request, employee_name):
     #     user = LeaveRequest.objects.filter(employee_name__name=employee_name)
@@ -43,6 +51,7 @@ class ApprovalForm(APIView):
 
 class UserView(APIView):
     def get(self, request, employee_name):
+        #import pdb;pdb.set_trace()
         user = User.objects.filter(name=employee_name)
         user_serializer = UserSerializer(user, many=True)
         return Response(user_serializer.data)
@@ -52,6 +61,11 @@ class LeaveCreditView(APIView):
         credits = LeaveCredit.objects.filter(user_name__name=employee_name)
         credit_serializer = LeaveCreditSerializer(credits, many=True )
         return Response(credit_serializer.data)
+
+    def post(self, request):
+        query = User.objects.all()    
+
+
 
 # @api_view(['GET', 'POST'])
 # def apply_leave(self, request):
