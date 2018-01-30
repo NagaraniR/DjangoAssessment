@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>JavaScript - read JSON from URL</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<style>
+
+header{
+	position:all;
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+ul{
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+
+h4{
+	font-family: arial, sans-serif;
+	font-size: 14px
+}
+
+p{
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+menu{
+	
+	font-family: arial, sans-serif;
+	color:maroon;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 85%;
+    height: 100%;
+    color:maroon;
+}
+
+td, th {
+    border: 1px solid maroon;
+    text-align: left;
+    font: 20px 5px;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: tan;
+}
+</style>
+
+<script type="text/javascript">
+	var base_url = 'http://127.0.0.1:8000/leave/'; 
+	$(function(){
+		$.ajax({
+            type: 'GET',
+            url: base_url+'approval/OmPrakash/?format=json',
+            success: function(data){
+                $.each(data, function(index, data){
+                	$("#employee_name").val(data.employee_name)
+                    $("#reporter").val(data.reporter)
+                	$('#leave_history').append("<tr><td>"+data.from_date+"</td>"+
+                		"<td>"+data.to_date+"</td>"+
+                		"<td>"+data.no_days+"</td>"+
+                		"<td>"+data.leave_type_name+"</td>"+
+                		"<td>"+data.reason+"</td>"+
+                		"<td>"+data.approval_status+"</td></tr>"
+                	)
+                });
+            }
+        });
+    });
+
+	$(function(){
+		$.ajax({
+            type: 'GET',
+            url: base_url+'credits/OmPrakash/?format=json',
+            success: function(data){
+                $.each(data, function(index, data){
+                	$('#leave_balance').append("<tr><td>"+data.leave_type_name+"</td>"+
+                		"<td>"+data.available+"</td></tr>"
+                	)
+                });
+            }
+        });
+    });
+</script>
+</head>
+<body  style=" background-color: cornsilk">
+    <header style=" background-color: cornsilk"><center><h2>Leave Application</h2></center></header>
+    <div >
+    	<ul>
+    		<label id ="txtcolor" for="name">Employee Name:</label>
+	 		<input name="employee_name" id="employee_name">
+    		<label id ="txtcolor" for="reporter">Reporting Senior:</label>
+  	  		<input name="reporter" id="reporter">
+  	  	</ul>
+	</div>
+
+	<div>
+		<ul>
+			<h4><p>Current Leave Balance</p></h4>
+			<table id="leave_balance">
+				<tr>
+					<th>Leave Type</th>
+					<th>Available</th>
+				</tr>
+			</table>
+		</ul>
+	</div>
+	<div>
+		<ul>
+			<h4><p>History of Leave</p></h4>
+    		<table id="leave_history">
+    			<tr>
+    				<th>From Date</th>
+    				<th>To Date</th>
+    				<th>No Of Days</th>
+    				<th>Leave Type</th>
+    				<th>Reason</th>
+    				<th>Status</th>
+    			</tr>
+    		</table>
+    	</ul> 		
+	</div>    
+</body>
+</html>
