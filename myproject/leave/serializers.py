@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import User, LeaveCredit, LeaveRequest
+from models import User, LeaveCredit, LeaveRequest, Status
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = LeaveCredit
 		fields = ('leave_type_name', 'available')
+
+class StatusSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Status
+		fields = ('status',)
+
 
 ##for Approval serializer creation 
 class LeaveRequestSerializer(serializers.ModelSerializer):
