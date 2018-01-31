@@ -141,6 +141,7 @@ select {
         // });
             }
 
+<<<<<<< HEAD
             var base_URL = 'http://192.168.1.96:8001/leave'
             $(function(){
                 // alert("ajax:"+base_URL)
@@ -186,6 +187,38 @@ select {
                             $(credit).appendTo('#credits');
                        }); 
                     }
+=======
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ -->
+    <script type="text/javascript">
+        
+        var base_URL = 'http://127.0.0.1:8000/leave'
+        $(function(){
+            // alert("ok");
+            // var $user_name = $('#user')
+            $.ajax({
+                type: 'GET',
+                url: base_URL + '/user/OmPrakash/?format=json',
+                success: function(data){
+                    $.each(data, function(index, data){
+                        $("#user").val(data.name);
+                        $("#reporter").val(data.reporting_senior);
+                   });
+                }
+                 
+            }); 
+            $.ajax({
+                type: 'GET',
+                url : base_URL + '/credits/OmPrakash/?format=json',
+                success :function(result){
+                    $.each(result, function(index, result){
+                        // console.log(result)
+                        var credit="<option>"+result.leave_type_name +"-"+ result.available+"</option>";
+                        // alert(credit);
+                        $(credit).appendTo('#credits');
+                   }); 
+                }
+>>>>>>> bb7bb1a4ff151334b6a6f70c7634ec0c5215dad8
 
                 });
             });

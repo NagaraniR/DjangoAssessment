@@ -29,6 +29,8 @@ class LeaveRequestSerializer(serializers.ModelSerializer):
 		model=LeaveRequest
 		fields = ('employee_name', 'reporter', 'leave_type_name', 'from_date', 
 			'to_date', 'no_days', 'reason', 'approval_status')
+
+		
 # class UserDetailsSerializers(serializers.Serializer):
 # 	user_details = UserSerializer(many=True)
 # 	leave_credits = LeaveCreditSerializer(many=True)

@@ -13,8 +13,11 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 import json
 # import requests
 
+
+
 class Post(APIView):
     def post(self, request):
+<<<<<<< HEAD
         import pdb;pdb.set_trace()
         # response = requests.get(request.data)
         # json_data = json.loads(response.text)
@@ -47,29 +50,28 @@ class Post(APIView):
         values = json.loads(request.body)
         # name = data.get("name")
 
+=======
+        print "sdff";
+        user = User.objects.all()
+        return Response(User)
+>>>>>>> bb7bb1a4ff151334b6a6f70c7634ec0c5215dad8
     
 
 ##For Approval  
 class ApprovalForm(APIView):
 
-    
-
     def get(self, request, employee_name):
-
         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
         user = LeaveRequestSerializer(user, many=True)
         return Response(user.data)
 
-
-        
-
-    # def put(self, request, employee_name):
-    #     user = LeaveRequest.objects.filter(employee_name__name=employee_name)
-    #     serializer = LeaveRequestSerializer(user, data=request.DATA)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, employee_name):
+        user = LeaveRequest.objects.filter(employee_name__name=employee_name)
+        serializer = LeaveRequestSerializer(user, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserView(APIView):
     def get(self, request, employee_name):
@@ -97,9 +99,6 @@ class StatusView(APIView):
 # def apply_leave(self, request):
 #     return
 
-
-
-            
     	#import pdb;pdb.set_trace()
     	# user = User.objects.filter(name=employee_name)
     	# 

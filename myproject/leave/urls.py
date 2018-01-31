@@ -17,6 +17,4 @@ urlpatterns = [
 
 	# url(r'^apply/user/(?P<employee_name>\w+)/$', views.UserView.as_view(), name= 'user'),
 	# url(r'^apply/credits/(?P<employee_name>\w+)/$', views.LeaveCreditView.as_view(), name= 'user'),
-
-	
 ]
