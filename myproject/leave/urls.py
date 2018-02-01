@@ -13,6 +13,7 @@ urlpatterns = [
 	#url(r'^apply/$', views.ApplyLeave.as_view(), name="apply"),
     url(r'^status/$', views.StatusView.as_view(), name= 'status'),
 	url(r'^store/data/database/$', views.Post.as_view(), name= 'apply'),
+	url(r'^validation/$', views.Post.as_view(), name= 'apply'),
 	url(r'^approval/(?P<employee_name>\w+)/$', views.ApprovalForm.as_view(), name='approval'),
 
 	# url(r'^apply/user/(?P<employee_name>\w+)/$', views.UserView.as_view(), name= 'user'),

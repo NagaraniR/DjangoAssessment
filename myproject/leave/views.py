@@ -5,7 +5,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer
+from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -91,6 +91,15 @@ class StatusView(APIView):
         status = Status.objects.all()
         status_serializer = StatusSerializer(status, many=True)
         return Response(status_serializer.data)
+
+class LeaveRequestView(APIView):
+    def get(self,request):
+        
+        leave_request = LeaveRequest.objects.all()
+        leave_request_serializer = LeaveRequestSerializer2(status, many=True)
+        return Response(leave_request_serializer.data)
+
+
 
 
 
