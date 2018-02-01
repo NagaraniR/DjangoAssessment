@@ -19,31 +19,23 @@ class Post(APIView):
         print "sdff";
         user = User.objects.all()
         return Response(User)
-
     
-
 
 ##For Approval  
 class ApprovalForm(APIView):
 
-    
-
     def get(self, request, employee_name):
-
         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
         user = LeaveRequestSerializer(user, many=True)
         return Response(user.data)
 
-
-        
-
-    # def put(self, request, employee_name):
-    #     user = LeaveRequest.objects.filter(employee_name__name=employee_name)
-    #     serializer = LeaveRequestSerializer(user, data=request.DATA)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, employee_name):
+        user = LeaveRequest.objects.filter(employee_name__name=employee_name)
+        serializer = LeaveRequestSerializer(user, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserView(APIView):
     def get(self, request, employee_name):

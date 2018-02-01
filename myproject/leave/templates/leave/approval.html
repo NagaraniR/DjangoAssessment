@@ -75,7 +75,7 @@ tr:nth-child(even) {
                 $.each(data, function(index, data){
                 	$("#employee_name").val(data.employee_name)
                     $("#reporter").val(data.reporter)
-                	$('#leave_history').append("<tr><td>"+data.from_date+"</td>"+
+                	$('#history_of_leave').append("<tr><td>"+data.from_date+"</td>"+
                 		"<td>"+data.to_date+"</td>"+
                 		"<td>"+data.no_days+"</td>"+
                 		"<td>"+data.leave_type_name+"</td>"+
@@ -100,27 +100,12 @@ tr:nth-child(even) {
             }
         });
     });
-
-    /*$(function(){
-        $.ajax({
-            type:'GET'
-            url:base_url+'approval/'+username+'/?format=json'$filter =leave_type_name eq 'Pending',
-            $.each(data, function(index, data){
-                    $('#leave_balance').append("<tr><td>"+data.from_date+"</td>"+
-                        "<td>"+data.to_date+"</td>"+
-                        "<td>"+data.no_days+"</td>"+
-                        "<td>"+data.leave_type_name+"</td>"+
-                        "<td>"+data.reason+"</td>"+
-                    )
-                });
-            })
-        })*/
 </script>
 </head>
 
 <body style=" background-color: cornsilk">
     <header style=" background-color: cornsilk"><center><h2>Leave Application</h2></center></header>
-    <div >
+    <div>
     	<ul>
     		<label id ="txtcolor" for="name">Employee Name:</label>
 	 		<input name="employee_name" id="employee_name">
@@ -128,11 +113,6 @@ tr:nth-child(even) {
   	  		<input name="reporter" id="reporter">
   	  	</ul>
 	</div>
-
-    <div>
-        
-    </div>
-
 
 	<div>
 		<ul>
@@ -145,11 +125,10 @@ tr:nth-child(even) {
 			</table>
 		</ul>
 	</div>
-	
-    <div>
-		<ul>
+	<div>
+        <ul>
 			<h4><p>History of Leave</p></h4>
-    		<table id="leave_history">
+    		<table id="history_of_leave">
     			<tr>
     				<th>From Date</th>
     				<th>To Date</th>
@@ -160,6 +139,7 @@ tr:nth-child(even) {
     			</tr>
     		</table>
     	</ul> 		
-	</div>    
+	</div>
+    
 </body>
 </html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>JavaScript - read JSON from URL</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<style>
+
+header{
+	position:all;
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+ul{
+    position:all;
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+
+h4{
+	font-family: arial, sans-serif;
+	font-size: 14px
+}
+
+p{
+	font-family: arial, sans-serif;
+	color: maroon;
+}
+menu{
+	
+	font-family: arial, sans-serif;
+	color:maroon;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 85%;
+    height: 100%;
+    color:maroon;
+}
+
+td, th {
+    border: 1px solid maroon;
+    text-align: left;
+    font: 20px 5px;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: tan;
+}
+</style>
+</head>
+<body>
+	<h1 style="color:blue;"><center> Leave Application</h1>
+    <form class="apply" method="POST" action=" ">
+        <label for="name">Name:</label>
+        <input name="user" id="user"><br>
+        <label for="reporter">Reporting Senior:</label>
+        <input name="reporter" id="reporter"><br>
+        <select id="credits" >
+            <option value="select">Select Leave</option>
+        </select><br>
+        <label for="date">From Date:</label>
+        <input id="fromDate" type="text"><br>
+        <label for="date">To Date:</label>
+        <input id="toDate" type="text"><br>
+        <label for="day">Days:</label>
+        <input id="days" type="text"><br>
+        <label for="reason"> Reason: </label>
+        <textarea id="reason" name="user_comment"></textarea><br>
+        <button type="button" id="submit" onclick="submitfun()">Submit</button>
+    </form>
+</body>
+</html>
