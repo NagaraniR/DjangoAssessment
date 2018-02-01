@@ -6,29 +6,29 @@
 <style>
 
 header{
-	position:all;
-	font-family: arial, sans-serif;
-	color: maroon;
+    position:all;
+    font-family: arial, sans-serif;
+    color: maroon;
 }
 ul{
     position:all;
-	font-family: arial, sans-serif;
-	color: maroon;
+    font-family: arial, sans-serif;
+    color: maroon;
 }
 
 h4{
-	font-family: arial, sans-serif;
-	font-size: 14px
+    font-family: arial, sans-serif;
+    font-size: 14px
 }
 
 p{
-	font-family: arial, sans-serif;
-	color: maroon;
+    font-family: arial, sans-serif;
+    color: maroon;
 }
 menu{
-	
-	font-family: arial, sans-serif;
-	color:maroon;
+    
+    font-family: arial, sans-serif;
+    color:maroon;
 }
 
 table {
@@ -67,13 +67,13 @@ tr:nth-child(even) {
     }
     var username = (getValue()["username"]);
 
-	$(function(){
-		$.ajax({
+    $(function(){
+        $.ajax({
             type: 'GET',
             url: base_url+'approval/'+username+'/?format=json',
             success: function(data){
                 $.each(data, function(index, data){
-                	$("#employee_name").val(data.employee_name)
+                    $("#employee_name").val(data.employee_name)
                     $("#reporter").val(data.reporter)
                 	$('#history_of_leave').append("<tr><td>"+data.from_date+"</td>"+
                 		"<td>"+data.to_date+"</td>"+
@@ -87,15 +87,15 @@ tr:nth-child(even) {
         });
     });
 
-	$(function(){
-		$.ajax({
+    $(function(){
+        $.ajax({
             type: 'GET',
             url: base_url+'credits/'+username+'/?format=json',
             success: function(data){
                 $.each(data, function(index, data){
-                	$('#leave_balance').append("<tr><td>"+data.leave_type_name+"</td>"+
-                		"<td>"+data.available+"</td></tr>"
-                	)
+                    $('#leave_balance').append("<tr><td>"+data.leave_type_name+"</td>"+
+                        "<td>"+data.available+"</td></tr>"
+                    )
                 });
             }
         });
@@ -140,6 +140,5 @@ tr:nth-child(even) {
     		</table>
     	</ul> 		
 	</div>
-    
 </body>
 </html>

@@ -5,21 +5,49 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-from serializers import UserSerializer, LeaveCreditSerializer, LeaveRequestSerializer
+from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
 import json
+# import requests
+
+
 
 class Post(APIView):
-    print "dsfsd";
     def post(self, request):
+        # response = requests.get(request.data)
+        # json_data = json.loads(response.text)
+        #value = request.data.encode("utf-8")
+        name = request.data["name"]
+
+        reporting_senior = request.data["reporting_senior"]
+        credits = request.data["credits"]
+        fromDate = request.data["fromDate"]
+        toDate = request.data["toDate"]
+        reason = request.data["reason"]
+        days = request.data["days"]
+        status = Status.objects.get(status=request.data["status"])
+        LeaveRequest.objects.create(
+            employee_name= User.objects.get(name=name),
+            reporter = User.objects.get(name=reporting_senior), 
+            leave_type = LeaveType.objects.get(catagory=credits),
+            from_date = fromDate,
+            to_date = toDate,
+            no_days = days ,
+            reason = reason,
+            status = status
+            )
+        #values = request.data
+        # name = request.POST.get("name")
+        # #name = request.data.get('name', None)
+        # # name = request.POST.get('name')
+        values = json.loads(request.body)
+        # name = data.get("name")
         print "sdff";
         user = User.objects.all()
         return Response(User)
-    
 
 ##For Approval  
 class ApprovalForm(APIView):
@@ -50,8 +78,12 @@ class LeaveCreditView(APIView):
         credit_serializer = LeaveCreditSerializer(credits, many=True )
         return Response(credit_serializer.data)
 
-    def post(self, request):
-        query = User.objects.all()    
+class StatusView(APIView):
+    def get(self, request):
+        status = Status.objects.all()
+        status_serializer = StatusSerializer(status, many=True)
+        return Response(status_serializer.data)
+
 
 
 

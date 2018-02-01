@@ -16,13 +16,24 @@ textarea{
 	border: 3px solid #ccc;
 	box-sizing: border-box;
 	padding: 10px 15px;
-	-webkit-transition: 0.5s;
+    position:all;
+    font-family: arial, sans-serif;
+    font-size: 20px;
+    color: maroon;
+}
+textarea{
+    width: auto;
+    border: 3px solid #ccc;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    -webkit-transition: 0.5s;
     transition: 0.5s;
     outline: none;
 }
 
 textarea:focus{
 	border: 3px solid maroon;
+
 }
 
 input[type=text] {
@@ -100,9 +111,8 @@ td, th {
 </style>
 <script type="text/javascript">
 	base_url =  'http://127.0.0.1:8000/leave/'; 
-
 $(function(){
-		$.ajax({
+        $.ajax({
             type: 'GET',
             url: base_url+'approval/OmPrakash/?format=json',
             success: function(data){
@@ -142,9 +152,9 @@ $(function(){
 		document.write(user);
 		return user
 	}
-
 </script>
 </head>
+
 <body style="background-color: cornsilk">
 	<header>
 	<center>Leave Application</center>
