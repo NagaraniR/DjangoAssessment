@@ -11,12 +11,12 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 	leave_type_name = serializers.CharField(source='leave_type.catagory')
 	class Meta:
 		model = LeaveCredit
-		fields = ('leave_type_name', 'available')
+		fields = "__all__"
 
 class StatusSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Status
-		fields = ('status',)
+		fields = '__all__'
 
 
 ##for Approval serializer creation 

@@ -16,9 +16,10 @@ import json
 
 
 class Post(APIView):
+
     def post(self, request):
-<<<<<<< HEAD
         import pdb;pdb.set_trace()
+        
         # response = requests.get(request.data)
         # json_data = json.loads(response.text)
         #value = request.data.encode("utf-8")
@@ -30,32 +31,31 @@ class Post(APIView):
         toDate = request.data["toDate"]
         reason = request.data["reason"]
         days = request.data["days"]
-        status = Status.objects.get(status=request.data["status"])
-        LeaveRequest.objects.create(
+        status = request.data["status"]
+        leave_request = LeaveRequest.objects.create(
             employee_name= User.objects.get(name=name),
             reporter = User.objects.get(name=reporting_senior), 
-            leave_type = LeaveType.objects.get(catagory=credits),
+            leave_type = LeaveType.objects.get(id=credits),
             from_date = fromDate,
             to_date = toDate,
             no_days = days ,
             reason = reason,
-            status = status
+            status = Status.objects.get(status=status)
             )
+        leave_request.save()
+
         
 
         #values = request.data
         # name = request.POST.get("name")
         # #name = request.data.get('name', None)
         # # name = request.POST.get('name')
-        values = json.loads(request.body)
-        # name = data.get("name")
+        # values = json.loads(request.body)
+        # # name = data.get("name")
 
-=======
-        print "sdff";
-        user = User.objects.all()
-        return Response(User)
->>>>>>> bb7bb1a4ff151334b6a6f70c7634ec0c5215dad8
-    
+        # print "sdff";
+        # user = User.objects.all()
+        # return Response(User)    
 
 ##For Approval  
 class ApprovalForm(APIView):
