@@ -111,14 +111,14 @@ td, th {
 </style>
 <script type="text/javascript">
 	base_url =  'http://127.0.0.1:8000/leave/'; 
-$(function(){
+    $(function(){
         $.ajax({
             type: 'GET',
             url: base_url+'approval/OmPrakash/?format=json',
             success: function(data){
-                $.each(data, 
-                	function(index, data){
-               		if data.approval_status == "Pending"{
+                $.each(data, function(index, data){
+                    var check_status = "Pending"
+                    if(data.approval_status == check_status){
                 			$("#employee_name").val(data.employee_name)
 	                    	$("#reporter").val(data.reporter)
 	                    	$("#from_date").val(data.from_date)
@@ -132,20 +132,22 @@ $(function(){
             	}
         	});
     	});
-		
-	$(function approve(){
-		$.ajax({
-            type: 'PUT',
-            url: base_url+'approval/'+username+'/?format=json',
-            data: {
-                approval_status: 'Approved'
+	
+    	function approve(){
+            var dataForm = {approval_status='Approved'}
+            $.ajax({
+                url: base_url+'approval/OmPrakash/?format=json',
+             type: 'PUT',
+             data: dataForm,
+             dataType: "json",
+             success: (result)
+            {
+            console.log("success")
             },
-            dataType: "json",
-            success: (result) => {
-                console.log("success")
-            },
-        });
-	});
+    });
+    }
+    
+	
 	
 	function getusername(){
 		var user = getValue("user");
@@ -160,7 +162,7 @@ $(function(){
 	<center>Leave Application</center>
 	</header>
 	<center>
-    <form class="apply" method="POST" action=" ">
+    <form class="apply" method="POST" name="approval">
     	<div style="background-color: cornsilk">
     		<table>
     		<tr>
@@ -193,19 +195,29 @@ $(function(){
         	</table>
             	<table>
             		<tr>
-            			<td><fieldset>
-     					<label for="reason"> Reason: </label>
-        				<textarea id="reason" rows="3" cols="50" name="user_comment">
-        				</textarea></fieldset><br>
-        				<center>	
-        				<input type="button" class="button button1" type="button" 
-        				id="approval_status" value="approval_status" 
-        				onclick="approve()"></button></center>  
+            			<td>
+                            <fieldset>
+     					       <label for="reason"> Reason: </label>
+        				       <textarea id="reason" rows="3" cols="50" name="user_comment">
+        				        </textarea>
+                            </fieldset><br>
+                        </td></tr>
+                    <tr>
+                        <td><fieldset>
+                            <label for ="approval_status">Status</label>
+                            <input id= "approval_status" type="text"/></fieldset>  
+                        </td>
+                    </tr>
+                    <tr><td>
+        				    <center>	
+        				        <input type="submit" class="button button1"
+        				        id="approval_status" onclick=approve() value="Approve">
+                            </center>
         				</td>
         			</tr>
         		</table>
-    	</div>
-    </form>
+    	   </div>
+        </form>
     <center>
 </body>
 </html>

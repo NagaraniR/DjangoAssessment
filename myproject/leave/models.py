@@ -58,5 +58,8 @@ class LeaveRequest(models.Model):
 	status = models.ForeignKey(Status,
 		on_delete=models.CASCADE)
 
+	def get_status(self):
+		return self.employee_name+'applied leave approval status is'+self.status+'.'
+
 	def __str__(self):
 		return str(self.employee_name)

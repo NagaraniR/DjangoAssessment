@@ -5,7 +5,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer
+from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -59,7 +59,8 @@ class ApprovalForm(APIView):
 
     def put(self, request, employee_name):
         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
-        serializer = LeaveRequestSerializer(user, data=request.DATA)
+        status = Status.objects.get(status=request.data["status"])
+        serializer = LeaveRequestSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -83,9 +84,6 @@ class StatusView(APIView):
         status = Status.objects.all()
         status_serializer = StatusSerializer(status, many=True)
         return Response(status_serializer.data)
-
-
-
 
 # @api_view(['GET', 'POST'])
 # def apply_leave(self, request):
