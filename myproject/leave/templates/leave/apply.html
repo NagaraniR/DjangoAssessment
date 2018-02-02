@@ -50,7 +50,7 @@ select {
 </style>
     <script type="text/javascript">
         $(function(){
-            $( "#fromDate" ).datepicker({dateFormat: 'dd-mm-yy'});
+            $( "#fromDate" ).datepicker({dateFormat: 'yy-mm-dd'});
             $("#toDate").datepicker({
                 dateFormat: 'yy-mm-dd',
                 onSelect: function(dateText, inst) {
@@ -103,8 +103,8 @@ select {
                 var data = new Array();                
                 data[0] = $("#user").val();
                 data[1] = $("#reporter").val();
-                data[2] = $("#status").val();
-                data[3] = "leave_type_id";
+                data[2] = status_id;
+                data[3] = leave_type_id;
                 console.log(leave_type_id);
                 data[4] = $("#fromDate").val();
                 data[5] = $("#toDate").val();  
@@ -129,10 +129,7 @@ select {
                     "contentType": "application/json; charset=utf-8",
                     "dataType": "json",
                     "success": function (result) {
-                        
-                        alert("ok");
-
-
+                        alert("ok")
                     },
 
                     error: function (result) {
@@ -152,8 +149,8 @@ select {
             }
 
             var base_URL = 'http://192.168.1.96:8000/leave'
-            var leave_type_id = "";
-            var status_id = "";
+            var leave_type_id;
+            var status_id;
             $(function(){
                 // alert("ajax:"+base_URL)
                 // var $user_name = $('#user')
@@ -198,7 +195,7 @@ select {
                         $.each(result, function(index, result){
                             console.log(result)
                             var status="<option>"+result.status +"</option>";
-                            status_id = result.id
+                            status_id = result.id;
                             // alert(credit);
                             $(status).appendTo('#status');
                        }); 
@@ -223,8 +220,9 @@ select {
                     url : base_URL + '/credits/naga/?format=json',
                     success :function(value){
                        $.each(value, function(index, value){
+                        alert("credits");
                             console.log(value)
-                            leave_type_id = value.id;
+                            leave_type_id = value.id
                             console.log(leave_type_id);
                             var credit="<option value="+ value.id +">"+value.leave_type_name +"-"+ value.available+"</option>";
                             // alert(credit);
@@ -242,19 +240,27 @@ select {
 
                 $.ajax({
                     type: 'GET',
-                    url : base_URL + 'validation/?format=json',
+                    url : base_URL + 'validation/naga/?format=json',
                     success :function(result){
                         $.each(result, function(index, result){
                             console.log(result)
-                            if result.status == "Pending":
-                                result.
+                            if (result.status == ""){
+                                credit_Validate()
+                            }
+                                
+                            });
                         
 
                             // alert(credit);
-
-                       }); 
-                    }
+                        } 
+                    });
                 });
+
+
+            function credit_Validate(){
+                alert("validate func");
+
+                $ajax({})
 
             }
 

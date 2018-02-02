@@ -104,7 +104,7 @@ td, th {
 $(function(){
         $.ajax({
             type: 'GET',
-            url: base_url+'approval/OmPrakash/?format=json',
+            url: base_url+'approval/naga/?format=json',
             success: function(data){
                 $.each(data, 
                     function(index, data){
@@ -127,7 +127,7 @@ $(function(){
     $(function approve(){
         $.ajax({
             type: 'PUT',
-            url: base_url+'approval/'+username+'/?format=json',
+            url: base_url+'approval/naga/?format=json',
             data: {
                 approval_status: 'Approved'
             },

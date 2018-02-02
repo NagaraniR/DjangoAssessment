@@ -5,7 +5,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -40,9 +40,10 @@ class Post(APIView):
             to_date = toDate,
             no_days = days ,
             reason = reason,
-            status = Status.objects.get(status=status)
+            status = Status.objects.get(id=status)
             )
         leave_request.save()
+        return Response("returned")
 
         
 
