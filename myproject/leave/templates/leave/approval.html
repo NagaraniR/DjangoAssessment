@@ -75,13 +75,13 @@ tr:nth-child(even) {
                 $.each(data, function(index, data){
                     $("#employee_name").val(data.employee_name)
                     $("#reporter").val(data.reporter)
-                    $('#history_of_leave').append("<tr><td>"+data.from_date+"</td>"+
-                        "<td>"+data.to_date+"</td>"+
-                        "<td>"+data.no_days+"</td>"+
-                        "<td>"+data.leave_type_name+"</td>"+
-                        "<td>"+data.reason+"</td>"+
-                        "<td>"+data.approval_status+"</td></tr>"
-                    )
+                	$('#history_of_leave').append("<tr><td>"+data.from_date+"</td>"+
+                		"<td>"+data.to_date+"</td>"+
+                		"<td>"+data.no_days+"</td>"+
+                		"<td>"+data.leave_type_name+"</td>"+
+                		"<td>"+data.reason+"</td>"+
+                		"<td>"+data.approval_status+"</td></tr>"
+                	)
                 });
             }
         });
@@ -106,40 +106,39 @@ tr:nth-child(even) {
 <body style=" background-color: cornsilk">
     <header style=" background-color: cornsilk"><center><h2>Leave Application</h2></center></header>
     <div>
-        <ul>
-            <label id ="txtcolor" for="name">Employee Name:</label>
-            <input name="employee_name" id="employee_name">
-            <label id ="txtcolor" for="reporter">Reporting Senior:</label>
-            <input name="reporter" id="reporter">
-        </ul>
-    </div>
+    	<ul>
+    		<label id ="txtcolor" for="name">Employee Name:</label>
+	 		<input name="employee_name" id="employee_name">
+    		<label id ="txtcolor" for="reporter">Reporting Senior:</label>
+  	  		<input name="reporter" id="reporter">
+  	  	</ul>
+	</div>
 
-    <div>
+	<div>
+		<ul>
+			<h4><p>Current Leave Balance</p></h4>
+			<table id="leave_balance">
+				<tr>
+					<th>Leave Type</th>
+					<th>Available</th>
+				</tr>
+			</table>
+		</ul>
+	</div>
+	<div>
         <ul>
-            <h4><p>Current Leave Balance</p></h4>
-            <table id="leave_balance">
-                <tr>
-                    <th>Leave Type</th>
-                    <th>Available</th>
-                </tr>
-            </table>
-        </ul>
-    </div>
-    <div>
-        <ul>
-            <h4><p>History of Leave</p></h4>
-            <table id="history_of_leave">
-                <tr>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                    <th>No Of Days</th>
-                    <th>Leave Type</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                </tr>
-            </table>
-        </ul>       
-    </div>
-    
+			<h4><p>History of Leave</p></h4>
+    		<table id="history_of_leave">
+    			<tr>
+    				<th>From Date</th>
+    				<th>To Date</th>
+    				<th>No Of Days</th>
+    				<th>Leave Type</th>
+    				<th>Reason</th>
+    				<th>Status</th>
+    			</tr>
+    		</table>
+    	</ul> 		
+	</div>
 </body>
 </html>

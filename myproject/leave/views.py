@@ -5,7 +5,14 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
+<<<<<<< HEAD
 from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+=======
+
+from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
+
+from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+>>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -18,8 +25,10 @@ import json
 class Post(APIView):
 
     def post(self, request):
+
         import pdb;pdb.set_trace()
         
+
         # response = requests.get(request.data)
         # json_data = json.loads(response.text)
         #value = request.data.encode("utf-8")
@@ -42,21 +51,21 @@ class Post(APIView):
             reason = reason,
             status = Status.objects.get(id=status)
             )
+<<<<<<< HEAD
         leave_request.save()
         return Response("returned")
 
         
+=======
+>>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
 
-        #values = request.data
-        # name = request.POST.get("name")
-        # #name = request.data.get('name', None)
-        # # name = request.POST.get('name')
-        # values = json.loads(request.body)
-        # # name = data.get("name")
+        leave_request.save()
 
-        # print "sdff";
-        # user = User.objects.all()
-        # return Response(User)    
+        values = json.loads(request.body)
+        # name = data.get("name")
+        print "sdff";
+        user = User.objects.all()
+        return Response(User)
 
 ##For Approval  
 class ApprovalForm(APIView):
@@ -68,7 +77,8 @@ class ApprovalForm(APIView):
 
     def put(self, request, employee_name):
         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
-        serializer = LeaveRequestSerializer(user, data=request.DATA)
+        status = Status.objects.get(status=request.data["status"])
+        serializer = LeaveRequestSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -93,17 +103,13 @@ class StatusView(APIView):
         status_serializer = StatusSerializer(status, many=True)
         return Response(status_serializer.data)
 
+
 class LeaveRequestView(APIView):
     def get(self,request):
         
         leave_request = LeaveRequest.objects.all()
         leave_request_serializer = LeaveRequestSerializer2(status, many=True)
         return Response(leave_request_serializer.data)
-
-
-
-
-
 
 # @api_view(['GET', 'POST'])
 # def apply_leave(self, request):
