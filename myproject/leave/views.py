@@ -5,14 +5,11 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-<<<<<<< HEAD
-from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
-=======
 
 from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
 
 from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
->>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
+
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -24,11 +21,7 @@ import json
 
 class Post(APIView):
 
-    def post(self, request):
-
-        import pdb;pdb.set_trace()
-        
-
+    def post(self, request):    
         # response = requests.get(request.data)
         # json_data = json.loads(response.text)
         #value = request.data.encode("utf-8")
@@ -51,14 +44,7 @@ class Post(APIView):
             reason = reason,
             status = Status.objects.get(id=status)
             )
-<<<<<<< HEAD
-        leave_request.save()
-        return Response("returned")
-
-        
-=======
->>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
-
+            
         leave_request.save()
 
         values = json.loads(request.body)
@@ -84,6 +70,12 @@ class ApprovalForm(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class WaitngForApprovalView(APIView):
+    def get(self,request):
+        user = LeaveRequest.objects.all()
+        pending_user = LeaveRequestSerializer(user, many=True)
+        return Response(pending_user.data) 
+
 class UserView(APIView):
     def get(self, request, employee_name):
         #import pdb;pdb.set_trace()
@@ -103,10 +95,8 @@ class StatusView(APIView):
         status_serializer = StatusSerializer(status, many=True)
         return Response(status_serializer.data)
 
-
 class LeaveRequestView(APIView):
-    def get(self,request):
-        
+    def get(self,request):        
         leave_request = LeaveRequest.objects.all()
         leave_request_serializer = LeaveRequestSerializer2(status, many=True)
         return Response(leave_request_serializer.data)

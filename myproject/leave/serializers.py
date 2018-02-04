@@ -17,7 +17,6 @@ class StatusSerializer(serializers.ModelSerializer):
 		model = Status
 		fields = "__all__"
 
-
 class LeaveRequestSerializer2(serializers.ModelSerializer):
 	employee_name = serializers.CharField(source='employee_name.name')
 	reporter = serializers.CharField(source='reporter.name')
@@ -27,7 +26,6 @@ class LeaveRequestSerializer2(serializers.ModelSerializer):
 	class Meta:
 		model = Status
 		fields = '__all__'
-
 
 ##for Approval serializer creation 
 class LeaveRequestSerializer(serializers.ModelSerializer):
