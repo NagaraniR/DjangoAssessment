@@ -4,21 +4,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.views import APIView
-from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-<<<<<<< HEAD
-from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
-=======
-
+from models import Designation, Employee, Status, LeaveType, LeaveCredit, LeaveRequest
 from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
-
-from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
->>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-import json
 # import requests
+
+
+
+class ApplyView(APIView)
 
 
 
@@ -51,13 +44,9 @@ class Post(APIView):
             reason = reason,
             status = Status.objects.get(id=status)
             )
-<<<<<<< HEAD
         leave_request.save()
         return Response("returned")
 
-        
-=======
->>>>>>> ec26173368fc07e1610352d39dde99d2dd81f230
 
         leave_request.save()
 
