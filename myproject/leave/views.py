@@ -5,7 +5,15 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.views import APIView
 from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
+<<<<<<< HEAD
 from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+=======
+
+from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
+
+from serializers import UserSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+
+>>>>>>> cd0bb6cd0cc21767a418c4ef8844546a57969a7d
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -17,11 +25,7 @@ import json
 
 class Post(APIView):
 
-    def post(self, request):
-
-        import pdb;pdb.set_trace()
-        
-
+    def post(self, request):    
         # response = requests.get(request.data)
         # json_data = json.loads(response.text)
         #value = request.data.encode("utf-8")
@@ -44,9 +48,13 @@ class Post(APIView):
             reason = reason,
             status = Status.objects.get(id=status)
             )
+<<<<<<< HEAD
 
         leave_request.save()
         return Response("returned")
+=======
+            
+>>>>>>> cd0bb6cd0cc21767a418c4ef8844546a57969a7d
         leave_request.save()
         values = json.loads(request.body)
         # name = data.get("name")
@@ -71,12 +79,20 @@ class ApprovalForm(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+<<<<<<< HEAD
 class Waiting_For_Approval(APIView):
     
     def get(self, request):
         user = LeaveRequest.objects.all()
         user = LeaveRequestSerializer(user, many=True)
         return Response(user.data)
+=======
+class WaitngForApprovalView(APIView):
+    def get(self,request):
+        user = LeaveRequest.objects.all()
+        pending_user = LeaveRequestSerializer(user, many=True)
+        return Response(pending_user.data) 
+>>>>>>> cd0bb6cd0cc21767a418c4ef8844546a57969a7d
 
 class UserView(APIView):
     def get(self, request, employee_name):
@@ -98,7 +114,10 @@ class StatusView(APIView):
         return Response(status_serializer.data)
 
 class LeaveRequestView(APIView):
+<<<<<<< HEAD
     
+=======
+>>>>>>> cd0bb6cd0cc21767a418c4ef8844546a57969a7d
     def get(self,request):        
         leave_request = LeaveRequest.objects.all()
         leave_request_serializer = LeaveRequestSerializer2(status, many=True)
