@@ -133,21 +133,6 @@ td, th {
                 }
             });
         });
-        
-    $(function approve(){
-        $.ajax({
-            type: 'PUT',
-            url: base_url+'approval/naga/?format=json',
-            data: {
-                approval_status: 'Approved'
-            },
-            dataType: "json",
-            success: (result) => {
-                console.log("success")
-
-            	}
-        	});
-    	});
 	
     	function approve(){
             var dataForm = {approval_status='Approved'}
@@ -156,15 +141,31 @@ td, th {
              type: 'PUT',
              data: dataForm,
              dataType: "json",
-             success: (result)
-            {
+             success: (result){
+                $('#')
             console.log("success")
             },
     });
     }
+
+    $("#talk").on('click', 'a[id^=delete-]', function() {
+      var pk = $(this).attr('id').split('-')[1];
+        delete_article(pk);
+    });
+
+    function delete_article(pk){
+        $.ajax({
+            url: "api/v1/articles/"+pk,
+            type: "DELETE",
+            data: { pk: pk },
+                success: function(data) {
+               $('#post-'+pk).hide();
+                    console.log("delete successful")
+                },
+        })
+    };
     
-	
-	
+
 	function getusername(){
 		var user = getValue("user");
 		document.write(user);
