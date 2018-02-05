@@ -52,7 +52,7 @@ tr:nth-child(even) {
 </style>
 
 <script type="text/javascript">
-    var base_url = 'http://127.0.0.1:8000/leave/'; 
+    
     function getValue(varname)
     {
       var url = window.location.href;
@@ -65,9 +65,13 @@ tr:nth-child(even) {
         vars[params[0]] = params[1];
       }return vars;
     }
+
+    var base_url = 'http://127.0.0.1:8000/leave/'; 
     var username = (getValue()["username"]);
 
+
     $(function(){
+    
         $.ajax({
             type: 'GET',
             url: base_url+'approval/'+username+'/?format=json',
@@ -85,17 +89,39 @@ tr:nth-child(even) {
                 });
             }
         });
-    });
 
-    $(function(){
         $.ajax({
             type: 'GET',
             url: base_url+'credits/'+username+'/?format=json',
             success: function(data){
                 $.each(data, function(index, data){
-                    $('#leave_balance').append("<tr><td>"+data.leave_type_name+"</td>"+
-                        "<td>"+data.available+"</td></tr>"
-                    )
+                    $('#leave_balance').append
+                    ("<tr><td>"+data.leave_type_name+"</td>"+
+                        "<td>"+data.available+"</td></tr>")
+                });
+            }
+        });
+
+        $.ajax({
+            type:'GET'
+            url:'http://127.0.0.1:8000/leave/requests/?format=json'
+            success:function(data){
+                $.each(data, function(index, data){
+                    var check_status = "Pending"
+                    
+                    if(data.approval_status == check_status){
+                        if(username == data.reporter){
+                            $('#waiting_for_approval').append
+                            ("<tr><td>"+data.employee_name+"</td>"+
+                                "<td>"+data.from_date+"</td>"+
+                                "<td>"+data.to_date+"</td>"+
+                                "<td>"+data.no_days+"</td>"+
+                                "<td>"+data.leave_type_name+"</td>"+
+                                "<td>"+data.reason+"</td>"+
+                                "<td>"+data.approval_status+"</td></tr>"
+                            )
+                        }
+                    }
                 });
             }
         });
@@ -140,5 +166,22 @@ tr:nth-child(even) {
     		</table>
     	</ul> 		
 	</div>
+
+    <div>
+        <ul>
+            <h4><p>Waiting For Approval</p></h4>
+            <table id="waiting_for_approval">
+                <tr>
+                    <th>Name</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>No Of Days</th>
+                    <th>Leave Type</th>
+                    <th>Reason</th>
+                    <th>Approve</th>
+                </tr>
+            </table>    
+        </ul>
+    </div>
 </body>
 </html>

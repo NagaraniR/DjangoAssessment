@@ -28,17 +28,17 @@ class LeaveRequestSerializer2(serializers.ModelSerializer):
 		model = Status
 		fields = '__all__'
 
-
 ##for Approval serializer creation 
 class LeaveRequestSerializer(serializers.ModelSerializer):
 	employee_name = serializers.CharField(source='employee_name.name')
 	reporter = serializers.CharField(source='reporter.name')
 	leave_type_name = serializers.CharField(source='leave_type.catagory')
 	approval_status = serializers.CharField(source='status.status')
+	
 	class Meta:
 		model=LeaveRequest
 		fields ="__all__"
-	
+		
 # fields = ('employee_name', 'reporter', 'leave_type_name', 'from_date', 
 # 	'to_date', 'no_days', 'reason', 'approval_status')
 
