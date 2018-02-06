@@ -2,11 +2,11 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
+from models import Designation, Employee, Status, LeaveType, LeaveCredit, LeaveRequest
 
 # Register your models here.
 admin.site.register(Designation)
-admin.site.register(User)
+admin.site.register(Employee)
 admin.site.register(Status)
 admin.site.register(LeaveType)
 admin.site.register(LeaveCredit)

@@ -10,7 +10,7 @@ class Designation(models.Model):
 	def __str__(self):
 		return self.name
 
-class User(models.Model):
+class Employee(models.Model):
 	code = models.IntegerField()
 	name = models.CharField(max_length = 30)
 	email = models.CharField(max_length = 30)
@@ -18,7 +18,8 @@ class User(models.Model):
 	mode = models.BooleanField()
 	designation = models.ForeignKey(Designation,
 		on_delete=models.CASCADE)
-	reporting_senior =models.CharField(max_length = 30)
+	reporting_senior =models.ForeignKey('self', 
+		on_delete=models.CASCADE, null=True, blank=True, max_length = 30)
 	
 	def __str__(self):
 		return self.name
@@ -38,19 +39,19 @@ class LeaveType(models.Model):
 		return self.catagory
 	
 class LeaveCredit(models.Model):
-	user_name = models.ForeignKey(User,
+	name = models.ForeignKey(Employee,
 		on_delete=models.CASCADE)
 	leave_type = models.ForeignKey(LeaveType,
 		on_delete=models.CASCADE)
 	available = models.IntegerField()
 
 	def __str__(self):
-		return str(self.user_name)
+		return str(self.name)
 
 class LeaveRequest(models.Model):
-	employee_name = models.ForeignKey(User, null=True, related_name='employee_name')
-	reporter = models.ForeignKey(User, null=True, related_name='reporter')
-	leave_type = models.ForeignKey(LeaveType, null=True, related_name='leave_type')
+	name = models.ForeignKey(Employee, null=True, related_name='employee_name')
+	reporter = models.ForeignKey(Employee, null=True, related_name='reporting_senior_name')
+	leave_type = models.ForeignKey(LeaveType, null=True, related_name='type')
 	from_date = models.DateField()
 	to_date = models.DateField()
 	no_days = models.IntegerField()
