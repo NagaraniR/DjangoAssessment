@@ -54,9 +54,10 @@ class Post(APIView):
 ##For Approval  
 class ApprovalForm(APIView):
 
-    def get(self, request, employee_name):
-        user = LeaveRequest.objects.filter(employee_name__name=employee_name)
+    def get(self, request, id):
+        user = LeaveRequest.objects.filter(id=id)
         user = LeaveRequestSerializer(user, many=True)
+
         return Response(user.data)
 
     def put(self, request, employee_name):
