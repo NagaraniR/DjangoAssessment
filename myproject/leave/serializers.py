@@ -1,38 +1,64 @@
 from rest_framework import serializers
-from models import Employee, LeaveType, LeaveCredit, LeaveRequest
+from models import Employee, LeaveType, LeaveCredit, LeaveRequest, Status
 
 
-class ApplySerializer(serializers.ModelSerializer):
+class createSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Employee
-		fields = ('name','email')
+		model = Status
+		fields = '__all__'
+
+
+
+	# name = models.ForeignKey(Employee, null=True, related_name='employee_name')
+	# reporter = models.ForeignKey(Employee, null=True, related_name='reporting_senior_name')
+	# leave_type = models.ForeignKey(LeaveType, null=True, related_name='type')
+	# from_date = models.DateField()
+	# to_date = models.DateField()
+	# no_days = models.IntegerField()
+	# reason = models.CharField(max_length=500)
+	# status = models.ForeignKey(Status,
+	# 	on_delete=models.CASCADE)
+
+
+# 		{
+#         "id": 1,
+#         "name": "nagarani",
+#         "reporter": "a@b123.com",
+# "leave_type","Personal",
+# "from_date" :12-03-2018
+# 	"to_date":13-03-2018
+# 	"no_days":2
+# 	"reason" :"fever"
+#     }
+# class ApplySerializer(serializers.ModelSerializer):
+# 	class Meta:
+# 		model = Employee
+# 		fields = ('name','email')
 
 # class UserSerializer(serializers.ModelSerializer):
 # 	class Meta:
-# 		model = User
+# 		model = Employee
 # 		fields = ('name', 'reporting_senior')
 
-<<<<<<< HEAD
-# class LeaveCreditSerializer(serializers.ModelSerializer):
+# # class LeaveCreditSerializer(serializers.ModelSerializer):
+# # 	leave_type_name = serializers.CharField(source='leave_type.catagory')
+# # 	class Meta:
+# # 		model = LeaveCredit
+# # 		fields = "__all__"
+
+# # class StatusSerializer(serializers.ModelSerializer):
+# # 	class Meta:
+# # 		model = Status
+# # 		fields = "__all__"
+# class LeaveRequestSerializer2(serializers.ModelSerializer):
+# 	employee_name = serializers.CharField(source='employee_name.name')
+# 	reporter = serializers.CharField(source='reporter.name')
 # 	leave_type_name = serializers.CharField(source='leave_type.catagory')
-# 	class Meta:
-# 		model = LeaveCredit
-# 		fields = "__all__"
-
-# class StatusSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = Status
-# 		fields = "__all__"
-=======
-class LeaveRequestSerializer2(serializers.ModelSerializer):
-	employee_name = serializers.CharField(source='employee_name.name')
-	reporter = serializers.CharField(source='reporter.name')
-	leave_type_name = serializers.CharField(source='leave_type.catagory')
-	approval_status = serializers.CharField(source='status.status')
->>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
+# 	approval_status = serializers.CharField(source='status.status')
 
 
-<<<<<<< HEAD
+
+
 # class LeaveRequestSerializer2(serializers.ModelSerializer):
 # 	employee_name = serializers.CharField(source='employee_name.name')
 # 	reporter = serializers.CharField(source='reporter.name')
@@ -54,19 +80,18 @@ class LeaveRequestSerializer2(serializers.ModelSerializer):
 # 		model=LeaveRequest
 # 		fields ="__all__"
 	
-=======
+
 ##for Approval serializer creation 
-class LeaveRequestSerializer(serializers.ModelSerializer):
-	employee_name = serializers.CharField(source='employee_name.name')
-	reporter = serializers.CharField(source='reporter.name')
-	leave_type_name = serializers.CharField(source='leave_type.catagory')
-	approval_status = serializers.CharField(source='status.status')
+# class LeaveRequestSerializer(serializers.ModelSerializer):
+# 	employee_name = serializers.CharField(source='employee_name.name')
+# 	reporter = serializers.CharField(source='reporter.name')
+# 	leave_type_name = serializers.CharField(source='leave_type.catagory')
+# 	approval_status = serializers.CharField(source='status.status')
 	
-	class Meta:
-		model=LeaveRequest
-		fields ="__all__"
+# 	class Meta:
+# 		model=LeaveRequest
+# 		fields ="__all__"
 		
->>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
 # fields = ('employee_name', 'reporter', 'leave_type_name', 'from_date', 
 # 	'to_date', 'no_days', 'reason', 'approval_status')
 
