@@ -46,53 +46,11 @@
 
 </style>
 
-
 <script type="text/javascript">
-	$(function(){
-                // alert("ajax:"+base_URL)
-                // var $user_name = $('#user')
-                // $.ajax({
-                //     type: 'GET',
-                //     url: base_URL + '/user/naga/?format=json',
-                //     // cache: false,
-                //     success: function(data){
-                //         alert("ok");
-                //         $.each(data, function(index, data){
-                //             $("#user").val(data.name);
-                //             $("#reporter").val(data.reporting_senior);
-                //        });
-                //     },
-                //     error: function(){
-                //         alert("error");
-                //     }
-                     
-                // }); 
-                base_URL = "http://127.0.0.1:8000/"
+	
+</script>
 
 
-                $.ajax({
-                type: 'GET',
-                url: base_URL + 'leave/apply/2/?format=json',
-                success: function(data){
-                    $.each(data, function(index, data){
-                        $("#user").val(data.employee.name);
-                        $("#reporter").val(data.reporting_senior);
-                        var status="<option>"Pending"</option>";
-                            status_id = result.id;
-                            // alert(credit);
-                            $(status).appendTo('#status');
-                        var credit="<option value="+ data.id +">"+data.leave_type_name +"-"+ data.available+"</option>";
-                        $(credit).appendTo('#credits');
-                   });
-                },
-                error: function(){
-                        alert("error");
-                    }
-                 
-            });
-        });
-
-        </script>
 </head>
 <body>
 

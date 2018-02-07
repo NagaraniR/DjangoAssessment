@@ -4,7 +4,7 @@ from django.db import models
 import datetime
 
 class Designation(models.Model):
-	code = models.IntegerField()
+	code = models.IntegerField(unique=True)
 	name = models.CharField(max_length=30)
 
 	def __str__(self):
@@ -13,7 +13,7 @@ class Designation(models.Model):
 class Employee(models.Model):
 	code = models.IntegerField(unique=True)
 	name = models.CharField(max_length = 30)
-	email = models.CharField(max_length = 30)
+	email = models.CharField(max_length = 30, unique=True)
 	join_date = models.DateField()
 	mode = models.BooleanField()
 	designation = models.ForeignKey(Designation,
@@ -57,8 +57,7 @@ class LeaveRequest(models.Model):
 	to_date = models.DateField()
 	no_days = models.IntegerField()
 	reason = models.CharField(max_length=500)
-	status = models.ForeignKey(Status,
-		on_delete=models.CASCADE)
+	status = models.ForeignKey(Status,on_delete=models.CASCADE)
 
-	def __unicode__(self):
-		return unicode(self.id)
+	def __str__(self):
+		return str(self.id)
