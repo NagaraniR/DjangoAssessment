@@ -24,6 +24,6 @@ from leave import views
 
 urlpatterns = [
 
-url(r'^apply/$', views.ApplyView.as_view(), name= 'user'),
+url(r'^apply/(?P<pk>\d+)/$', views.ApplyView.as_view(), name= 'user'),
 	
 ]

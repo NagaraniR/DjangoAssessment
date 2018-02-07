@@ -1,23 +1,50 @@
 from rest_framework import serializers
 from models import Employee, LeaveType, LeaveCredit, LeaveRequest, Status
+# from django.db import models
 
 
-class createSerializer(serializers.ModelSerializer):
+class CreateSerializer(serializers.ModelSerializer):
+
 	class Meta:
-		model = Status
-		fields = '__all__'
+		model = LeaveRequest
+		fields = "__all__"
 
 
+class EmployeeSerializer(serializers.ModelSerializer):
 
-	# name = models.ForeignKey(Employee, null=True, related_name='employee_name')
-	# reporter = models.ForeignKey(Employee, null=True, related_name='reporting_senior_name')
-	# leave_type = models.ForeignKey(LeaveType, null=True, related_name='type')
-	# from_date = models.DateField()
-	# to_date = models.DateField()
-	# no_days = models.IntegerField()
-	# reason = models.CharField(max_length=500)
-	# status = models.ForeignKey(Status,
-	# 	on_delete=models.CASCADE)
+	class Meta:
+		model = Employee
+		fields = "__all__"	
+
+
+class LeaveTypeSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = LeaveType
+		fields = "__all__"				
+		# fields = ("from_date", "to_date", "no_days", "reason")
+
+	# def create(self, validated_data):
+	# 	import pdp;pdp.set_trace()
+	# 	name = validated_data.data.get("name")
+	# 	validated_data.pop("name")
+	# 	reporter = validated_data.data.get("reporter")
+	# 	validated_data.pop("reporter")
+	# 	leave_type = validated_data.data.get("leave_type")
+	# 	validated_data.pop("leave_type")
+	# 	status = validated_data.data.get("status")
+	# 	validated_data.pop("status")
+	# 	return models.LeaveRequest.objects.create(name=name,
+	# 	reporter=reporter,
+	# 	leave_type=leave_type,
+	# 	from_date=from_date,
+	# 	to_date=to_date,
+	# 	no_days=no_days,
+	# 	reason=reason,
+	# 	status=status,
+	# 	 **validated_data)		
+
+
 
 
 # 		{

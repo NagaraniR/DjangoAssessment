@@ -4,33 +4,49 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.views import APIView
-from models import Status
+from rest_framework import status
+from models import Status,Employee,LeaveType
 from django.core.serializers.python import Serializer
 #from serializers import UserSerializer
 from rest_framework.response import Response
-from .serializers import createSerializer
+from .serializers import CreateSerializer, EmployeeSerializer, LeaveTypeSerializer
+import datetime
 # from rest_framework.generics import CreateAPIView
 # import requests
 
 
-
-
 class ApplyView(APIView):
+
+  def get(self, request, pk, format=None):
+
+    employee = Employee.objects.filter(id=pk)
+    leave_types = LeaveType.objects.all()
+    serializer = EmployeeSerializer(employee, many=True)
+    leave_type_serializer = LeaveTypeSerializer(leave_types, many=True)
+
+    return Response({"employee":serializer.data,"leave_types":leave_type_serializer.data})
+
     
-    def post(self, request, format=None):
-        #import pdb;pdb.set_trace()
-        user = Status.objects.get(code=1)
-        status = request.data 
-        # status["status"]= user
-        print status
-        serializer = createSerializer(data=status)
-        serializer.is_valid()
-        serializer.save()
-        return Response(serializer.data)
-        # if serializer.is_valid()
-        #     serializer.save()
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  def post(self, request, pk, format=None):
+    user = Employee.objects.get(id=pk)
+    # request.data["name"] = user.id
+    # name = request.data["name"]
+    # user = Employee.objects.get(name = request.data["name"])
+    request.data["name"] = user.id
+    request.data["reporter"] = user.reporting_senior.id
+    leave = LeaveType.objects.get(catagory = request.data["leave_type"])
+    request.data["leave_type"] = leave.id
+    from_date = datetime.datetime.strptime(self.request.data.get('from_date'), "%Y-%m-%d")
+    to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
+    no_days = abs((to_date-from_date).days)
+    request.data["no_days"] = no_days
+    status = Status.objects.get(code=1)
+    request.data["status"]= status.id
+    serializer = CreateSerializer(data=request.data, many=False)
+    if serializer.is_valid(raise_exception=True):
+      serializer.save()
+      return Response(serializer.data)
+    return JsonResponse(serializer.errors)
 
 
 # class ApplyView(APIView)

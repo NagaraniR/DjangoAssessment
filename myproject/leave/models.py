@@ -11,7 +11,7 @@ class Designation(models.Model):
 		return self.name
 
 class Employee(models.Model):
-	code = models.IntegerField()
+	code = models.IntegerField(unique=True)
 	name = models.CharField(max_length = 30)
 	email = models.CharField(max_length = 30)
 	join_date = models.DateField()
@@ -23,6 +23,7 @@ class Employee(models.Model):
 	
 	def __str__(self):
 		return self.name
+	
 
 class Status(models.Model):
 	code = models.IntegerField(unique=True)
@@ -32,7 +33,7 @@ class Status(models.Model):
 		return self.status
 
 class LeaveType(models.Model):
-	code = models.IntegerField()
+	code = models.IntegerField(unique=True)
 	catagory = models.CharField(max_length=30)
 
 	def __str__(self):
@@ -56,8 +57,8 @@ class LeaveRequest(models.Model):
 	to_date = models.DateField()
 	no_days = models.IntegerField()
 	reason = models.CharField(max_length=500)
-	# status = models.ForeignKey(Status,
-	# 	on_delete=models.CASCADE)
+	status = models.ForeignKey(Status,
+		on_delete=models.CASCADE)
 
-	def __str__(self):
-		return str(self.employee_name)
+	def __unicode__(self):
+		return unicode(self.id)

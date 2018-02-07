@@ -1,12 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.test import TestCase
-from .models import User, LeaveRequest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory
-from .serializers import LeaveRequestSerializer
+from rest_framework.test import APITestCase
+from .models import Employee, LeaveType
+
+class AccountTests(APITestCase):
+    def test_create_account(self):
+        """
+        Ensure we can create a new account object.
+        """
+        # url = reverse('account-list')
+        url = "http://127.0.0.1:8000/leave/apply/2/"
+        data = {'name': 'DabApps'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.data, status.HTTP_201_CREATED)
+		# response = self.client.post("http://127.0.0.1:8000/leave/apply/2/", {}, format='json')
+		# self.assertEqual(response.data['name'], {})
+
 # Create your tests here.
 # factory = APIRequestFactory()
 # request = factory.get('/approval/OmPrakash',{'name':'OmPrakash'},format='json')
