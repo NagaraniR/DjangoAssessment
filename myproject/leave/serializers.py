@@ -8,12 +8,6 @@ class createSerializer(serializers.ModelSerializer):
 		model = LeaveRequest
 		fields = '__all__'
 
-class updateSerializer(serializers.ModelSerializer):
-	
-	class Meta:
-		model = LeaveRequest
-		fields = ('id','status')
-
 
 	# def create(self, valid_data):
  	#        return LeaveRequest.objects.create(**valid_data)

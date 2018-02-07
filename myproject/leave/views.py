@@ -19,7 +19,7 @@ from models import Status, LeaveRequest
 from django.core.serializers.python import Serializer
 #from serializers import UserSerializer
 from rest_framework.response import Response
-from .serializers import createSerializer, updateSerializer
+from .serializers import createSerializer
 # from rest_framework.generics import CreateAPIView
 
 # import requests
@@ -46,24 +46,33 @@ class ApplyView(APIView):
 # class ApplyView(APIView)
 class Approve(APIView):
 
-    # def get(self, request, format=None):
-        
+    def get_leaves(self, pk):
+        try:
+            return LeaveRequest.objects.get(id=pk)
+        except LeaveRequest.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk, format=None):
+        user = self.get_leaves(pk)
+        user = createSerializer(user)
+        return Response(user.data)
 
-    def put(self,request,format=None):
-        #import pdb;pdb.set_trace()
-        # data = request.data 
-        # user = LeaveRequest.objects.get(id=request.data["id"])
-        # if user.reporter == 
-        # Status.objects.get(status=request.data["status"])
-        # data[status] = 
-
-        user = LeaveRequest.objects.get(id=request.data["id"])
+    def put(self,request, pk, format=None):
+        user = self.get_leaves(pk)
         status = Status.objects.get(status=request.data["status"])
-        user.status = status
-        user.save()
-        serializer = createSerializer(user)
-        return Response(serializer.data)
+        request.data["status"] = status.status
+        serializer = createSerializer(request.data, many=False) 
+        if serializer.is_valid(raise_exception=True):
+            serializer.save() 
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+        # user = LeaveRequest.objects.get(id=request.data["id"])
+        # status = Status.objects.get(status=request.data["status"])
+        # user.status = status
+        # user.save()
+        # serializer = createSerializer(user)
+        # return Response(serializer.data)
         
         # import pdb;pdb.set_trace()
         # status = Status.objects.get(status=request.data["status"])

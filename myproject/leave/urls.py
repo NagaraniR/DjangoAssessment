@@ -42,5 +42,5 @@ from leave import views
 urlpatterns = [
 
 url(r'^apply/$', views.ApplyView.as_view(), name= 'user'),
-url(r'^approve/$', views.Approve.as_view(), name='approve'),
+url(r'^approve/(?P<pk>\d+)/$', views.Approve.as_view(), name='approve'),
 ]
