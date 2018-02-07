@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 from rest_framework.views import APIView
+
 from rest_framework.response import Response
 
 # <<<<<<< HEAD
@@ -13,17 +14,89 @@ from rest_framework.response import Response
 # from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
 
 # >>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
+
+from models import Status, LeaveRequest
+from django.core.serializers.python import Serializer
+#from serializers import UserSerializer
+from rest_framework.response import Response
+from .serializers import createSerializer, updateSerializer
+# from rest_framework.generics import CreateAPIView
+
 # import requests
 
 
-class LeaveApproval(APIView):
+#class LeaveApproval(APIView):
     
 
-
-
-
 # Create your views here.
+class ApplyView(APIView):
+    
+    def post(self, request, format=None):
+        #import pdb;pdb.set_trace()
+        status = Status.objects.get(code=101)
+        data = request.data 
+        data["status"]= status.id
+        serializer = createSerializer(data=data, many=False)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(serializer.data)
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # class ApplyView(APIView)
+class Approve(APIView):
+
+    # def get(self, request, format=None):
+        
+
+
+    def put(self,request,format=None):
+        #import pdb;pdb.set_trace()
+        # data = request.data 
+        # user = LeaveRequest.objects.get(id=request.data["id"])
+        # if user.reporter == 
+        # Status.objects.get(status=request.data["status"])
+        # data[status] = 
+
+        user = LeaveRequest.objects.get(id=request.data["id"])
+        status = Status.objects.get(status=request.data["status"])
+        user.status = status
+        user.save()
+        serializer = createSerializer(user)
+        return Response(serializer.data)
+        
+        # import pdb;pdb.set_trace()
+        # status = Status.objects.get(status=request.data["status"])
+        # request.data["status"] = status.id
+        # serializer = updateSerializer(request.data,)
+        # if serializer.is_valid(raise_exception=True):
+        #     serializer.save()
+        # return Response(serializer.data) 
+        # return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+        # code = request.GET.get('code')
+        # employee = Employee.objects.get(code=code)
+        # status = Status.objects.get(code=100)
+        # if employee:
+        #     data = request.data
+        #     data["status"] = status.id
+        #     serializer = createSerializer(data=data, many=False)
+        #     if serializer.is_valid(raise_exception=True):
+        #         serializer.save()
+        #     return Response(serializer.data)
+        # return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -70,8 +143,13 @@ class LeaveApproval(APIView):
 # ##For Approval  
 # class ApprovalForm(APIView):
 
+
 #     def get(self, request, id):
 #         user = LeaveRequest.objects.filter(id=id)
+#         user = LeaveRequestSerializer(user, many=True)
+
+#     def get(self, request, employee_name):
+#         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
 #         user = LeaveRequestSerializer(user, many=True)
 
 #         return Response(user.data)
