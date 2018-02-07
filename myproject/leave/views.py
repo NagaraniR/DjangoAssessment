@@ -1,117 +1,122 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-
-# Create your views here.
 from rest_framework.views import APIView
-<<<<<<< HEAD
-from models import Designation, Employee, Status, LeaveType, LeaveCredit, LeaveRequest
-from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
-=======
-from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-
-from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
-
->>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
 from rest_framework.response import Response
+
+# <<<<<<< HEAD
+# from models import Designation, Employee, Status, LeaveType, LeaveCredit, LeaveRequest
+# from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer
+# =======
+# from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
+
+# from serializers import UserSerializer, LeaveRequestSerializer, LeaveCreditSerializer, StatusSerializer, LeaveRequestSerializer2
+
+# >>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
 # import requests
 
 
-
-class ApplyView(APIView)
-
-
-
-class Post(APIView):
-
-    def post(self, request):    
-        # response = requests.get(request.data)
-        # json_data = json.loads(response.text)
-        #value = request.data.encode("utf-8")
-        name = request.data["name"]
-
-        reporting_senior = request.data["reporting_senior"]
-        credits = request.data["credits"]
-        fromDate = request.data["fromDate"]
-        toDate = request.data["toDate"]
-        reason = request.data["reason"]
-        days = request.data["days"]
-        status = request.data["status"]
-        leave_request = LeaveRequest.objects.create(
-            employee_name= User.objects.get(name=name),
-            reporter = User.objects.get(name=reporting_senior), 
-            leave_type = LeaveType.objects.get(id=credits),
-            from_date = fromDate,
-            to_date = toDate,
-            no_days = days ,
-            reason = reason,
-            status = Status.objects.get(id=status)
-            )
-<<<<<<< HEAD
-        leave_request.save()
-        return Response("returned")
-
-=======
->>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
-
-        leave_request.save()
-        return Response("returned")
-        values = json.loads(request.body)
-        # name = data.get("name")
-        print "sdff";
-        user = User.objects.all()
-        return Response(User)
-
-##For Approval  
-class ApprovalForm(APIView):
-
-    def get(self, request, id):
-        user = LeaveRequest.objects.filter(id=id)
-        user = LeaveRequestSerializer(user, many=True)
-
-        return Response(user.data)
-
-    def put(self, request, employee_name):
-        user = LeaveRequest.objects.filter(employee_name__name=employee_name)
-        status = Status.objects.get(status=request.data["status"])
-        serializer = LeaveRequestSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class LeaveApproval(APIView):
+    
 
 
-class WaitngForApprovalView(APIView):
-    def get(self,request):
-        user = LeaveRequest.objects.all()
-        pending_user = LeaveRequestSerializer(user, many=True)
-        return Response(pending_user.data) 
 
-class UserView(APIView):
-    def get(self, request, employee_name):
-        #import pdb;pdb.set_trace()
-        user = User.objects.filter(name=employee_name)
-        user_serializer = UserSerializer(user, many=True)
-        return Response(user_serializer.data)
 
-class LeaveCreditView(APIView):
-    def get(self, request, employee_name):
-        credits = LeaveCredit.objects.filter(user_name__name=employee_name)
-        credit_serializer = LeaveCreditSerializer(credits, many=True )
-        return Response(credit_serializer.data)
+# Create your views here.
+# class ApplyView(APIView)
 
-class StatusView(APIView):
-    def get(self, request):
-        status = Status.objects.all()
-        status_serializer = StatusSerializer(status, many=True)
-        return Response(status_serializer.data)
 
-class LeaveRequestView(APIView):
 
-    def get(self,request):        
-        leave_request = LeaveRequest.objects.all()
-        leave_request_serializer = LeaveRequestSerializer2(status, many=True)
-        return Response(leave_request_serializer.data)
+# class Post(APIView):
+
+#     def post(self, request):    
+#         # response = requests.get(request.data)
+#         # json_data = json.loads(response.text)
+#         #value = request.data.encode("utf-8")
+#         name = request.data["name"]
+
+#         reporting_senior = request.data["reporting_senior"]
+#         credits = request.data["credits"]
+#         fromDate = request.data["fromDate"]
+#         toDate = request.data["toDate"]
+#         reason = request.data["reason"]
+#         days = request.data["days"]
+#         status = request.data["status"]
+#         leave_request = LeaveRequest.objects.create(
+#             employee_name= User.objects.get(name=name),
+#             reporter = User.objects.get(name=reporting_senior), 
+#             leave_type = LeaveType.objects.get(id=credits),
+#             from_date = fromDate,
+#             to_date = toDate,
+#             no_days = days ,
+#             reason = reason,
+#             status = Status.objects.get(id=status)
+#             )
+# <<<<<<< HEAD
+#         leave_request.save()
+#         return Response("returned")
+
+# =======
+# >>>>>>> bc86fafb300efa29b19f7206ca117bc6ae4ff3be
+
+#         leave_request.save()
+#         return Response("returned")
+#         values = json.loads(request.body)
+#         # name = data.get("name")
+#         print "sdff";
+#         user = User.objects.all()
+#         return Response(User)
+
+# ##For Approval  
+# class ApprovalForm(APIView):
+
+#     def get(self, request, id):
+#         user = LeaveRequest.objects.filter(id=id)
+#         user = LeaveRequestSerializer(user, many=True)
+
+#         return Response(user.data)
+
+#     def put(self, request, employee_name):
+#         user = LeaveRequest.objects.filter(employee_name__name=employee_name)
+#         status = Status.objects.get(status=request.data["status"])
+#         serializer = LeaveRequestSerializer(user, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class WaitngForApprovalView(APIView):
+#     def get(self,request):
+#         user = LeaveRequest.objects.all()
+#         pending_user = LeaveRequestSerializer(user, many=True)
+#         return Response(pending_user.data) 
+
+# class UserView(APIView):
+#     def get(self, request, employee_name):
+#         #import pdb;pdb.set_trace()
+#         user = User.objects.filter(name=employee_name)
+#         user_serializer = UserSerializer(user, many=True)
+#         return Response(user_serializer.data)
+
+# class LeaveCreditView(APIView):
+#     def get(self, request, employee_name):
+#         credits = LeaveCredit.objects.filter(user_name__name=employee_name)
+#         credit_serializer = LeaveCreditSerializer(credits, many=True )
+#         return Response(credit_serializer.data)
+
+# class StatusView(APIView):
+#     def get(self, request):
+#         status = Status.objects.all()
+#         status_serializer = StatusSerializer(status, many=True)
+#         return Response(status_serializer.data)
+
+# class LeaveRequestView(APIView):
+
+#     def get(self,request):        
+#         leave_request = LeaveRequest.objects.all()
+#         leave_request_serializer = LeaveRequestSerializer2(status, many=True)
+#         return Response(leave_request_serializer.data)
 
 # @api_view(['GET', 'POST'])
 # def apply_leave(self, request):

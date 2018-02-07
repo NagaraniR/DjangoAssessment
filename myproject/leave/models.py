@@ -13,7 +13,7 @@ class Designation(models.Model):
 class Employee(models.Model):
 	code = models.IntegerField()
 	name = models.CharField(max_length = 30)
-	email = models.CharField(max_length = 30)
+	email = models.CharField(max_length = 30, unique=True)
 	join_date = models.DateField()
 	mode = models.BooleanField()
 	designation = models.ForeignKey(Designation,
