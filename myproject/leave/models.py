@@ -23,6 +23,7 @@ class Employee(models.Model):
 	
 	def __str__(self):
 		return self.name
+	
 
 class Status(models.Model):
 	code = models.IntegerField(unique=True)
@@ -56,8 +57,7 @@ class LeaveRequest(models.Model):
 	to_date = models.DateField()
 	no_days = models.IntegerField()
 	reason = models.CharField(max_length=500)
-	status = models.ForeignKey(Status,
-	 	on_delete=models.CASCADE)
+	status = models.ForeignKey(Status,on_delete=models.CASCADE)
 
 	def __str__(self):
 		return str(self.id)
