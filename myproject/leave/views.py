@@ -28,9 +28,13 @@ class ApplyView(APIView):
     request.data["reporter"] = user.reporting_senior.id
     leave = LeaveType.objects.get(catagory = request.data["leave_type"])
     request.data["leave_type"] = leave.id
-    from_date = datetime.datetime.strptime(self.request.data.get('from_date'), "%Y-%m-%d")
-    to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
+    from_date = datetime.datetime.strptime((self.request.data['from_date']), "%Y-%m-%d")
+    to_date = datetime.datetime.strptime((self.request.data['to_date']), "%Y-%m-%d")
     no_days = abs((to_date-from_date).days)
+
+    # from_date = datetime.datetime.strptime(self.request.data.get('from_date'), "%Y-%m-%d")
+    # to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
+    # no_days = abs((to_date-from_date).days)
     request.data["no_days"] = no_days
     status = Status.objects.get(code=1)
     request.data["status"]= status.id
