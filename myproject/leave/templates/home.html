@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8">
+	<title>Login</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js">
+	</script>
+	<style>
+	header{
+	position:all;
+	top: 100%;
+	font-family: arial, sans-serif;
+	font-size: 20px;
+	color: maroon;
+	}
+	ul{
+    position:all;
+	font-family: arial, sans-serif;
+	color: maroon;
+	}
+	</style>
+	<script type="text/javascript">
+		function passing(){
+			var username = document.getElementsByName("username")
+			var Password = document.getElementsByName("password")
+			window.location.href = "templates/approval.html"
+		}
+	</script>
+	</head>
+	<body>
+		<header>
+			<center>
+				Login
+			</center>
+		</header>
+		<div style="position: absolute"; top: 200px; left: 350px;">
+			<form method="get" action="" ">
+		      	<input type="text" name=username placeholder="username"><br><br>
+		      	<input type="Password" placeholder="Password"><br><br>
+		      	<center><input type="button" name="Login" value="Login"></center>
+		    </form>
+     	</div>	
+	</body>
+</html>

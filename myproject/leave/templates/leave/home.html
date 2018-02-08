@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Login</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js">
+	function getusername() {
+		var username = getValue("username");
+		document.write(username);
+		return username
+	}
+
+</script>
+<link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+<style>
+	.login {
+		margin-top: 15%;
+		margin-left: 35%;
+	}
+</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+			<a class="text-center col-md-12" style="font-size:25px" href="home.html">Leave Application</a>
+		<hr>
+	</nav>
+	<div class="login">
+		<div class="text-center col-md-6">
+			<div class="card">
+				<div class="card-header">
+					Login
+				</div>
+				<div class="card-block">
+					<form action="approval.html" method="get">
+						<div class="text-center">
+							<br/>
+							<input type="text" name=username placeholder="username"><br><br>
+							<input type="Password" placeholder="Password"><br><br>
+						</div>
+						<center><input type="submit" name="Login" value="Login"></center>
+						<br/>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
