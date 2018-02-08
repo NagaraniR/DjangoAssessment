@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from models import Employee, LeaveType, LeaveCredit, LeaveRequest, Status
-# from django.db import models
-
 
 class CreateSerializer(serializers.ModelSerializer):
 

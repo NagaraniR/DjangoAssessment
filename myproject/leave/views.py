@@ -2,25 +2,22 @@
 from __future__ import unicode_literals
 from rest_framework.views import APIView
 from rest_framework import status
-from models import Status,Employee,LeaveType
+from models import Status,Employee,LeaveType,LeaveRequest
 from django.core.serializers.python import Serializer
 from rest_framework.response import Response
 from .serializers import CreateSerializer, EmployeeSerializer, LeaveTypeSerializer
 import datetime
-from rest_framework.response import Response
 
 
 class ApplyView(APIView):
 
   def get(self, request, pk, format=None):
-
     employee = Employee.objects.filter(id=pk)
     leave_types = LeaveType.objects.all()
     serializer = EmployeeSerializer(employee, many=True)
     leave_type_serializer = LeaveTypeSerializer(leave_types, many=True)
 
     return Response({"employee":serializer.data,"leave_types":leave_type_serializer.data})
-
     
   def post(self, request, pk, format=None):
     user = Employee.objects.get(id=pk)
@@ -46,56 +43,30 @@ class ApplyView(APIView):
 
 class Approve(APIView):
 
-        
+    def get_leaves(self, pk):
+        try:
+            return LeaveRequest.objects.get(id=pk)
+        except LeaveRequest.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk, format=None):
+        user = self.get_leaves(pk)
+        user = createSerializer(user)
+        return Response(user.data)
 
-    def put(self,request,format=None):
-        #import pdb;pdb.set_trace()
-        # data = request.data 
-        # user = LeaveRequest.objects.get(id=request.data["id"])
-        # if user.reporter == 
-        # Status.objects.get(status=request.data["status"])
-        # data[status] = 
-
-        user = LeaveRequest.objects.get(id=request.data["id"])
+    def put(self,request, pk, format=None):
+        user = self.get_leaves(pk)
         status = Status.objects.get(status=request.data["status"])
-        user.status = status
-        user.save()
-        serializer = createSerializer(user)
-        return Response(serializer.data)
-        
-        # import pdb;pdb.set_trace()
+        request.data["status"] = status.status
+        serializer = createSerializer(request.data, many=False) 
+        if serializer.is_valid(raise_exception=True):
+            serializer.save() 
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+        # user = LeaveRequest.objects.get(id=request.data["id"])
         # status = Status.objects.get(status=request.data["status"])
-        # request.data["status"] = status.id
-        # serializer = updateSerializer(request.data,)
-        # if serializer.is_valid(raise_exception=True):
-        #     serializer.save()
-        # return Response(serializer.data) 
-        # return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-        # code = request.GET.get('code')
-        # employee = Employee.objects.get(code=code)
-        # status = Status.objects.get(code=100)
-        # if employee:
-        #     data = request.data
-        #     data["status"] = status.id
-        #     serializer = createSerializer(data=data, many=False)
-        #     if serializer.is_valid(raise_exception=True):
-        #         serializer.save()
-        #     return Response(serializer.data)
-        # return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # user.status = status
+        # user.save()
+        # serializer = createSerializer(user)
+        # return Response(serializer.data)
