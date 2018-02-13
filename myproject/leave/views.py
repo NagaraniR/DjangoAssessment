@@ -44,8 +44,9 @@ class ApplyPostView(APIView):
             to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
             no_days = abs((to_date-from_date).days)
             request.data["no_days"] = no_days
-            status = Status.objects.get(code=1)
+            status = Status.objects.get(status="Pending")
             request.data["status"]= status.id
+
             serializer = LeaveRequestSerializer(data=request.data, many=False)
             if serializer.is_valid(raise_exception=True):
               serializer.save()
@@ -142,8 +143,10 @@ class LeaveBalance(APIView):
 
     def get(self, request, pk, format=None):
         try:
-            balance = LeaveCredit.objects.filter(name=pk)
-            serializer = LeaveCreditSerializer(balance, many=True)
+            import pdb;pdb.set_trace()
+            employee = Employee.objects.get(id=pk)
+            credits = LeaveCredit.objects.filter(name=employee)
+            serializer = LeaveCreditSerializer(credits, many=True)
             return Response({"Leave available":serializer.data})
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"

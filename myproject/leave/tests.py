@@ -19,6 +19,10 @@ class BaseSetUp(APITestCase):
 								code=1,
 								name="Software Developer"
 								)
+		software_trainee = Designation.objects.create(
+								code=2,
+								name="software Traineer"
+								)
 		
 		personal = LeaveType.objects.create(
 								code=1,
@@ -65,25 +69,25 @@ class BaseSetUp(APITestCase):
 								reporting_senior=raveena
 								)
 
-		# omprakash = Employee.objects.create(
-		# 						code=1000, 
-		# 						name="OmPrakash", 
-		# 						email="om@gmail.com", 
-		# 						join_date="2016-05-10", 
-		# 						mode=1, 
-		# 						designation=self.designation_emp,
-		# 						reporting_senior=None
-		# 						)
+		omprakash = Employee.objects.create(
+								code=4, 
+								name="OmPrakash", 
+								email="om@gmail.com", 
+								join_date="2016-05-10", 
+								mode=1, 
+								designation=software_trainee,
+								reporting_senior=None
+								)
 		
-		# prabu = Employee.objects.create(
-		# 						code=1001, 
-		# 						name="Prabu", 
-		# 						email="prabu@gmail.com", 
-		# 						join_date="2016-04-10", 
-		# 						mode=1, 
-		# 						designation=self.designation_mgr,
-		# 						reporting_senior=self.emp1
-		# 						)
+		prabu = Employee.objects.create(
+								code=5, 
+								name="Prabu", 
+								email="prabu@gmail.com", 
+								join_date="2016-04-10", 
+								mode=1, 
+								designation=software_trainee,
+								reporting_senior=nagarani
+								)
 		pending = Status.objects.create(
 							code=1,
 							status="Pending"
@@ -120,11 +124,24 @@ class BaseSetUp(APITestCase):
 									reason="marriage",
 									status=pending
 									)
-		# LeaveCredit.objects.create(
-		# 	name=nagarani,
-		# 	leave_type=personal,
-			
-		# 	)
+		LeaveCredit.objects.create(
+									name=nagarani,
+									leave_type=personal,
+									available=11
+									)
+		LeaveCredit.objects.create(
+									name=nagarani,
+									leave_type=sick,
+									available=11
+									)
+		LeaveCredit.objects.create(
+									name=omprakash,
+									leave_type=personal,
+									available=11
+									)
+
+	# def tearDown(self):
+ #        del self.a
 
 class ApplyGetTestCase(BaseSetUp):
 	
@@ -176,8 +193,7 @@ class ApplyPostTestCase(BaseSetUp):
 						"leave_type": "Personal",
 	 					"from_date": "2018-04-17",
 	 					"to_date": "2018-04",
-	 					"reason": "fever",
-	 					"status": "Pending"
+	 					"reason": "fever"
 	 					}
 	 	response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -210,40 +226,43 @@ class ReportingSeniorsRequestsTestCase(BaseSetUp):
 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-# class LeaveApplicationTest(BaseSetUp):
-# 	# Test leave approval
-#     def test_approve(self):
-#         response = self.client.put('http://127.0.0.1:8000/leave/deny/', {"id": 1}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, 200)
+class LeaveApplicationTest(BaseSetUp):
+	# Test leave approval
+    def test_approve(self):
+        response = self.client.put('http://127.0.0.1:8000/leave/deny/', {"id": 1}, 
+        	format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-#     #Test wrong url
-#     def test_worng_url_approve(self):
-#     	response = self.client.put('http://127.0.0.1:8000/leave/approved/', {"id": 1}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, 404)
+    #Test wrong url
+    def test_worng_url_approve(self):
+    	response = self.client.put('http://127.0.0.1:8000/leave/approved/', {"id": 1}, 
+        	format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-#     #Test wrong data
-#     def test_wrong_data_approve(self):
-#     	response = self.client.get('http://127.0.0.1:8000/leave/approve/', 
-#     		{
-#     		"id": 1, 
-#     		"status":"Approved"
-#     		}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, 200)
+    #Test wrong data
+    def test_wrong_data_approve(self):
+    	response = self.client.get('http://127.0.0.1:8000/leave/approve/', 
+    		{
+    		"id": 1, 
+    		"status":"Approved"
+    		}, 
+        	format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-#     def test_unexist_id(self):
-#     	response = self.client.get('http://127.0.0.1:8000/leave/approve/', {"id": 0}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, 405)
+    def test_unexist_id(self):
+    	response = self.client.get('http://127.0.0.1:8000/leave/approve/', {"id": 0}, 
+        	format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-# class  LeaveBalanceTest(BaseSetUp):
+class  LeaveBalanceTest(BaseSetUp):
 
-# 	def test_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/available/2/', format='json')
-# 		self.assertEqual(response.data, 405)
+	def test_leave_balance(self):
+		print "fg", LeaveCredit.objects.all()
+		print "dfs", Employee.objects.get(name="Nagarani").id
+		response = self.client.get('http://127.0.0.1:8000/leave/available/57/', format='json')
+		print "df", response.data
+		self.assertEqual(response.data, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-# 	def test_badurl_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
-#     	self.assertEqual(response.data, 200)
+	def test_badurl_leave_balance(self):
+		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
