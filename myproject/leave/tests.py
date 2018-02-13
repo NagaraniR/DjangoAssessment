@@ -101,17 +101,14 @@ class ApplyGetTestCase(BaseSetUp):
 	
 	def test_user_data(self):
 		
-		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/2/")	
+		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/apply/employee/1/")	
 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
 		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
-		if response.data is not None:
-			self.assertEqual(response.data, expected)
-		else:
-			self.assertIs(response.data, None)
+		self.assertEqual(response.data, expected)
 
 	def test_response_bad_request(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/3/")			
+		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/apply/employee/3/")			
 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 	def test_request_not_found(self):	
@@ -181,7 +178,7 @@ class ReportingSeniorsRequestsTestCase(BaseSetUp):
 
 	def test_unknown_id(self):
 		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/10/", format='json')
-		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_request_not_found(self):
 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
