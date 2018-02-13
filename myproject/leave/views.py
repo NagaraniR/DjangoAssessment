@@ -2,16 +2,15 @@
 from __future__ import unicode_literals
 from rest_framework.views import APIView
 from rest_framework import status
-from models import Status,Employee,LeaveType, LeaveRequest, LeaveCredit
+from models import Status, Employee, LeaveType, LeaveRequest, LeaveCredit
 from django.core.serializers.python import Serializer
 from rest_framework.response import Response
-from .serializers import LeaveRequestSerializer, EmployeeSerializer, LeaveTypeSerializer
+from .serializers import LeaveRequestSerializer, EmployeeSerializer, LeaveTypeSerializer, LeaveCreditSerializer
 import datetime
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 from rest_framework.generics import GenericAPIView
 from django.db.models.query import QuerySet
-
 
 
 class ApplyGetView(APIView):
@@ -71,7 +70,6 @@ class UserHistoryView(APIView):
                     template = template = "An exception of function {0} occurred. Arguments:\n{1!r}"
                     message = template.format(type(exception).__name__, exception.args)
                     return Response(message)
-
 
 class WAPPRView(APIView):
 
@@ -139,7 +137,70 @@ class Approve(APIView):
 
 
 
+          
+class LeaveBalance(APIView):
 
+    def get(self, request, pk, format=None):
+        try:
+            balance = LeaveCredit.objects.filter(name=pk)
+            serializer = LeaveCreditSerializer(balance, many=True)
+            return Response({"Leave available":serializer.data})
+        except Exception as exception:
+            template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(exception).__name__, exception.args)
+            return Response(message)
 
+class LeaveRequestView(APIView):
 
+    def get(self, request, pk, format):
+        try:
+            leave_id = LeaveRequest.objects.get(id=pk)
+            leave_serializer = LeaveRequestSerializer(leave_id, many=True)
+            return Response(leave_serializer.data)
+        except Exception as Exception:
+            template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(exception).__name__, exception.args)
+            return Response(message)
 
+class DenyView(APIView):
+    
+    def put(self,request, format=None):
+        try:
+            user = LeaveRequest.objects.get(id=request.data["id"])
+            if user:
+                status = Status.objects.get(code=101)
+                if user.status == status:
+                    serializer = LeaveRequestSerializer(user)
+                    return Response(serializer.data)
+                else:
+                    user.status = status
+                    user.save()
+                    serializer = LeaveRequestSerializer(user)
+                    return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+        except Exception as exception:
+            template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(exception).__name__, exception.args)
+            return Response(message)
+
+class ApproveView(APIView):
+    
+    def put(self,request, format=None):
+        try:
+            user = LeaveRequest.objects.get(id=request.data["id"])
+            if user:
+                status = Status.objects.get(code=100)
+                if user.status == status:
+                    serializer = LeaveRequestSerializer(user)
+                else:
+                    user.status = status
+                    user.save()
+                    serializer = LeaveRequestSerializer(user)
+                    return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+        except Exception as exception:
+            template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(exception).__name__, exception.args)
+            return Response(message)
