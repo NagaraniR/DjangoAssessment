@@ -14,7 +14,7 @@ class BaseSetUp(APITestCase):
 
 	def setUp(self):
 		self.client = APIClient()
-		
+
 		self.designation = Designation.objects.create(
 								code=1,
 								name="Software Developer"
@@ -84,16 +84,20 @@ class BaseSetUp(APITestCase):
 								reporting_senior=self.omprakash
 								)
 		Status.objects.create(
+							designation=software_developer,
+							reporting_senior=raveena
+								)
+		pending = Status.objects.create(
 							code=1,
 							status="Pending"
 							)
 
-		Status.objects.create(
+		approved = Status.objects.create(
 							code=2,
 							status="Approved"
 							)
 		
-		Status.objects.create(
+		rejected = Status.objects.create(
 							code=3,
 							status="Rejected"
 							)
@@ -106,7 +110,7 @@ class BaseSetUp(APITestCase):
 									to_date="2018-12-13",
 									no_days=2,
 									reason="marriage",
-									status=Status.objects.get(id=1)
+									status=pending
 									)
 		
 		LeaveRequest.objects.create(
@@ -117,8 +121,9 @@ class BaseSetUp(APITestCase):
 									to_date="2018-12-13",
 									no_days=2,
 									reason="marriage",
-									status=Status.objects.get(id=2)
+									status=pending
 									)
+
 		LeaveCredit.objects.create(
 					            name=self.nagarani,
 					            leave_type = LeaveType.objects.get(id=1),
@@ -131,33 +136,6 @@ class BaseSetUp(APITestCase):
 								available="3"
 								)
 
-    # # Test leave approval
-    # def test_approve(self):
-    # 	response = self.client.put(
-    # 		'http://127.0.0.1:8000/leave/deny/', {"id": 1}, format='json'
-    # 		)
-    #     self.assertEqual(response.status_code, 200)
-
-    # #Test wrong url
-    # def test_worng_url_approve(self):
-    # 	response = self.client.put(
-    # 		'http://127.0.0.1:8000/leave/approved/', {"id": 1}, format='json'
-    # 		)
-    #     self.assertEqual(response.status_code, 404)
-
-    # #Test wrong data
-    # def test_wrong_data_approve(self):
-    # 	response = self.client.get(
-    # 		'http://127.0.0.1:8000/leave/approve/', { "id": 1, "status":"Approved" }, format='json'
-    # 		)
-    #     self.assertEqual(response.status_code, 200)
-
-    # def test_unexist_id(self):
-    # 	response = self.client.get(
-    # 		'http://127.0.0.1:8000/leave/approve/', {"id": 0}, format='json'
-    # 		)
-    #     self.assertEqual(response.status_code, 405)
-
 class ApplyGetTestCase(BaseSetUp):
 	
 	def test_user_data(self):
@@ -165,13 +143,10 @@ class ApplyGetTestCase(BaseSetUp):
 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
 		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
-		if response.data is not None:
-			self.assertEqual(response.data, expected)
-		else:
-			self.assertIs(response.data, None)
+		self.assertEqual(response.data, expected)
 
 	def test_response_bad_request(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/3/")			
+		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/3/")			
 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 	def test_request_not_found(self):	
@@ -219,11 +194,11 @@ class ApplyPostTestCase(BaseSetUp):
 class LeaveHistoryTestCase(BaseSetUp):
 
 	def test_user_history(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history/2/", format='json')
+		response = self.client.get("http://127.0.0.1:8000/leave/user/history/2/", format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_unknown_id(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history/20", format='json')
+		response = self.client.get("http://127.0.0.1:8000/leave/user/history/20", format='json')
 		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
 
 	def test_request_not_found(self):
@@ -238,7 +213,7 @@ class ReportingSeniorsRequestsTestCase(BaseSetUp):
 
 	def test_unknown_id(self):
 		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/10/", format='json')
-		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_request_not_found(self):
 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')

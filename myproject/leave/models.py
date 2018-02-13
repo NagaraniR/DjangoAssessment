@@ -12,7 +12,7 @@ class Designation(models.Model):
 
 class Employee(models.Model):
 	code = models.IntegerField(unique=True)
-	name = models.CharField(max_length = 30)
+	name = models.CharField(max_length = 30, unique=True)
 	email = models.CharField(max_length = 30, unique=True)
 	join_date = models.DateField()
 	mode = models.BooleanField()
@@ -60,4 +60,4 @@ class LeaveRequest(models.Model):
 	status = models.ForeignKey(Status,on_delete=models.CASCADE)
 
 	def __str__(self):
-		return str(self.id)
+		return str(self.name)
