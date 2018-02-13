@@ -87,53 +87,6 @@ class WAPPRView(APIView):
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
    
-class Approve(APIView):
-
-        
-
-
-    def put(self,request,format=None):
-        #import pdb;pdb.set_trace()
-        # data = request.data 
-        # user = LeaveRequest.objects.get(id=request.data["id"])
-        # if user.reporter == 
-        # Status.objects.get(status=request.data["status"])
-        # data[status] = 
-
-        user = LeaveRequest.objects.get(id=request.data["id"])
-        status = Status.objects.get(status=request.data["status"])
-        user.status = status
-        user.save()
-        serializer = createSerializer(user)
-        return Response(serializer.data)
-        
-        # import pdb;pdb.set_trace()
-        # status = Status.objects.get(status=request.data["status"])
-        # request.data["status"] = status.id
-        # serializer = updateSerializer(request.data,)
-        # if serializer.is_valid(raise_exception=True):
-        #     serializer.save()
-        # return Response(serializer.data) 
-        # return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-        # code = request.GET.get('code')
-        # employee = Employee.objects.get(code=code)
-        # status = Status.objects.get(code=100)
-        # if employee:
-        #     data = request.data
-        #     data["status"] = status.id
-        #     serializer = createSerializer(data=data, many=False)
-        #     if serializer.is_valid(raise_exception=True):
-        #         serializer.save()
-        #     return Response(serializer.data)
-        # return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-
-
-
 
 
 
@@ -143,7 +96,7 @@ class LeaveBalance(APIView):
 
     def get(self, request, pk, format=None):
         try:
-            import pdb;pdb.set_trace()
+            # import pdb;pdb.set_trace()
             employee = Employee.objects.get(id=pk)
             credits = LeaveCredit.objects.filter(name=employee)
             serializer = LeaveCreditSerializer(credits, many=True)

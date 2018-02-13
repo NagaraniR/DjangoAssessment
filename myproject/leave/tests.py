@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from rest_framework.test import APITestCase, APIClient
 from . import views
-from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status,Designation
+from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status, Designation
 from .serializers import EmployeeSerializer, LeaveTypeSerializer
 from rest_framework import status
 import json
@@ -14,7 +14,7 @@ class BaseSetUp(APITestCase):
 
 	def setUp(self):
 		self.client = APIClient()
-		
+
 		software_developer = Designation.objects.create(
 								code=1,
 								name="Software Developer"
@@ -30,9 +30,8 @@ class BaseSetUp(APITestCase):
 								)
 		
 		sick = LeaveType.objects.create(
-							code=2,
-							catagory="Sick"
-							)
+								code=2, 
+								catagory="Sick")
 		
 		earned = LeaveType.objects.create(
 								code=3,
@@ -76,8 +75,9 @@ class BaseSetUp(APITestCase):
 								join_date="2016-05-10", 
 								mode=1, 
 								designation=software_trainee,
-								reporting_senior=None
+								reporting_senior=raveena
 								)
+		
 		
 		prabu = Employee.objects.create(
 								code=5, 
@@ -88,6 +88,7 @@ class BaseSetUp(APITestCase):
 								designation=software_trainee,
 								reporting_senior=nagarani
 								)
+		
 		pending = Status.objects.create(
 							code=1,
 							status="Pending"
@@ -146,8 +147,7 @@ class BaseSetUp(APITestCase):
 class ApplyGetTestCase(BaseSetUp):
 	
 	def test_user_data(self):
-		
-		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/1/")	
+		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/2/")	
 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
 		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
@@ -169,8 +169,7 @@ class ApplyPostTestCase(BaseSetUp):
 						"leave_type": "Personal",
 	 					"from_date": "2018-04-17",
 	 					"to_date": "2018-04-20",
-	 					"reason": "fever",
-	 					"status": "Pending"
+	 					"reason": "fever"
 	 					}
 	 	self.response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
 		self.assertEqual(self.response.status_code, status.HTTP_200_OK)
@@ -181,8 +180,7 @@ class ApplyPostTestCase(BaseSetUp):
 						"leave_type": "Personal",
 	 					"from_date": "2018-04-17",
 	 					"to_date": "2018-04-20",
-	 					"reason": "fever",
-	 					"status": "Pending"
+	 					"reason": "fever"
 	 					}
 	 	response = self.client.post("http://127.0.0.1:8000/apply/",request_data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -257,12 +255,10 @@ class LeaveApplicationTest(BaseSetUp):
 class  LeaveBalanceTest(BaseSetUp):
 
 	def test_leave_balance(self):
-		print "fg", LeaveCredit.objects.all()
-		print "dfs", Employee.objects.get(name="Nagarani").id
 		response = self.client.get('http://127.0.0.1:8000/leave/available/57/', format='json')
-		print "df", response.data
-		self.assertEqual(response.data, status.HTTP_405_METHOD_NOT_ALLOWED)
+		self.assertEqual(response.content, '{"Leave available":[{"id":34,"available":11,"name":57,"leave_type":34},{"id":35,"available":11,"name":57,"leave_type":35}]}')
 
 	def test_badurl_leave_balance(self):
 		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+		
