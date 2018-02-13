@@ -76,11 +76,12 @@ class WAPPRView(APIView):
 
     def get(self, request, pk, format=None):
         try:
+            # import pdb;pdb.set_trace()
             reporter = Employee.objects.get(id=pk)
-            employees = Employee.objects.filter(reporting_senior=reporter)
+            employees = Employee.objects.filter(reporting_senior=reporter).values_list("id", flat=True)
             # requests = LeaveRequest.objects.filter(name=employees)
-            status = Status.objects.get(status="Pending")
-            waiting_for_approval = LeaveRequest.objects.filter(name=employees, status=status.id)
+            waiting_for_approval = LeaveRequest.objects.filter(name__in=employees)
+            status = Status.objects.get(code=101)
             pending_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
             return Response(pending_serializer.data)
         except Exception as exception:
@@ -102,17 +103,18 @@ class LeaveBalance(APIView):
 
 class LeaveRequestView(APIView):
 
-    def get(self, request, pk, format):
+    def get(self, request, pk, format=None):
         try:
+            # import pdb;pdb.set_trace()
             leave_id = LeaveRequest.objects.get(id=pk)
-            leave_serializer = LeaveRequestSerializer(leave_id, many=True)
+            leave_serializer = LeaveRequestSerializer(leave_id, many=False)
             return Response(leave_serializer.data)
-        except Exception as Exception:
+        except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
 
-class DenyView(APIView):
+class DenyRequest(APIView):
     
     def put(self,request, format=None):
         try:
@@ -134,8 +136,20 @@ class DenyView(APIView):
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
 
-class ApproveView(APIView):
-    
+class ApproveRequest(APIView):
+
+    # def LOP(self, user):
+    def check_leave_balance(self, user):
+        # import pdb;pdb.set_trace()
+        user_leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
+        if user_leave_balance.available >= 0:
+            available = int(user_leave_balance.available) 
+            no_days = int(user.no_days)
+            available -= no_days
+            user_leave_balance.available = long(available)
+            user_leave_balance.save()
+        return user
+
     def put(self,request, format=None):
         try:
             user = LeaveRequest.objects.get(id=request.data["id"])
@@ -144,9 +158,10 @@ class ApproveView(APIView):
                 if user.status == status:
                     serializer = LeaveRequestSerializer(user)
                 else:
-                    user.status = status
-                    user.save()
-                    serializer = LeaveRequestSerializer(user)
+                    user_data = self.check_leave_balance(user)
+                    user_data.status = status
+                    user_data.save()
+                    serializer = LeaveRequestSerializer(user_data)
                     return Response(serializer.data)
             else:
                 return Response(serializer.errors)

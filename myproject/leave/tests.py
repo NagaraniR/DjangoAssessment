@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from rest_framework.test import APITestCase, APIClient
 from . import views
-from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status,Designation
+from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status, Designation
 from .serializers import EmployeeSerializer, LeaveTypeSerializer
 from rest_framework import status
 import json
@@ -15,76 +15,73 @@ class BaseSetUp(APITestCase):
 	def setUp(self):
 		self.client = APIClient()
 		
-		Designation.objects.create(
+		self.designation = Designation.objects.create(
 								code=1,
 								name="Software Developer"
 								)
-
-		designation = Designation.objects.get(id=1)
 		
-		LeaveType.objects.create(
+		self.leave_type_personal = LeaveType.objects.create(
 								code=1,
 								catagory="Personal"
 								)
 		
-		LeaveType.objects.create(
-							code=2,
-							catagory="Sick"
-							)
+		self.leave_type_sick = LeaveType.objects.create(
+								code=2, 
+								catagory="Sick")
 		
-		LeaveType.objects.create(
+		self.leave_type_earned = LeaveType.objects.create(
 								code=3,
 								catagory="Earned"
 								)
 		
-		raveena = Employee.objects.create(
+		self.raveena = Employee.objects.create(
 										code=1,
 										name="Raveena",
 										email="raveena@gmail.com",
 										join_date="2018-02-13",
 										mode=1,
-										designation=designation,
+										designation=self.designation,
 										reporting_senior=None
 										)
 
-		nagarani = Employee.objects.create(
+		self.nagarani = Employee.objects.create(
 								code=2,
 								name="Nagarani",
 								email="nagarani@gmail.com",
 								join_date="2018-02-13",
 								mode=1,
-								designation=designation,
-								reporting_senior=raveena
+								designation=self.designation,
+								reporting_senior=self.raveena
 								)
 		
-		nithya = Employee.objects.create(
+		self.nithya = Employee.objects.create(
 								code=3,
 								name="Nithya",
 								email="nithya@gmail.com",
 								join_date="2018-02-13",
 								mode=1,
-								designation=designation,
-								reporting_senior=raveena
+								designation=self.designation,
+								reporting_senior=self.raveena
 								)
 
-		omprakash = Employee.objects.create(
+		self.omprakash = Employee.objects.create(
 								code=1000, 
 								name="OmPrakash", 
 								email="om@gmail.com", 
 								join_date="2016-05-10", 
 								mode=1, 
-								designation=self.designation_emp,
-								reporting_senior=None
+								designation=self.designation,
+								reporting_senior=self.prabu
 								)
 		
-		prabu = Employee.objects.create(
+		self.prabu = Employee.objects.create(
 								code=1001, 
 								name="Prabu", 
 								email="prabu@gmail.com", 
 								join_date="2016-04-10", 
 								mode=1, 
-								designation=self.designation_mgr,
-								reporting_senior=self.emp1
+								designation=self.designation,
+								reporting_senior=self.omprakash
 								)
 		Status.objects.create(
 							code=1,
@@ -102,9 +99,9 @@ class BaseSetUp(APITestCase):
 							)
 		
 		LeaveRequest.objects.create(
-									name=nagarani,
-									reporter=nagarani.reporting_senior,
-									leave_type=LeaveType.objects.get(id=1),
+									name=self.nagarani,
+									reporter=self.nagarani.reporting_senior,
+									leave_type=self.leave_type_sick,
 									from_date="2018-12-12",
 									to_date="2018-12-13",
 									no_days=2,
@@ -113,9 +110,9 @@ class BaseSetUp(APITestCase):
 									)
 		
 		LeaveRequest.objects.create(
-									name=nithya,
-									reporter=nithya.reporting_senior,
-									leave_type=LeaveType.objects.get(id=1),
+									name=self.nithya,
+									reporter=self.nithya.reporting_senior,
+									leave_type=self.leave_type_earned,
 									from_date="2018-12-12",
 									to_date="2018-12-13",
 									no_days=2,
@@ -123,21 +120,47 @@ class BaseSetUp(APITestCase):
 									status=Status.objects.get(id=2)
 									)
 		LeaveCredit.objects.create(
-					            name = omprakash,
+					            name=self.nagarani,
 					            leave_type = LeaveType.objects.get(id=1),
 					            available="3"
 					            )
 
         LeaveCredit.objects.create(
-								name = nagarani,
+								name=self.omprakash,
 								leave_type = LeaveType.objects.get(id=1),
 								available="3"
 								)
 
+    # # Test leave approval
+    # def test_approve(self):
+    # 	response = self.client.put(
+    # 		'http://127.0.0.1:8000/leave/deny/', {"id": 1}, format='json'
+    # 		)
+    #     self.assertEqual(response.status_code, 200)
+
+    # #Test wrong url
+    # def test_worng_url_approve(self):
+    # 	response = self.client.put(
+    # 		'http://127.0.0.1:8000/leave/approved/', {"id": 1}, format='json'
+    # 		)
+    #     self.assertEqual(response.status_code, 404)
+
+    # #Test wrong data
+    # def test_wrong_data_approve(self):
+    # 	response = self.client.get(
+    # 		'http://127.0.0.1:8000/leave/approve/', { "id": 1, "status":"Approved" }, format='json'
+    # 		)
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_unexist_id(self):
+    # 	response = self.client.get(
+    # 		'http://127.0.0.1:8000/leave/approve/', {"id": 0}, format='json'
+    # 		)
+    #     self.assertEqual(response.status_code, 405)
+
 class ApplyGetTestCase(BaseSetUp):
 	
 	def test_user_data(self):
-		
 		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/2/")	
 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
@@ -252,7 +275,7 @@ class LeaveApplicationTest(BaseSetUp):
 class  LeaveBalanceTest(BaseSetUp):
 
 	def test_leave_balance(self):
-    	response = self.client.get('http://127.0.0.1:8000/leave/available/2/', format='json')
+		response = self.client.get('http://127.0.0.1:8000/leave/available/2/', format='json')
     	self.assertEqual(response.data, 405)
 
 	def test_badurl_leave_balance(self):
