@@ -1,134 +1,197 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.urls import reverse
+from rest_framework.test import APITestCase, APIClient
+from . import views
+from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status,Designation
+from .serializers import EmployeeSerializer, LeaveTypeSerializer
 from rest_framework import status
-from rest_framework.test import APITestCase
-from .models import Employee, LeaveType
+import json
+from django.http import HttpResponsePermanentRedirect
 
-class AccountTests(APITestCase):
-    def test_create_account(self):
-        """
-        Ensure we can create a new account object.
-        """
-        # url = reverse('account-list')
-        url = "http://127.0.0.1:8000/leave/apply/2/"
-        data = {'name': 'DabApps'}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.data, status.HTTP_201_CREATED)
-		# response = self.client.post("http://127.0.0.1:8000/leave/apply/2/", {}, format='json')
-		# self.assertEqual(response.data['name'], {})
 
-# Create your tests here.
-# factory = APIRequestFactory()
-# request = factory.get('/approval/OmPrakash',{'name':'OmPrakash'},format='json')
+class BaseSetUp(APITestCase):
 
-# class LeaveRequestTest(APITestCase):
-# 	def setUp(self):
-# 		self.client = Client()
-# 		self.username = 'admin'
-# 		self.email = 'admin@gmail.com'
-# 		self.password = 'test1234'
-# 		self.test_user = User.objects.create_user(self.username, self.email, self.password)
-# 		login = self.client.login(username=self.username, password=self.password)
-# 		self.assertEqual(login, True)
+	def setUp(self):
+		self.client = APIClient()
+		Designation.objects.create(
+								code=1,
+								name="Software Developer"
+								)
+		designation = Designation.objects.get(id=1)
+		raveena = Employee.objects.create(
+										code=1,
+										name="Raveena",
+										email="raveena@gmail.com",
+										join_date="2018-02-13",
+										mode=1,
+										designation=designation,
+										reporting_senior=None
+										)
+		LeaveType.objects.create(
+								code=1,
+								catagory="Personal"
+								)
+		LeaveType.objects.create(
+							code=2,
+							catagory="Sick"
+							)
+		LeaveType.objects.create(
+								code=3,
+								catagory="Earned"
+								)
+
+		nagarani = Employee.objects.create(
+								code=2,
+								name="Nagarani",
+								email="nagarani@gmail.com",
+								join_date="2018-02-13",
+								mode=1,
+								designation=designation,
+								reporting_senior=raveena
+								)
+		nithya = Employee.objects.create(
+								code=3,
+								name="Nithya",
+								email="nithya@gmail.com",
+								join_date="2018-02-13",
+								mode=1,
+								designation=designation,
+								reporting_senior=raveena
+								
+			)
+		Status.objects.create(
+							code=1,
+							status="Pending"
+							)
+		Status.objects.create(
+							code=2,
+							status="Approved"
+							)
+		Status.objects.create(
+							code=3,
+							status="Rejected"
+							)
+		LeaveRequest.objects.create(
+									name=nagarani,
+									reporter=nagarani.reporting_senior,
+									leave_type=LeaveType.objects.get(id=1),
+									from_date="2018-12-12",
+									to_date="2018-12-13",
+									no_days=2,
+									reason="marriage",
+									status=Status.objects.get(id=1)
+									)
+		LeaveRequest.objects.create(
+									name=nithya,
+									reporter=nithya.reporting_senior,
+									leave_type=LeaveType.objects.get(id=1),
+									from_date="2018-12-12",
+									to_date="2018-12-13",
+									no_days=2,
+									reason="marriage",
+									status=Status.objects.get(id=2)
+									)
+			
+		
+																			
+
+class ApplyGetTestCase(BaseSetUp):
+
 	
-# 	# def setUp(self):
-# 	# 	user = User.objects.create(
-# 	# 		code=1001
-# 	# 		name ='OmPrakash',
-# 	# 		reporting_senior = "Badri",)
-# 	# 	type_leave = LeaveType.objects.create(
-# 	# 		catagory = "Sick") 
-# 	# 	status = Status.objects.create(status="Pending")
-# 	# 	LeaveRequest.objects.create(
-# 	# 		code=1001,
-# 	# 		employee_name=user,
-# 	# 		reporter = user,
-# 	# 		leave_type=type_leave,
-# 	# 		from_date="12-01-2018",
-# 	# 		to_date="13-01-2018", 
-# 	# 		no_days=1, 
-# 	# 		reason="Fever", 
-# 	# 		status=status)
+	def test_user_data(self):
+		
+		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/2/")	
+		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
+		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
+		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
+		if response.data is not None:
+			self.assertEqual(response.data, expected)
+		else:
+			self.assertIs(response.data, None)
+
+	def test_response_bad_request(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/apply/employee/3/")			
+		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+	def test_request_not_found(self):	
+		response = self.client.get("http://127.0.0.1:8000/leave/applmployee/2/")	
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+		
+class ApplyPostTestCase(BaseSetUp):	
 	
-# 	def test_info(self):
-# 		response = client.get(reverse('approval:OmPrakash'))
-# 		leave_info = LeaveRequest.objects.all()
-# 		serializer = LeaveRequestSerializer(leave_info, many=True)
-# 		self.assertEqual(response.data, serializer.data)
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_post_leave_response(self):
+		request_data = {
+	 					"name": "Nagarani",
+						"leave_type": "Personal",
+	 					"from_date": "2018-04-17",
+	 					"to_date": "2018-04-20",
+	 					"reason": "fever",
+	 					"status": "Pending"
+	 					}
+		
+	 	self.response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
+		self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
-# from django.core.urlresolvers import reverse
-# from rest_framework import status
-# from rest_framework.test import APITestCase
-# from models import Designation, User, Status, LeaveType, LeaveCredit, LeaveRequest
-# from serializers import UserSerializer
-# import json
+	def test_request_not_found(self):
+		request_data = {
+	 					"name": "Nagarani",
+						"leave_type": "Personal",
+	 					"from_date": "2018-04-17",
+	 					"to_date": "2018-04-20",
+	 					"reason": "fever",
+	 					"status": "Pending"
+	 					}
+		
+	 	response = self.client.post("http://127.0.0.1:8000/apply/",request_data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-# class ReadUserTest(APITestCase):
-# 	client = APIClient()
-# 	# def setUp(self):
-# 	# 	import pdb;pdb.set_trace()
-# 	# 	# self.superuser = User.objects.create_superuser('admin', 'admin@example.com', 'admin1234')
-# 	# 	# self.client.login(username='admin', password='adminadmin')
-# 	# 	designation1 = Designation.objects.create(code=111, name = "Python trainee")
-# 	# 	designation2 = Designation.objects.create(code=112, name = "DevOps Trainee")
-#  #        User.objects.create(
-#  #            code = 1,
-#  #             name='raja',
-#  #              email='raja@example.com',
-#  #               join_date="2017-07-22",
-#  #                mode=True,
-#  #                designation=designation1,
-#  #                reporting_senior='raja')
+	def test_response_format(self):
+		request_data = {
+	 					"name": "Nagarani",
+						"leave_type": "Personal",
+	 					"from_date": "2018-04-17",
+	 					"to_date": "2018-04",
+	 					"reason": "fever",
+	 					"status": "Pending"
+	 					}
+		
+	 	response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
+		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class LeaveHistoryTestCase(BaseSetUp):
+
+	def test_user_history(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history/2/", format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+	def test_unknown_id(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history/20", format='json')
+		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+
+	def test_request_not_found(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history=h/20", format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class ReportingSeniorsRequestsTestCase(BaseSetUp):
+
+	def test_ReportingSeniors_requests(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/1/", format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+	def test_unknown_id(self):
+		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/10/", format='json')
+		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+
+	def test_request_not_found(self):
+		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-# 	def test_user(self):
-# 		import pdb;pdb.set_trace()
-# 		#print "hi"
-# 		response = client.get(reverse('user:naga'))
-# 		# designation1 = Designation.objects.create(code=111, name = "Python trainee")
-# 		# User.objects.create(
-#   #           code = 1,
-#   #            name='raja',
-#   #             email='raja@example.com',
-#   #              join_date="2017-07-22",
-#   #               mode=True,
-#   #               designation=designation1,
-#   #               reporting_senior='raja')
-# 		# designation = Designation.objects.all()
-# 		# user1 = User.objects.all()
-#         serializer = UserSerializer(User.objects.filter(name="naga"), many=True)
-#         print "sda",serializer.data
-#         #print "sdg",response.data
-#         self.assertEqual(response.data, serializer.data)
-# # class UserTest(APITestCase):
-# 	# url = reverse('user')
-	
 
-# from __future__ import unicode_literals
 
-# from django.test import TestCase
-# from .models import LeaveRequest
-# from django.core.urlresolvers import reverse
-# from rest_framework import status
-# from rest_framework.test import APITestCase
 
-# from .serializers import LeaveRequestSerializer
-# # Create your tests here.
 
-# # factory = APIRequestFactory()
-# # request = factory.get('/approval/OmPrakash',{'name':'OmPrakash'},format='json')
 
-# class ReadUserTest(APITestCase):
-# 	def sutUp(self):
-# 		self.superuser = LeaveRequest.objects.create_superuser('admin', 'admin@example.com', 'admin1234')
-# 		self.client.login(username='admin', password='admin1234')
-# 		self.user = LeaveRequest.objects.create(employee_name="OmPrakash")
-# 		# self.data = {'1004', 'OmPrakash', 'omprakash@gmail.com', '2018-01-10', '1', 'Developer', 'Badri'}
 
-# 	def test_can_read_user_list(self):
-# 		response = self.client.get(reverse('approval'))
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+		

@@ -3,7 +3,7 @@ from models import Employee, LeaveType, LeaveCredit, LeaveRequest, Status
 # from django.db import models
 
 
-class CreateSerializer(serializers.ModelSerializer):
+class LeaveRequestSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = LeaveRequest
@@ -22,6 +22,9 @@ class LeaveTypeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = LeaveType
 		fields = "__all__"				
-		
+
+
+			
+
 
 	

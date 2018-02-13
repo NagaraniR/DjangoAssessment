@@ -59,6 +59,7 @@ ROOT_URLCONF = 'myproject.urls'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
        # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     # 'TEST_REQUEST_RENDERER_CLASSES': (
     #     'rest_framework.renderers.MultiPartRenderer',
@@ -97,7 +98,12 @@ DATABASES = {
         'PASSWORD': 'root',                  # Not used with sqlite3.
         'PORT': '3306',
         'HOST': '127.0.0.1',
+
     }
+# 'TEST': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'test_leaveapp',
+#             }
 } 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
