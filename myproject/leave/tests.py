@@ -14,11 +14,29 @@ class BaseSetUp(APITestCase):
 
 	def setUp(self):
 		self.client = APIClient()
+		
 		Designation.objects.create(
 								code=1,
 								name="Software Developer"
 								)
+
 		designation = Designation.objects.get(id=1)
+		
+		LeaveType.objects.create(
+								code=1,
+								catagory="Personal"
+								)
+		
+		LeaveType.objects.create(
+							code=2,
+							catagory="Sick"
+							)
+		
+		LeaveType.objects.create(
+								code=3,
+								catagory="Earned"
+								)
+		
 		raveena = Employee.objects.create(
 										code=1,
 										name="Raveena",
@@ -28,18 +46,6 @@ class BaseSetUp(APITestCase):
 										designation=designation,
 										reporting_senior=None
 										)
-		LeaveType.objects.create(
-								code=1,
-								catagory="Personal"
-								)
-		LeaveType.objects.create(
-							code=2,
-							catagory="Sick"
-							)
-		LeaveType.objects.create(
-								code=3,
-								catagory="Earned"
-								)
 
 		nagarani = Employee.objects.create(
 								code=2,
@@ -50,6 +56,7 @@ class BaseSetUp(APITestCase):
 								designation=designation,
 								reporting_senior=raveena
 								)
+		
 		nithya = Employee.objects.create(
 								code=3,
 								name="Nithya",
@@ -58,20 +65,42 @@ class BaseSetUp(APITestCase):
 								mode=1,
 								designation=designation,
 								reporting_senior=raveena
-								
-			)
+								)
+
+		omprakash = Employee.objects.create(
+								code=1000, 
+								name="OmPrakash", 
+								email="om@gmail.com", 
+								join_date="2016-05-10", 
+								mode=1, 
+								designation=self.designation_emp,
+								reporting_senior=None
+								)
+		
+		prabu = Employee.objects.create(
+								code=1001, 
+								name="Prabu", 
+								email="prabu@gmail.com", 
+								join_date="2016-04-10", 
+								mode=1, 
+								designation=self.designation_mgr,
+								reporting_senior=self.emp1
+								)
 		Status.objects.create(
 							code=1,
 							status="Pending"
 							)
+
 		Status.objects.create(
 							code=2,
 							status="Approved"
 							)
+		
 		Status.objects.create(
 							code=3,
 							status="Rejected"
 							)
+		
 		LeaveRequest.objects.create(
 									name=nagarani,
 									reporter=nagarani.reporting_senior,
@@ -82,6 +111,7 @@ class BaseSetUp(APITestCase):
 									reason="marriage",
 									status=Status.objects.get(id=1)
 									)
+		
 		LeaveRequest.objects.create(
 									name=nithya,
 									reporter=nithya.reporting_senior,
@@ -92,12 +122,19 @@ class BaseSetUp(APITestCase):
 									reason="marriage",
 									status=Status.objects.get(id=2)
 									)
-			
-		
-																			
+		LeaveCredit.objects.create(
+					            name = omprakash,
+					            leave_type = LeaveType.objects.get(id=1),
+					            available="3"
+					            )
+
+        LeaveCredit.objects.create(
+								name = nagarani,
+								leave_type = LeaveType.objects.get(id=1),
+								available="3"
+								)
 
 class ApplyGetTestCase(BaseSetUp):
-
 	
 	def test_user_data(self):
 		
@@ -129,7 +166,6 @@ class ApplyPostTestCase(BaseSetUp):
 	 					"reason": "fever",
 	 					"status": "Pending"
 	 					}
-		
 	 	self.response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
 		self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
@@ -142,7 +178,6 @@ class ApplyPostTestCase(BaseSetUp):
 	 					"reason": "fever",
 	 					"status": "Pending"
 	 					}
-		
 	 	response = self.client.post("http://127.0.0.1:8000/apply/",request_data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -155,7 +190,6 @@ class ApplyPostTestCase(BaseSetUp):
 	 					"reason": "fever",
 	 					"status": "Pending"
 	 					}
-		
 	 	response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -187,11 +221,40 @@ class ReportingSeniorsRequestsTestCase(BaseSetUp):
 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+class LeaveApplicationTest(BaseSetUp):
+	# Test leave approval
+    def test_approve(self):
+        response = self.client.put('http://127.0.0.1:8000/leave/deny/', {"id": 1}, 
+        	format='json')
+        self.assertEqual(response.status_code, 200)
 
+    #Test wrong url
+    def test_worng_url_approve(self):
+    	response = self.client.put('http://127.0.0.1:8000/leave/approved/', {"id": 1}, 
+        	format='json')
+        self.assertEqual(response.status_code, 404)
 
+    #Test wrong data
+    def test_wrong_data_approve(self):
+    	response = self.client.get('http://127.0.0.1:8000/leave/approve/', 
+    		{
+    		"id": 1, 
+    		"status":"Approved"
+    		}, 
+        	format='json')
+        self.assertEqual(response.status_code, 200)
 
+    def test_unexist_id(self):
+    	response = self.client.get('http://127.0.0.1:8000/leave/approve/', {"id": 0}, 
+        	format='json')
+        self.assertEqual(response.status_code, 405)
 
+class  LeaveBalanceTest(BaseSetUp):
 
+	def test_leave_balance(self):
+    	response = self.client.get('http://127.0.0.1:8000/leave/available/2/', format='json')
+    	self.assertEqual(response.data, 405)
 
-
-		
+	def test_badurl_leave_balance(self):
+		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
+    	self.assertEqual(response.data, 200)

@@ -10,5 +10,8 @@ url(r'^user/leave/apply/employee/(?P<pk>\d+)/$', views.ApplyGetView.as_view(), n
 url(r'^apply/$', views.ApplyPostView.as_view(), name = 'apply'),
 url(r'^user/leave/history/(?P<pk>\d+)/$', views.UserHistoryView.as_view(), name = 'apply'),
 url(r'^WAPPR/(?P<pk>\d+)/$', views.WAPPRView.as_view(), name = 'apply'),
-url(r'^approve/$', views.Approve.as_view(), name='approve'),
+	
+	url(r'^deny/$', views.DenyView.as_view(), name='leave_deny'),
+	url(r'^approve/$', views.ApproveView.as_view(), name='leave_approve'),
+	url(r'^available/(?P<pk>\d+)/$', views.LeaveBalance.as_view(),name='available_leaves'),
 ]
