@@ -224,7 +224,7 @@ class ReportingSeniorsRequestsTestCase(BaseSetUp):
 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-class LeaveApplicationTest(BaseSetUp):
+class LeaveApprovalTest(BaseSetUp):
 	# Test leave approval
     def test_approve(self):
         response = self.client.put('http://127.0.0.1:8000/leave/deny/', {"id": 1}, 
