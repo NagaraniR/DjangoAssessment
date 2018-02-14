@@ -87,11 +87,6 @@ class WAPPRView(APIView):
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
    
-
-
-
-
-          
 class LeaveBalance(APIView):
 
     def get(self, request, pk, format=None):
@@ -108,7 +103,7 @@ class LeaveBalance(APIView):
 
 class LeaveRequestView(APIView):
 
-    def get(self, request, pk, format):
+    def get(self, request, pk, format=None):
         try:
             leave_id = LeaveRequest.objects.get(id=pk)
             leave_serializer = LeaveRequestSerializer(leave_id, many=True)
@@ -141,22 +136,62 @@ class DenyView(APIView):
             return Response(message)
 
 class ApproveView(APIView):
-    
+
     def put(self,request, format=None):
         try:
             user = LeaveRequest.objects.get(id=request.data["id"])
             if user:
                 status = Status.objects.get(code=100)
-                if user.status == status:
-                    serializer = LeaveRequestSerializer(user)
-                else:
+                if user.status != status:
+                    user_data = self.check_leave_type(user)
                     user.status = status
                     user.save()
-                    serializer = LeaveRequestSerializer(user)
-                    return Response(serializer.data)
+                    serializer = LeaveRequestSerializer(user_data)
+                    return Response(serializer.data)                   
             else:
                 return Response(serializer.errors)
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
+
+    def check_leave_type(self, user):
+        lop = LeaveType.objects.get(code=100)
+        if user.leave_type == lop:
+            user = self.add_lop(user)
+        else:
+            user = self.check_leave_balance(user)
+        return user
+
+    # def get_leave_balance(self, user):
+    #     leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
+    #     return leave_balance
+
+    def check_leave_balance(self, user):
+        leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
+        if leave_balance.available > user.no_days:
+            available = int(leave_balance.available)
+            no_days = int(user.no_days)
+            available -= no_days
+            leave_balance.available = long(available)
+            leave_balance.save()
+            return user
+        else:
+            pass
+
+    def add_lop(self, user):
+        leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
+        available = int(leave_balance.available)
+        no_days = int(user.no_days)
+        available += no_days
+        leave_balance.available = long(available)
+        leave_balance.save()
+        return user
+
+    # def leave_lop(self, user):
+    #     type_lop = LeaveType.objects.get(code=100)
+    #     user.leave_type =  type_lop
+    #     user.save()
+    #     return user
+
+   
