@@ -39,14 +39,16 @@ class ApplyPostView(APIView):
             request.data["name"] = user.id
             request.data["reporter"] = user.reporting_senior.id
             leave = LeaveType.objects.get(catagory = request.data["leave_type"])
-            request.data["leave_type"] = leave.id
+            available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
             from_date = datetime.datetime.strptime(self.request.data.get('from_date'), "%Y-%m-%d")
             to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
             no_days = abs((to_date-from_date).days)
-            request.data["no_days"] = no_days
+            if no_days > available.available:
+                return Response("Sorry the no of days that you applied is not available in your balance")
+            else:
+                request.data["no_days"] = no_days
             status = Status.objects.get(status="Pending")
             request.data["status"]= status.id
-
             serializer = LeaveRequestSerializer(data=request.data, many=False)
             if serializer.is_valid(raise_exception=True):
               serializer.save()
