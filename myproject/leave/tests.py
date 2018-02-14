@@ -147,7 +147,8 @@ class BaseSetUp(APITestCase):
 class ApplyGetTestCase(BaseSetUp):
 	
 	def test_user_data(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/2/")	
+		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/1/")	
+		print "hjgf", response.content
 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
 		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
