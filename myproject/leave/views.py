@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import exception_handler
 from rest_framework.generics import GenericAPIView
 from django.db.models.query import QuerySet
+from django.http import JsonResponse
 
 
 class ApplyGetView(APIView):
@@ -28,7 +29,8 @@ class ApplyGetView(APIView):
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
 
-class ApplyPostView(APIView):    
+class ApplyPostView(APIView):  
+
     
     def post(self, request, format=None):
         try:
@@ -88,6 +90,13 @@ class WAPPRView(APIView):
             template = template = "An exception of function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
+
+class PendingRecordView(APIView):
+
+    def get(self, request, pk, format=None):
+        pending_records = LeaveRequest.objects.filter(name=pk, status=Status.objects.get(status="Pending"))
+        pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
+        return Response(pending_records_serializer.data)
    
 class LeaveBalance(APIView):
 
