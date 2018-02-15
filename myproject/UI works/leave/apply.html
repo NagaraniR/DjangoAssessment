@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript - read JSON from URL</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/home/linuxuser/Desktop/Leave/DjangoAssessment/myproject/leave/static/style.css">
+    <script src="/home/linuxuser/Desktop/Leave/DjangoAssessment/myproject/leave/static/jquery2.js"></script>
+    <script src="/home/linuxuser/Desktop/Leave/DjangoAssessment/myproject/leave/static/jquery3.js"></script> 
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+    <style>
+    input[type=text], select {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: gray;
+    }
+    .button
+{
+  /*width: 150px;*/
+  text-align: center;
+
+}
+    body {
+    border: 1px solid black;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 150px;
+    margin-left: 80px;
+    background-color: lightblue;
+}
+label {
+  display: inline-block;
+  width: 140px;
+  text-align: right;
+}​
+select {
+  display: inline-block;
+  width: 140px;
+  text-align: right;
+}​
+
+</style>
+    <script type="text/javascript">
+        $(function(){
+            $( "#fromDate" ).datepicker({dateFormat: 'yy-mm-dd'});
+            $("#toDate").datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function(dateText, inst) {
+                    var start = $(this).datepicker( 'getDate' );
+                    var end = $("#fromDate").datepicker( 'getDate' );
+                    // var start = $(this).val();
+                    // var end = $('#toDate').val();
+                    var timeDiff = Math.abs(end.getTime() - start.getTime());
+                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    $("#days").val(diffDays)
+                    // alert(diffDays); 
+                    // var diff = new Date(end - start);
+                    // var day = diff/1000/60/60/24;
+                    // alert(Math.round(day));
+                }
+            });
+        });
+
+
+        function submitfun(){
+             
+                
+                // var name = $("#user").val();
+                // var reporting_senior = $("#reporter").val();
+                // var credits = $("#credits").val();
+                // var fromDate = $("#fromDate").val();
+                // var toDate = $("#toDate").val();
+                // var days = $("#days").val();
+                // var reason = $("#reason").val();
+               
+               /* $.ajax({
+                    type:'POST',
+                    url: 'http://127.0.0.1:8000/leave/store/data/database/',
+                    dataType: 'json',
+                    data: data
+                    success: function(result){
+                        alert("dsg");
+                    }
+                });*/
+                // var data = {
+                //     "name":$("#user").val(), 
+                //     "reporting_senior":$("#reporter").val(), 
+                //     "credits":$("#credits").val(), 
+                //     "fromDate":$("#fromDate").val(), 
+                //     "toDate":$("#toDate").val(), 
+                //     "days":$("#days").val(), 
+                //     "reason":$("#reason").val()
+                // }
+
+                var data = new Array();                
+                data[0] = $("#user").val();
+                data[1] = $("#reporter").val();
+                data[2] = status_id;
+                data[3] = leave_type_id;
+                console.log(leave_type_id);
+                data[4] = $("#fromDate").val();
+                data[5] = $("#toDate").val();  
+                data[6] = $("#days").val(); 
+                data[7] = $("#reason").val();  
+                console.log(data); 
+                alert("okok");
+
+                $.ajax({
+                    "type": "POST",
+                    "url": "http://127.0.0.1:8000/leave/store/data/database/",
+                    "cache": false,
+                    "data": JSON.stringify({ "name": data[0],
+                        "reporting_senior":data[1],
+                        "status" : data[2],
+                        "credits":data[3],
+                        "fromDate":data[4],
+                        "toDate":data[5],
+                        "days":data[6],
+                        "reason":data[7]
+                    }),
+                    "contentType": "application/json; charset=utf-8",
+                    "dataType": "json",
+                    "success": function (result) {
+                        alert("ok")
+
+                    },
+
+                    error: function (result) {
+                        alert("fail");
+                    }
+                });
+
+        //         $.ajax({
+        //     "type": "POST",
+        //     "dataType": "json",
+        //     "url": "http://192.168.1.96:8001/leave/store/data/database/",
+        //     "data": {"name":$("#user").val()},
+        //     "success": function(result) {
+        //         console.log(result);
+        //     },
+        // });
+            }
+            var base_URL = 'http://192.168.1.96:8000/leave'
+            var leave_type_id;
+            var status_id;
+            $(function(){
+                // alert("ajax:"+base_URL)
+                // var $user_name = $('#user')
+                // $.ajax({
+                //     type: 'GET',
+                //     url: base_URL + '/user/naga/?format=json',
+                //     // cache: false,
+                //     success: function(data){
+                //         alert("ok");
+                //         $.each(data, function(index, data){
+                //             $("#user").val(data.name);
+                //             $("#reporter").val(data.reporting_senior);
+                //        });
+                //     },
+                //     error: function(){
+                //         alert("error");
+                //     }
+                     
+                // }); 
+
+
+                $.ajax({
+                type: 'GET',
+                url: base_URL + '/user/naga/?format=json',
+                success: function(data){
+                    $.each(data, function(index, data){
+                        $("#user").val(data.name);
+                        $("#reporter").val(data.reporting_senior);
+                   });
+                },
+                error: function(){
+                        alert("error");
+                    }
+                 
+            });
+
+
+                $.ajax({
+                    type: 'GET',
+                    url : base_URL + '/status/?format=json',
+                    success :function(result){
+                        $.each(result, function(index, result){
+                            console.log(result)
+                            var status="<option>"+result.status +"</option>";
+                            status_id = result.id;
+                            // alert(credit);
+                            $(status).appendTo('#status');
+                       }); 
+                    }
+                });
+
+                // $.ajax({
+                //     type: 'GET',
+                //     url : base_URL + '/credits/naga/?format=json',
+                //     success :function(value){
+                //         $.each(value, function(index, value){
+                //             // console.log(result)
+                //             var credit="<option>"+value.leave_type_name +"-"+ value.available+"</option>";
+                //             // alert(credit);
+                //             $(credit).appendTo('#credits');
+                //        }); 
+                //     }
+                // });
+                
+                $.ajax({
+                    type: 'GET',
+                    url : base_URL + '/credits/naga/?format=json',
+                    success :function(value){
+                       $.each(value, function(index, value){
+                        alert("credits");
+                            console.log(value)
+                            leave_type_id = value.id
+                            console.log(leave_type_id);
+                            var credit="<option value="+ value.id +">"+value.leave_type_name +"-"+ value.available+"</option>";
+                            // alert(credit);
+                            $(credit).appendTo('#credits');
+                       }); 
+                    }
+
+    <script type="text/javascript">
+        
+        var base_URL = 'http://127.0.0.1:8000/leave'
+        $(function(){
+            // alert("ok");
+            // var $user_name = $('#user')
+            $.ajax({
+                type: 'GET',
+                url: base_URL + '/user/OmPrakash/?format=json',
+                success: function(data){
+                    $.each(data, function(index, data){
+                        $("#user").val(data.name);
+                        $("#reporter").val(data.reporting_senior);
+                   });
+                }
+            }); 
+            
+            $.ajax({
+                type: 'GET',
+                url : base_URL + '/credits/OmPrakash/?format=json',
+                success :function(result){
+                    $.each(result, function(index, result){
+                        // console.log(result)
+                        var credit="<option>"+result.leave_type_name +"-"+ result.available+"</option>";
+                        // alert(credit);
+                        $(credit).appendTo('#credits');
+                   }); 
+                }
+                });
+
+            });
+            
+            $(function(){
+
+                alert("entered into validation");
+
+                $.ajax({
+                    type: 'GET',
+                    url : base_URL + 'validation/naga/?format=json',
+                    success :function(result){
+                        $.each(result, function(index, result){
+                            console.log(result)
+                            if (result.status == ""){
+                                credit_Validate()
+                            }
+                                
+                            });
+                        
+
+                            // alert(credit);
+                        } 
+                    });
+                });
+
+
+            function credit_Validate(){
+                alert("validate func");
+
+                $ajax({})
+
+            }
+
+            </script>
+            </head>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     <script type="text/javascript"> -->
+        
+        <!-- // var base_URL = 'http://127.0.0.1:8000/leave'
+        // $(function(){
+        //     // alert("ok");
+        //     // var $user_name = $('#user')
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: base_URL + '/user/naga/?format=json',
+        //         success: function(data){
+        //             $.each(data, function(index, data){
+        //                 $("#user").val(data.name);
+        //                 $("#reporter").val(data.reporting_senior);
+        //            });
+        //         }
+                 
+        //     }); 
+        //     $.ajax({
+        //         type: 'GET',
+        //         url : base_URL + '/credits/naga/?format=json',
+        //         success :function(result){
+        //             $.each(result, function(index, result){
+        //                 // console.log(result)
+        //                 var credit="<option>"+result.leave_type_name +"-"+ result.available+"</option>";
+        //                 // alert(credit);
+        //                 $(credit).appendTo('#credits');
+        //            }); 
+        //         }
+>>>>>>> a1963b27c15137303d4c4eefab86907e0030c8b2
+
+        //         });
+        //     }); -->
+        
+    
+<body>
+    <h1 style="color:blue;"><center> Leave Application </center></h1>
+    <form class="apply" method="POST" action=" ">
+        <label for="name">Name:</label>
+        <input type="text" name="user" id="user" ><br>
+        <label for="reporter">Reporting Senior:</label>
+        <input type="text" name="reporter" id="reporter"><br>
+        <label for="name">Status:</label>
+        <select id="status" >
+            <option value="status">Select Status</option>
+        </select><br>
+        <label for="name">LeaveType:</label>
+        <select id="credits" >
+            <option value="select">Select Leave</option>
+        </select><br>
+        <label for="date">From Date:</label>
+        <input id="fromDate" type="text" required><br>
+        <label for="date">To Date:</label>
+        <input id="toDate" type="text"><br>
+        <label for="day">Days:</label>
+        <input id="days" type="text"><br>
+        <label for="reason"> Reason: </label>
+        <textarea id="reason" name="user_comment"></textarea><br>
+        <button style="text-align:center;" type="button" id="submit" onclick="submitfun()">Submit</button>
+    </form>
+    <!-- <form class="form-signin" method="POST" action="URL_OF_REST"><>
+        <h1 style="color:blue;"><center> Leave Application </center></h1>
+        <label for="name">Name:</label>
+        <input name="user" id="user"><br>
+        <label for="reporter">Reporting Senior:</label>
+        <input name="reporter" id="reporter"><br>
+        <select id="credits" >
+            <option value="select">Select Leave</option>
+        </select><br>
+        <label for="date">From Date:</label>
+        <input id="fromDate" type="text"><br>
+        <label for="date">To Date:</label>
+        <input id="toDate" type="text"><br>
+        <label for="day">Days:</label>
+        <input id="days" type="text"><br>
+        <label for="reason"> Reason: </label>
+        <textarea id="reason" name="user_comment"></textarea><br>
+        <button type="button" id="submit">Submit</button> -->
+
+</body>
+</html>
+
+
+<!-- <form>
+        Name:<br>
+        <input type="text" name="name"><br>
+        Reporting Senerior:<br>
+        <input type="text" name="repoting Senerior"><br>
+        From Date: <input type="text" name="date"><br>
+    </form> -->

@@ -8,28 +8,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-  <script type="text/javascript">
-  	var base_URL = "http://127.0.0.1:8000/leave/"
-  	$(function(){
-  		alert("base_URL"+base_URL)
-  		$.ajax({
-  			type :'GET',
-  			url : base_URL + 'available/6/?format=json',
-  			success : function(data){
-  				alert("status ok")
-  				$.each(data)
-  			},
-  			error : function(){
-  				alert("error")
-  			}
-  		});
-  	});
-  </script>
 </head>
 <body>
 
 </body>
 </html>
-
 
