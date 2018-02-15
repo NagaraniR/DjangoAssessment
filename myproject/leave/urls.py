@@ -14,5 +14,5 @@ url(r'^WAPPR/(?P<pk>\d+)/$', views.WAPPRView.as_view(), name = 'waiting for appr
 	url(r'^deny/$', views.DenyView.as_view(), name='leave_deny'),
 	url(r'^approve/$', views.ApproveView.as_view(), name='leave_approve'),
 	url(r'^available/(?P<pk>\d+)/$', views.LeaveBalance.as_view(),name='available_leaves'),
-	url(r'^request/(?P<pk>\d+)/$', views.LeaveRequestView.as_view(), name='leave_request'),
+	url(r'^view/request/(?P<pk>\d+)/$', views.LeaveRequestView.as_view(), name='view_request'),
 ]
