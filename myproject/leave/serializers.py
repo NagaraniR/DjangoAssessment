@@ -19,7 +19,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Employee
-		fields = "__all__"	
+		fields = ('name', 'reporting_senior')	
 
 class LeaveTypeSerializer(serializers.ModelSerializer):
 
