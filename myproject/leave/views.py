@@ -103,8 +103,8 @@ class LeaveBalance(APIView):
     def get(self, request, pk, format=None):
         try:
             # import pdb;pdb.set_trace()
-            employee = Employee.objects.get(id=pk)
-            credits = LeaveCredit.objects.filter(name=employee)
+            # employee = Employee.objects.get(id=pk)
+            credits = LeaveCredit.objects.filter(name=pk)
             serializer = LeaveCreditSerializer(credits, many=True)
             return Response({"Leave available":serializer.data})
         except Exception as exception:
@@ -158,7 +158,7 @@ class ApproveView(APIView):
                     user.status = status
                     user.save()
                     serializer = LeaveRequestSerializer(user_data)
-                    return Response(serializer.data)                   
+                    return Response(serializer.data)              
             else:
                 return Response(serializer.errors)
         except Exception as exception:
@@ -171,25 +171,23 @@ class ApproveView(APIView):
         if user.leave_type == lop:
             user = self.add_lop(user)
         else:
-            user = self.check_leave_balance(user)
+            user = self.reduce_leave_balance(user)
         return user
 
     # def get_leave_balance(self, user):
     #     leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
     #     return leave_balance
 
-    def check_leave_balance(self, user):
+    def reduce_leave_balance(self, user):
         leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
-        if leave_balance.available > user.no_days:
+        if leave_balance.available >= user.no_days:
             available = int(leave_balance.available)
             no_days = int(user.no_days)
             available -= no_days
             leave_balance.available = long(available)
             leave_balance.save()
             return user
-        else:
-            pass
-
+    
     def add_lop(self, user):
         leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
         available = int(leave_balance.available)
@@ -204,5 +202,3 @@ class ApproveView(APIView):
     #     user.leave_type =  type_lop
     #     user.save()
     #     return user
-
-   
