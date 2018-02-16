@@ -93,20 +93,21 @@ class WAPPRView(APIView):
 
 class PendingRecordView(APIView):
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk,format=None):
         pending_records = LeaveRequest.objects.filter(name=pk, status=Status.objects.get(status="Pending"))
         pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
         return Response(pending_records_serializer.data)
    
 class LeaveBalance(APIView):
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        pk = request.GET.get('id')
         try:
             # import pdb;pdb.set_trace()
-            # employee = Employee.objects.get(id=pk)
-            credits = LeaveCredit.objects.filter(name=pk)
+            employee = Employee.objects.get(id=pk)
+            credits = LeaveCredit.objects.filter(name=employee)
             serializer = LeaveCreditSerializer(credits, many=True)
-            return Response({"Leave available":serializer.data})
+            return Response(serializer.data)
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
@@ -114,12 +115,13 @@ class LeaveBalance(APIView):
 
 class LeaveRequestView(APIView):
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+        pk = request.GET.get('id')
         try:
             leave_id = LeaveRequest.objects.get(id=pk)
-            leave_serializer = LeaveRequestSerializer(leave_id, many=True)
+            leave_serializer = LeaveRequestSerializer(leave_id, many=False)
             return Response(leave_serializer.data)
-        except Exception as Exception:
+        except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
@@ -148,7 +150,7 @@ class DenyView(APIView):
 
 class ApproveView(APIView):
 
-    def put(self,request, format=None):
+    def put(self,request,format=None):
         try:
             user = LeaveRequest.objects.get(id=request.data["id"])
             if user:

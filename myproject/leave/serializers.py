@@ -2,29 +2,34 @@ from rest_framework import serializers
 from models import Employee, LeaveType, LeaveCredit, LeaveRequest, Status, LeaveCredit
 # from django.db import models
 
-
-class LeaveRequestSerializer(serializers.ModelSerializer):
+class LeaveTypeSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = LeaveRequest
-		fields = "__all__"
-
-class LeaveCreditSerializer(serializers.ModelSerializer):
-	
-	class Meta:
-		model = LeaveCredit
+		model = LeaveType
 		fields = "__all__"
 
 class EmployeeSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Employee
-		fields = "__all__"	
+		fields = ['id', 'name', 'reporting_senior', 'email']
 
-class LeaveTypeSerializer(serializers.ModelSerializer):
+class LeaveCreditSerializer(serializers.ModelSerializer):
+	
+	leave_type = LeaveTypeSerializer()
+	name = EmployeeSerializer()
 
 	class Meta:
-		model = LeaveType
+		model = LeaveCredit
+		fields = ['id', 'name', 'leave_type', 'available']
+
+class LeaveRequestSerializer(serializers.ModelSerializer):
+
+	leave_type = LeaveTypeSerializer()
+	name = EmployeeSerializer()
+
+	class Meta:
+		model = LeaveRequest
 		fields = "__all__"				
 
 class StatusSerializer(serializers.ModelSerializer):

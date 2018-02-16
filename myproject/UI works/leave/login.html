@@ -4,9 +4,9 @@
 <title>Login</title>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js">
 	function getusername() {
-		var username = getValue("username");
-		document.write(username);
-		return username
+		var userid = getValue("userid");
+		document.write(userid);
+		return userid
 	}
 	function IsEmpty(){
 		if(document.forms['login'].question.value === "")
@@ -44,10 +44,10 @@
 			<div class="col-sm-6 col-md-10 col-md-offset-1">
 				<form action="approval.html" name=login method="get">
 					<div class="text-center" style="font-family:Georgia">
-						<input type="text" name=username placeholder="Username"><br><br>
-						<input type="Password" placeholder="Password"><br><br>
+						<input type="text" name=userid placeholder="User id"><br><br>
+						<input for="defaultForm-pass" type="Password" placeholder="Password"><br><br>
 						<center>
-							<button class="btn btn-lg btn-primary btn-block" onClick= "return IsEmpty();" type="submit">Login</button>
+							<button class="btn btn btn-default" onClick= "return IsEmpty();" type="submit">Login</button>
 						</center>
 					</div>
 				</form>
@@ -55,5 +55,6 @@
 			</div>
 		</div>
 	</div>
+</form>
 </body>
 </html>
