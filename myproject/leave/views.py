@@ -14,9 +14,10 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse
 
 
-class Employee(APIView):
+class User(APIView):
 
     def get(self, request, format=None):
+        # import pdb;pdb.set_trace()
         pk = int(request.GET.get('id'))
         try:
             employee = Employee.objects.filter(id=pk)
