@@ -14,7 +14,7 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse
 
 
-class Employee(APIView):
+class Employees(APIView):
 
     def get(self, request, format=None):
         pk = int(request.GET.get('id'))
@@ -109,7 +109,6 @@ class Detail(APIView):
                 message = template.format(type(exception).__name__, exception.args)
                 return Response(message)
 
-<<<<<<< HEAD
 class PendingRecordView(APIView):
 
     def get(self, request, pk,format=None):
@@ -117,8 +116,6 @@ class PendingRecordView(APIView):
         pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
         return Response(pending_records_serializer.data)
    
-=======
->>>>>>> 3aba837e4312634cb5d03dd7eac18100a160d4a5
 class LeaveBalance(APIView):
 
     def get(self, request, format=None):

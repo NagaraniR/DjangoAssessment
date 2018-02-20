@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Leave Approval</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+<style>
+    .Absolute-Center.is-Responsive {
+      width: 100%; 
+      height: 50%;
+      min-width: 200px;
+      max-width: 800px;
+      padding: 40px;
+    }
+    #logo-container{
+        margin: auto;
+        margin-bottom: 10px;
+        width:200px;
+        height:30px;
+    }
+</style>
+
+<!-- 
+<script type="text/javascript"> 
+
+    function approve(){
+        $.ajax({
+            type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            dataType: 'json', // Set datatype - affects Accept header
+            url: base_url+"approve/", // A valid URL
+            headers: {"X-HTTP-Method-Override": "PUT"}, // X-HTTP-Method-Override set to PUT.
+            data: "{""id:"id"}" // Some data e.g. Valid JSON as a string
+        });
+    });
+    }
+</script>
+     -->
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+var userid = (geturl()["userid"]);
+var base_url = "http://127.0.0.1:8000/leave/"; 
+var id="&id="+userid; 
+
+    function geturl(varname){
+        var url = window.location.href;
+        var vars = {}
+        var hashes = url.split("?")[1];
+        var hash = hashes.split("&");
+        for (i=0; i<hash.length; i++){
+            params = hash[i].split("=");
+            vars[params[0]] = params[1];
+        }return vars;
+    }
+
+    $(document).ready(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: base_url+"pending/requests/?format=json"+id,
+            success: function(data){
+                var leave_id = $("#id").val(data.id)
+                $("#name").val(data.name.name)
+                $("#from_date").val(data.from_date)
+                $("#to_date").val(data.to_date)
+                $("#no_days").val(data.no_days)
+                $("#leave_type").val(data.leave_type.catagory)
+                $("#reason").val(data.reason)
+                }     
+            });
+        });
+
+    function approve(){
+        var arr = {"id": userid}
+        console.log( JSON.stringify(arr));
+        $.ajax({
+            type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            dataType: 'json', // Set datatype - affects Accept header
+            url: base_url+"approve/", // A valid URL
+            data: JSON.stringify(arr),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function(msg) {
+                alert(msg);
+            }   
+        });
+    }
+
+    function deny(){
+        var arr = {"id": userid}
+        console.log( JSON.stringify(arr));
+        $.ajax({
+            type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            dataType: 'json', // Set datatype - affects Accept header
+            url: base_url+"deny/", // A valid URL
+            data: JSON.stringify(arr),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function(msg) {
+                alert();
+            }   
+        });
+    }
+</script>
+
+</head>
+<body>
+    
+    <div class="jumbotron" style="font-family:Georgia">
+        <h2 class ="text-center">Leave Application</h2>
+        <p class ="text-center"> Leave Request Approval Form<p>    
+    </div>
+    <form>
+        <div class="container">
+            <div class="form-group">
+                <label class="text-center"  for="example-text-input" value="name">Name:</label>
+                <input  class="form-control" id="name">
+            </div>
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-center" for="example-text-input" value="name">From Date:</label>
+                    <input class="form-control" id="from_date">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-center" for="example-text-input" value="name">To Date:</label>
+                    <input class="form-control" id="to_date">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-center" for="name" value="name">No.Of.Days:</label>
+                    <input class="form-control" id="no_days">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-center" for="name" value="name">Leave Type:</label>
+                    <input class="form-control" id="leave_type">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="text-center exampleTextarea" for="name" value="name">Reason:</label>
+                <input class="form-control" row="3" id="reason">
+            </div>
+    </div>
+    <div id="form">
+        <center>
+            <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
+            <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
+        </center>
+    </div>    
+    </form>
+    <div id="footer class="text-center">
+            <p>Application courtesy
+                <a href="https://fifthgentech.com/">Fifth Genration Technology</a>.
+            </p>
+           
+
+        </div>
+    </div>
+</body>
+</html>

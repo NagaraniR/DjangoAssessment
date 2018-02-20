@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>JavaScript - read JSON from URL</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
 <style>
 
 header{
@@ -134,20 +134,20 @@ td, th {
             });
         });
 	
-    	function approve(){
-            var dataForm = {approval_status='Approved'}
-            $.ajax({
-                url: base_url+'approval/OmPrakash/?format=json',
-             type: 'PUT',
-             data: dataForm,
-             dataType: "json",
-             success: (result){
-                $('#')
+    function approve(){
+        var dataForm = {approval_status='Approved'}
+        $.ajax({
+            url: base_url+'approval/OmPrakash/?format=json',
+            type: 'PUT',
+            data: dataForm,
+            dataType: "json",
+            success: (result){
+            $('#')
             console.log("success")
             },
     });
     }
-
+/*
     $("#talk").on('click', 'a[id^=delete-]', function() {
       var pk = $(this).attr('id').split('-')[1];
         delete_article(pk);
@@ -165,7 +165,7 @@ td, th {
         })
     };
     
-
+*/
 	function getusername(){
 		var user = getValue("user");
 		document.write(user);
@@ -231,6 +231,12 @@ td, th {
         				        id="approval_status" onclick=approve() value="Approve">
                             </center>
         				</td>
+                        <td>
+                            <center>    
+                                <input type="submit" class="button button1"
+                                id="approval_status" onclick=deny() value="Approve">
+                            </center>
+                        </td>
         			</tr>
         		</table>
     	   </div>
