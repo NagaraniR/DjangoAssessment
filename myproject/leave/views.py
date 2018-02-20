@@ -47,7 +47,7 @@ class Apply(APIView):
         try:
             # response = exception_handler(request)
             # print "sad",response
-            # import pdb;pdb.set_trace()
+            import pdb;pdb.set_trace()
             user = Employee.objects.get(name=request.data["name"])
             request.data["name"] = user.id
             request.data["reporter"] = user.reporting_senior.id
