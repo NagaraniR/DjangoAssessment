@@ -14,9 +14,12 @@ from django.db.models.query import QuerySet
 from django.http import JsonResponse
 
 
-class Employees(APIView):
+
+class User(APIView):
+
 
     def get(self, request, format=None):
+        # import pdb;pdb.set_trace()
         pk = int(request.GET.get('id'))
         try:
             employee = Employee.objects.filter(id=pk)
@@ -46,7 +49,7 @@ class Apply(APIView):
         try:
             # response = exception_handler(request)
             # print "sad",response
-            # import pdb;pdb.set_trace()
+            import pdb;pdb.set_trace()
             user = Employee.objects.get(name=request.data["name"])
             request.data["name"] = user.id
             request.data["reporter"] = user.reporting_senior.id
@@ -108,6 +111,7 @@ class Detail(APIView):
                 template = template = "An exception of function {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(exception).__name__, exception.args)
                 return Response(message)
+
 
 class PendingRecordView(APIView):
 
