@@ -60,6 +60,7 @@ ROOT_URLCONF = 'myproject.urls'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+    'DATETIME_FORMAT': "%Y/%m/%d %H:%M:%S",
        # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     # 'TEST_REQUEST_RENDERER_CLASSES': (
     #     'rest_framework.renderers.MultiPartRenderer',

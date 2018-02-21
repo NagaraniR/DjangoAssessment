@@ -44,34 +44,33 @@ class Apply(APIView):
 
     
     def post(self, request, format=None):
-        try:
-            # response = exception_handler(request)
-            # print "sad",response
-            import pdb;pdb.set_trace()
-            user = Employee.objects.get(name=request.data["name"])
-            request.data["name"] = user.id
-            request.data["reporter"] = user.reporting_senior.id
-            leave = LeaveType.objects.get(catagory = request.data["leave_type"])
-            available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
-            from_date = datetime.datetime.strptime(self.request.data.get('from_date'), "%Y-%m-%d")
-            to_date = datetime.datetime.strptime(self.request.data.get('to_date'), "%Y-%m-%d")
-            no_days = abs((to_date-from_date).days)
-            if no_days > available.available:
-                return Response("Sorry the no of days that you applied is not available in your balance")
-            else:
-                request.data["no_days"] = no_days
-            status = Status.objects.get(status="Pending")
-            request.data["status"]= status.id
+
+        #import pdb;pdb.set_trace()
+        user = Employee.objects.get(name=request.data.get('name'))
+        request.data["name"] = user.id
+        request.data["reporter"] = user.reporting_senior.id
+        leave = LeaveType.objects.get(catagory = request.data["leave_type"])
+        request.data["leave_type"] = leave.id
+        available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
+        from_date = datetime.datetime.strptime(request.data.get('from_date'), "%Y-%m-%d")
+        print from_date
+        to_date = datetime.datetime.strptime(request.data.get('to_date'), "%Y-%m-%d")
+        no_days = abs((to_date-from_date).days)
+        if no_days > available.available:
+            return JsonResponse("Sorry the no of days that you applied is not available in your balance", safe=False)
+        else:
+            request.data["no_days"] = no_days
+            _status = Status.objects.get(status="Pending")
+            request.data["status"]= _status.id
             serializer = LeaveRequestSerializer(data=request.data, many=False)
             if serializer.is_valid(raise_exception=True):
-              serializer.save()
-              return Response(serializer.data)
-            return JsonResponse(serializer.errors)
-        except Exception as exception:
-                    template = "An exception of function {0} occurred. Arguments:\n{1!r}"
-                    message = template.format(type(exception).__name__, exception.args)
-                    return Response(message)
-
+                serializer.save()
+                print "ok"
+                return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+            else:
+                print "error"
+                return JsonResponse(serializer.errors, safe=False)
+     
 class Detail(APIView):
 
     def get(self, request, format=None):

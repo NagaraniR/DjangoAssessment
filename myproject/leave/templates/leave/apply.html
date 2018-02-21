@@ -15,6 +15,12 @@
         margin: 20px;
     }
 </style>
+<script src="js/google-code-prettify/prettify.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+  $('.datepicker').datepicker()
+</script>
 </head>
 <body>
 <div class="bs-example">
@@ -31,6 +37,10 @@
             <label><input type="checkbox"> Remember me</label>
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
+        <div class="input-append date" id="dp3" data-date-format="dd-mm-yyyy">
+          <input class="span2" size="16" type="text" />
+        </div>
+
     </form>
 </div>
 </body>
