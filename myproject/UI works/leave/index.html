@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Leave App-Home</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+<style>
+    .Absolute-Center.is-Responsive {
+      width: 100%; 
+      height: 50%;
+      min-width: 200px;
+      max-width: 800px;
+      padding: 40px;
+    }
+    #logo-container{
+        margin: auto;
+        margin-bottom: 10px;
+        width:200px;
+        height:30px;
+    }
+</style>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+var base_url = "http://127.0.0.1:8000/leave/"; 
+  $(document).ready(function(){
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: base_url+"details/?id=5",
+      success: function(data){
+        successmessage = data.details.name[]
+        $("label#successmessage").text(successmessage);
+        $.each(data, function(index, data){
+          $('#waiting_for_approval').append("<tr><td>"+data.name.name+"</td>"+
+            "<td>"+data.from_date+"</td>"+
+            "<td>"+data.to_date+"</td>"+
+            "<td>"+data.leave_type.catagory+"</td>"+
+            "<td>"+data.no_days+"</td></tr>")
+        });
+      }     
+    });
+  });
+
+    /*$(document).ready(function(){
+    $.ajax({
+      type:"GET",
+      url:base_url+"pending/requests/",
+      dataType: "json",
+      success: function(data){
+        $tbody = $("#example").find('tbody')
+        $row = $('<tr>');
+        var cols = '';
+        $.each(data, function(key, value){
+            cols += '<td>' + value.name.name + '</td>'
+          }
+        $row.html(cols);
+        $tbody.append($row);
+        /*$("#example").css('visibility', 'visible');*/
+      /*}
+    });
+  });*/
+
+  </script>
+  </head>
+    <body>
+      <div class="jumbotron" style="font-family:Georgia">
+        <h2 class ="text-center">Leave Application</h2>    
+      </div>
+      <div class="container">
+          <div>
+              <label id="successmessage"></label>
+          </div>
+        <div class="wrapper"> <!-- for reasons -->
+          <div class="main-content">
+            <a href="apply.html"><p>Apply Leave</p></a>
+          </div>
+          <div class="aside">
+            <h6><u>Waiting For Approval List</u></h6>
+            <div style="overflow:show; position:relative; width:3px; height: 0px; top: 0px;">
+              <table class="table table-striped" id="waiting_for_approval">
+                <tbody>
+                <tr>
+                <th scope="row">Name</th>
+                <th scope="row">From Date</th>
+                <th scope="row">To Date</th>
+                <th scope="row">Leave Type</th>
+                <th scope="row">Days</th>
+                
+                </tr>
+              </tbody>
+              </table>  
+          </div>
+        </div>
+      </div>
+    </body>
+</html>
