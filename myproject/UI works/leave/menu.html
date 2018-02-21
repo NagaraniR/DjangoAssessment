@@ -20,21 +20,6 @@
     }
 </style>
 
-<!-- 
-<script type="text/javascript"> 
-
-    function approve(){
-        $.ajax({
-            type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
-            dataType: 'json', // Set datatype - affects Accept header
-            url: base_url+"approve/", // A valid URL
-            headers: {"X-HTTP-Method-Override": "PUT"}, // X-HTTP-Method-Override set to PUT.
-            data: "{""id:"id"}" // Some data e.g. Valid JSON as a string
-        });
-    });
-    }
-</script>
-     -->
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
@@ -72,7 +57,6 @@ var id="&id="+userid;
 
     function approve(){
         var arr = {"id": userid}
-        console.log( JSON.stringify(arr));
         $.ajax({
             type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
             dataType: 'json', // Set datatype - affects Accept header
@@ -150,12 +134,10 @@ var id="&id="+userid;
         </center>
     </div>    
     </form>
-    <div id="footer class="text-center">
-            <p>Application courtesy
+    <div id="footer" class="text-center">
+            <p> Application courtesy
                 <a href="https://fifthgentech.com/">Fifth Genration Technology</a>.
             </p>
-           
-
         </div>
     </div>
 </body>

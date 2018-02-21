@@ -91,7 +91,7 @@ class Detail(APIView):
                 status = Status.objects.get(status="Pending")
                 waiting_for_approval = LeaveRequest.objects.filter(name__in=employees, status=status.id)
                 waiting_for_approval_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
+                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Deny"))
                 pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
                 return Response({
                                 "details":details_serializer.data, 
@@ -101,7 +101,7 @@ class Detail(APIView):
             else:
                 details = LeaveRequest.objects.filter(name=employee)
                 details_serializer =  LeaveRequestSerializer(details, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
+                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Deny"))
                 pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
                 return Response({
                                 "details":details_serializer.data,
@@ -115,8 +115,9 @@ class Detail(APIView):
 
 class PendingRecordView(APIView):
 
-    def get(self, request, pk,format=None):
-        pending_records = LeaveRequest.objects.filter(name=pk, status=Status.objects.get(status="Pending"))
+    def get(self, request,format=None):
+        pk = request.GET.get('id')
+        pending_records = LeaveRequest.objects.filter(name=pk, status=Status.objects.get(status="Deny"))
         pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
         return Response(pending_records_serializer.data)
    
@@ -138,15 +139,26 @@ class LeaveBalance(APIView):
 class LeaveRequestView(APIView):
 
     def get(self, request, format=None):
-        pk = request.GET.get('id')
-        try:
-            leave_id = LeaveRequest.objects.get(id=pk)
-            leave_serializer = LeaveRequestSerializer(leave_id, many=False)
-            return Response(leave_serializer.data)
-        except Exception as exception:
-            template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
-            message = template.format(type(exception).__name__, exception.args)
-            return Response(message)
+        if request.GET.get('id') is None:
+            try:
+                leave_id = LeaveRequest.objects.all()
+                leave_serializer = LeaveRequestSerializer(leave_id, many=True)
+                return Response(leave_serializer.data)
+            except Exception as exception:
+                template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+                message = template.format(type(exception).__name__, exception.args)
+                return Response(message)
+        
+        elif request.GET.get('id'):
+            try:
+                pk = request.GET.get('id')
+                leave_id = LeaveRequest.objects.get(id=pk)
+                leave_serializer = LeaveRequestSerializer(leave_id, many=False)
+                return Response(leave_serializer.data)
+            except Exception as exception:
+                template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
+                message = template.format(type(exception).__name__, exception.args)
+                return Response(message)
 
 class DenyView(APIView):
     
