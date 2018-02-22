@@ -22,12 +22,28 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
+var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
+var id="&id="+userid;
+/*sessionStorage.setItem('key', 'value');*/
+sessionStorage.setItem('user', userid);
+function geturl(varname){
+  var url = window.location.href;
+  var vars = {}
+  var hashes = url.split("?")[1];
+  var hash = hashes.split("&");
+  for (i=0; i<hash.length; i++){
+    params = hash[i].split("=");
+    vars[params[0]] = params[1];
+  }return vars;
+}
+
+/*var base_url = "http://127.0.0.1:8000/leave/"; 
   $(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: base_url+"details/?id=5",
+      url: base_url+"details/"+id,
       success: function(data){
         successmessage = data.details.name[]
         $("label#successmessage").text(successmessage);
@@ -40,7 +56,7 @@ var base_url = "http://127.0.0.1:8000/leave/";
         });
       }     
     });
-  });
+  });*/
 
     /*$(document).ready(function(){
     $.ajax({
@@ -73,7 +89,8 @@ var base_url = "http://127.0.0.1:8000/leave/";
           </div>
         <div class="wrapper"> <!-- for reasons -->
           <div class="main-content">
-            <a href="apply.html"><p>Apply Leave</p></a>
+            <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+            
           </div>
           <div class="aside">
             <h6><u>Waiting For Approval List</u></h6>
@@ -86,7 +103,6 @@ var base_url = "http://127.0.0.1:8000/leave/";
                 <th scope="row">To Date</th>
                 <th scope="row">Leave Type</th>
                 <th scope="row">Days</th>
-                
                 </tr>
               </tbody>
               </table>  
