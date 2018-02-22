@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
-<title>Leave App-Home</title>
 <head>
+<title>Leave App-Home</title>
+
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
 <style>
     .Absolute-Center.is-Responsive {
       width: 100%; 
@@ -19,7 +20,7 @@
         height:30px;
     }
 </style>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
 var base_url = "http://127.0.0.1:8000/leave/"; 
@@ -27,39 +28,36 @@ var base_url = "http://127.0.0.1:8000/leave/";
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: base_url+"details/?id=5",
+      url: "http://127.0.0.1:8001/leave/details/?format=json&id=3",
+      contentType:'application/json',
       success: function(data){
-        successmessage = data.details.name[]
-        $("label#successmessage").text(successmessage);
-        $.each(data, function(index, data){
-          $('#waiting_for_approval').append("<tr><td>"+data.name.name+"</td>"+
-            "<td>"+data.from_date+"</td>"+
-            "<td>"+data.to_date+"</td>"+
-            "<td>"+data.leave_type.catagory+"</td>"+
-            "<td>"+data.no_days+"</td></tr>")
+        // successmessage = data.details.name[]
+        // $("label#successmessage").text(successmessage);
+        $.each(data, function(key, value){
+          if(key == 'waiting_for_approval'){
+            for(var i=0; i<value.length; i++){
+              $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
+              "<td>"+value[i].from_date+"</td>"+
+              "<td>"+value[i].to_date+"</td>"+
+              "<td>"+value[i].leave_type.catagory+"</td>"+
+              "<td>"+value[i].no_days+"</td>"+
+              "<td>"+value[i].reason+"</td>"+
+              "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i]+")'>view</button></td></tr>");
+            }
+            
+          }
+
+          
         });
       }     
     });
   });
 
-    /*$(document).ready(function(){
-    $.ajax({
-      type:"GET",
-      url:base_url+"pending/requests/",
-      dataType: "json",
-      success: function(data){
-        $tbody = $("#example").find('tbody')
-        $row = $('<tr>');
-        var cols = '';
-        $.each(data, function(key, value){
-            cols += '<td>' + value.name.name + '</td>'
-          }
-        $row.html(cols);
-        $tbody.append($row);
-        /*$("#example").css('visibility', 'visible');*/
-      /*}
-    });
-  });*/
+  function myFunction(data){
+    alert(data);
+    window.location = '/home/linuxuser/Desktop/GIT/DjangoAssessment/myproject/UI works/leave/menu.html';
+  }
+
 
   </script>
   </head>
@@ -73,25 +71,54 @@ var base_url = "http://127.0.0.1:8000/leave/";
           </div>
         <div class="wrapper"> <!-- for reasons -->
           <div class="main-content">
-            <a href="apply.html"><p>Apply Leave</p></a>
+            <a href="ApplyScreen.html"><p>Apply Leave</p></a>
           </div>
           <div class="aside">
             <h6><u>Waiting For Approval List</u></h6>
             <div style="overflow:show; position:relative; width:3px; height: 0px; top: 0px;">
               <table class="table table-striped" id="waiting_for_approval">
-                <tbody>
+                <thead>
                 <tr>
                 <th scope="row">Name</th>
-                <th scope="row">From Date</th>
-                <th scope="row">To Date</th>
-                <th scope="row">Leave Type</th>
+                <th scope="row">From</th>
+                <th scope="row">To</th>
+                <th scope="row">Type</th>
                 <th scope="row">Days</th>
-                
-                </tr>
-              </tbody>
+                <th scope="row">Reason</th>
+                <th scope="row">Status</th>
+              </tr>
+              </thead>
               </table>  
           </div>
         </div>
       </div>
+    </div>
     </body>
 </html>
+
+<!-- <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+        <td>john@example.com</td>
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Moe</td>
+        <td>mary@example.com</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td>Dooley</td>
+        <td>july@example.com</td>
+      </tr>
+    </tbody>
+  </table> -->

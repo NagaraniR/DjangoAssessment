@@ -61,7 +61,7 @@
       </tr>
       <tr>
         <th><label  class="col-sm-2 control-label">Reason</label></th>
-        <th><input type="text" class="form-control" id="reason"></th>
+        <th><input type="text" class="form-control" id="reason" required></th>
       </tr>
       <tr><center>
         <th colspan="2"><button onclick="apply()" type="button" class="btn btn-default">Apply</button></th></center>
@@ -116,9 +116,7 @@
         data[1] = $("#type").val();
         data[2] = $("#fromDate").val();
         data[3] = $("#toDate").val();  
-        data[4] = $("#reason").val();
-        
-        alert(data); 
+        data[4] = $("#reason").val(); 
         $.ajax({
           type: "POST",
           url: "http://127.0.0.1:8001/leave/apply/",
@@ -132,7 +130,6 @@
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function (result) {
-            alert("ok");
           },
           error: function (result) {
             console.log(result);

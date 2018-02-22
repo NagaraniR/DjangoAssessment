@@ -35,8 +35,8 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 
 class LeaveRequestSerializer(serializers.ModelSerializer):
 
-	# leave_type = LeaveTypeSerializer()
-	# name = EmployeeSerializer()
+	leave_type = LeaveTypeSerializer()
+	name = EmployeeSerializer()
 
 	class Meta:
 		model = LeaveRequest

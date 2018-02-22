@@ -55,7 +55,6 @@ class Apply(APIView):
         request.data["leave_type"] = leave.id
         available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
         from_date = datetime.datetime.strptime(request.data.get('from_date'), "%Y-%m-%d")
-        print from_date
         to_date = datetime.datetime.strptime(request.data.get('to_date'), "%Y-%m-%d")
         no_days = abs((to_date-from_date).days)
         if no_days > available.available:
@@ -90,7 +89,7 @@ class Detail(APIView):
                 status = Status.objects.get(status="Pending")
                 waiting_for_approval = LeaveRequest.objects.filter(name__in=employees, status=status.id)
                 waiting_for_approval_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Deny"))
+                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
                 pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
                 return Response({
                                 "details":details_serializer.data, 
@@ -100,7 +99,7 @@ class Detail(APIView):
             else:
                 details = LeaveRequest.objects.filter(name=employee)
                 details_serializer =  LeaveRequestSerializer(details, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Deny"))
+                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
                 pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
                 return Response({
                                 "details":details_serializer.data,
