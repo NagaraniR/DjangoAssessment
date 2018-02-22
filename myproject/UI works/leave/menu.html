@@ -49,7 +49,7 @@ var id="&id="+employee_id;
                     if(key == 'waiting_for_approval'){
                         for(var i=0; i<value.length; i++){
                             if (value[i].id == employee_id){
-                                console.log(value[i]);
+                                console.log(value[i].name.name);
                                 $('#name').append(value[i].name);
                                 $('#from_date').append(value[i].from_date);
                                 $('#to_date').append(value[i].to_date);
@@ -58,9 +58,9 @@ var id="&id="+employee_id;
                                 $('#reason').append(value[i].reason);
                             }}}
                         });
-            }     
-        });
-    });
+                    }     
+                });
+            });
 
     function approve(){
         var arr = {"id": userid}
@@ -74,6 +74,7 @@ var id="&id="+employee_id;
             async: false,
             success: function(msg) {
                 alert(msg);
+                window.location = "index.html"
             }   
         });
     }
@@ -109,7 +110,7 @@ var id="&id="+employee_id;
                 <label class="text-center"  for="example-text-input" value="name">Name:</label>
                 <input  class="form-control" id="name">
             </div>
-             <div class="form-row">
+            <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-center" for="example-text-input" value="name">From Date:</label>
                     <input class="form-control" id="from_date">
@@ -141,7 +142,7 @@ var id="&id="+employee_id;
         </center>
     </div>    
     </form>
-    <div id="footer" class="text-center">
+    <div id="footer">
             <p> Application courtesy
                 <a href="https://fifthgentech.com/">Fifth Genration Technology</a>.
             </p>

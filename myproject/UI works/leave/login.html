@@ -4,16 +4,21 @@
 <title>Login</title>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js">
 	function getusername() {
-		var userid = getValue("userid");
-		document.write(userid);
-		return userid
+		if($('#userid').val() == ''){
+        	alert('Please fill out your id.');
+        	}
+        	return false;
+        else 
+			var userid = getValue("userid");
+			document.write(userid);
+			return userid
 	}
-	function IsEmpty(){
+	/*function IsEmpty(){
 		if(document.forms['login'].question.value === "")
   		{
     		alert("empty");
     		return false;
-  		}
+  		}*/
 </script>
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <style>
@@ -43,11 +48,12 @@
 			<div class="Absolute-Center is-Responsive">
 			<div class="col-sm-6 col-md-10 col-md-offset-1">
 				<form action="index.html" name=login method="get">
+				<form id="login" action="index.html" name=login method="get">
 					<div class="text-center" style="font-family:Georgia">
-						<input type="text" name=userid placeholder="User id"><br><br>
-						<input for="defaultForm-pass" type="Password" placeholder="Password"><br><br>
+						<label>Search</label>
+						<input type="text" id="userid" name=userid placeholder="User id"><br><br>
 						<center>
-							<button class="btn btn btn-default" onClick= "return IsEmpty();" type="submit">Login</button>
+							<button class="btn btn btn-default" onClick="getusername();" type="submit">Search</button>
 						</center>
 					</div>
 				</form>
