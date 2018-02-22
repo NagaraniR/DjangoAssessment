@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
+
 <style>
     .Absolute-Center.is-Responsive {
       width: 100%; 
@@ -23,12 +24,27 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
-var base_url = "http://127.0.0.1:8000/leave/"; 
+
+  var userid = (geturl()["userid"]);
+  var base_url = "http://127.0.0.1:8001/leave/"; 
+  var id="&id="+userid; 
+
+    function geturl(varname){
+        var url = window.location.href;
+        var vars = {}
+        var hashes = url.split("?")[1];
+        var hash = hashes.split("&");
+        for (i=0; i<hash.length; i++){
+            params = hash[i].split("=");
+            vars[params[0]] = params[1];
+        }return vars;
+    }
+
   $(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "http://127.0.0.1:8001/leave/details/?format=json&id=3",
+      url: "http://127.0.0.1:8001/leave/details/?format=json&"+id,
       contentType:'application/json',
       success: function(data){
         // successmessage = data.details.name[]
@@ -42,7 +58,7 @@ var base_url = "http://127.0.0.1:8000/leave/";
               "<td>"+value[i].leave_type.catagory+"</td>"+
               "<td>"+value[i].no_days+"</td>"+
               "<td>"+value[i].reason+"</td>"+
-              "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i]+")'>view</button></td></tr>");
+              "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
             }
             
           }
@@ -53,9 +69,8 @@ var base_url = "http://127.0.0.1:8000/leave/";
     });
   });
 
-  function myFunction(data){
-    alert(data);
-    window.location = '/home/linuxuser/Desktop/GIT/DjangoAssessment/myproject/UI works/leave/menu.html';
+  function myFunction(id){
+    window.location = 'menu.html?mgrid='+userid+'&empid='+id;
   }
 
 
@@ -79,7 +94,7 @@ var base_url = "http://127.0.0.1:8000/leave/";
               <table class="table table-striped" id="waiting_for_approval">
                 <thead>
                 <tr>
-                <th scope="row">Name</th>
+                <th scope="row" >Name</th>
                 <th scope="row">From</th>
                 <th scope="row">To</th>
                 <th scope="row">Type</th>
@@ -95,6 +110,14 @@ var base_url = "http://127.0.0.1:8000/leave/";
     </div>
     </body>
 </html>
+<!-- <thead>
+            <tr>
+                <th class="col-xs-1">Size</th>
+                <th class="col-xs-3">Bust</th>
+                <th class="col-xs-3">Waist</th>
+                <th class="col-xs-5">Hips</th>
+            </tr>
+        </thead> -->
 
 <!-- <table class="table table-striped">
     <thead>
