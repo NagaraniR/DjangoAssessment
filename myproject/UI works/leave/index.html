@@ -5,7 +5,6 @@
 
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
-
 <style>
     .Absolute-Center.is-Responsive {
       width: 100%; 
@@ -20,50 +19,32 @@
         width:200px;
         height:30px;
     }
-    /*.waiting_for_approval{
-      width: 100px;
-      height: 110px;
-      overflow: scroll;
-    }*/
-    /*h1{
-
-    }*/
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
 
+var userid = (geturl()["userid"]);
+var base_url = "http://127.0.0.1:8000/leave/"; 
+var id="&id="+userid;
+
+/*sessionStorage.setItem('key', 'value');*/
+sessionStorage.setItem('user', userid);
+
+function geturl(varname){
+  var url = window.location.href;
+  var vars = {}
+  var hashes = url.split("?")[1];
+  var hash = hashes.split("&");
+  for (i=0; i<hash.length; i++){
+    params = hash[i].split("=");
+    vars[params[0]] = params[1];
+  }return vars;
+}
+
+$(document).ready(function(){
   var userid = (geturl()["userid"]);
   var id="&id="+userid; 
-
-    function geturl(varname){
-        var url = window.location.href;
-        var vars = {}
-        var hashes = url.split("?")[1];
-        var hash = hashes.split("&");
-        for (i=0; i<hash.length; i++){
-            params = hash[i].split("=");
-            vars[params[0]] = params[1];
-        }return vars;
-    }
-
-// var userid = (geturl()["userid"]);
-// var base_url = "http://127.0.0.1:8000/leave/"; 
-// var id="&id="+userid;
-// /*sessionStorage.setItem('key', 'value');*/
-// sessionStorage.setItem('user', userid);
-// function geturl(varname){
-//   var url = window.location.href;
-//   var vars = {}
-//   var hashes = url.split("?")[1];
-//   var hash = hashes.split("&");
-//   for (i=0; i<hash.length; i++){
-//     params = hash[i].split("=");
-//     vars[params[0]] = params[1];
-//   }return vars;
-// }
-
-  $(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
@@ -95,9 +76,6 @@
                   "<td>"+value[i].status.status+"</td></tr>")
               }
             }
-            else{
-
-            }
         }
         else{
           $("#WAPPR").hide();
@@ -109,12 +87,12 @@
                   "<td>"+value[i].no_days+"</td>"+
                   "<td>"+value[i].reason+"</td>"+
                   "<td>"+value[i].status.status+"</td></tr>")
+                }
               }
             }
-        }
-        });
-      }     
-    });
+          });
+        }     
+      });
     $.ajax({
       type : "GET",
       dataType : "json",
@@ -126,9 +104,6 @@
               $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
               "<td>"+data.available+"</td><tr>")
             }
-          // }
-          // $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
-          //   "<td>"+data.available+"</td><tr>")
         });
       }
     });
@@ -138,30 +113,26 @@
     alert("sad"+id);
     window.location = 'menu.html?userid='+id;
   }
-
   function apply(path){
     link = path + "?id=" + userid;
     alert(link);
     window.open(path + '?id=' + userid, '_blank');
     //window.location = path + '?id=' + userid;
-    }
-
-
-  </script>
-  </head>
-    <body>
-      <div class="jumbotron" style="font-family:Georgia">
-        <h2 class ="text-center">Leave Application</h2>    
+  }
+</script>
+</head>
+  <body>
+    <div class="jumbotron" style="font-family:Georgia">
+      <h2 class ="text-center">Leave Application</h2>    
+    </div>
+    <div class="container">
+      <div>
+        <label id="successmessage"></label>
       </div>
-      <div class="container">
-          <div>
-              <label id="successmessage"></label>
-          </div>
-        <div class="wrapper"> <!-- for reasons -->
-          <div class="main-content">
-            <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
-            </table> 
-              <h6 align="top">Pending Records</h6> 
+      <div class="wrapper"> <!-- for reasons -->
+        <div class="main-content">
+          <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+          <h6 align="top">Pending Records</h6> 
               <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
                 <table class="table table-bordered" id="pending">
                   <thead>
@@ -176,6 +147,7 @@
                   </thead>
                 </table>
             </div>
+            <br>
             <h6>Status</h6>
               <table class="table table-bordered" id="available" style="width:300px">
                 <thead>
@@ -185,13 +157,14 @@
                   </tr>
                 </thead>
               </table>
-            </div>
-          <div class="aside" id="WAPPR">
+            </div>  
+        </div>
+        <div class="aside" id="WAPPR">
             <h6>Waiting For Approval</h6>
             <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
-                <table class="table table-bordered" id="waiting_for_approval">
-                  <thead>
-                    <tr>
+              <table class="table table-bordered" id="waiting_for_approval">
+                <thead>
+                  <tr>
                     <th scope="row" >Name</th>
                     <th scope="row">From</th>
                     <th scope="row">To</th>
@@ -201,14 +174,11 @@
                     <th scope="row">Status</th>
                   </tr>
                 </thead>
-              </tr>
-            </tbody>
-          
+              </table>
           </div>
-        </div>
       </div>
     </div>
-    </body>
+  </body>
 </html>
 <!-- <thead>
             <tr>

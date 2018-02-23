@@ -22,25 +22,35 @@
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
+<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ -->
 <script type="text/javascript">
-var employee_id = (geturl()["userid"]);
+
+var userid = (geturl()["userid"]);
+var base_url = "http://127.0.0.1:8000/leave/"; 
+var id="&id="+userid; 
+var user = sessionStorage.getItem('user')
+alert(user)
+
+/*var employee_id = (geturl()["userid"]);
 alert(employee_id);
 var base_url = "http://127.0.0.1:8001/leave/"; 
-var id="&id="+employee_id; 
+var id="&id="+employee_id; */
 
-    function geturl(varname){
-        var url = window.location.href;
-        var vars = {}
-        var hashes = url.split("?")[1];
-        var hash = hashes.split("&");
-        for (i=0; i<hash.length; i++){
-            params = hash[i].split("=");
-            vars[params[0]] = params[1];
-        }return vars;
-    }
+function geturl(varname){
+    var url = window.location.href;
+    var vars = {}
+    var hashes = url.split("?")[1];
+    var hash = hashes.split("&");
+    for (i=0; i<hash.length; i++){
+        params = hash[i].split("=");
+        vars[params[0]] = params[1];
+    }return vars;
+}
 
-
-    $(document).ready(function(){
+$(document).ready(function(){
 
     $.ajax({
         type: "GET",
@@ -58,29 +68,6 @@ var id="&id="+employee_id;
         });
     });
 
-    // $(document).ready(function(){
-    //     $.ajax({
-    //         type: "GET",
-    //         dataType: "json",
-    //         url: base_url+"details/?format=json&id=3",
-    //         success: function(data){
-    //             $.each(data, function(key, value){
-    //                 if(key == 'waiting_for_approval'){
-    //                     for(var i=0; i<value.length; i++){
-    //                         if (value[i].id == employee_id){
-    //                             console.log(value[i].name.name);
-    //                             $('#name').append(value[i].name);
-    //                             $('#from_date').append(value[i].from_date);
-    //                             $('#to_date').append(value[i].to_date);
-    //                             $('#no_days').append(value[i].no_days);
-    //                             $('#leave_type').append(value[i].leave_type.catagory);
-    //                             $('#reason').append(value[i].reason);
-    //                         }}}
-    //                     });
-    //                 }     
-    //             });
-    //         });
-
     function approve(){
         var arr = {"id": userid}
         $.ajax({
@@ -93,7 +80,6 @@ var id="&id="+employee_id;
             async: false,
             success: function(msg) {
                 alert(msg);
-                window.location = "index.html"
             }   
         });
     }
@@ -109,8 +95,9 @@ var id="&id="+employee_id;
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
-            success: function(msg) {
-                alert(ok);
+
+            success: function(msg){
+                alert(msg);
             }   
         });
     }
