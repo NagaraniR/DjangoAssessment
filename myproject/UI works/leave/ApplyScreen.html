@@ -17,7 +17,7 @@
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> -->
   </head>
 
-  <body><center>
+  <!-- <body><center>
     <h1><center>Apply leave</center></h1>
 <div class="container" style="max-width:600px;margin:60px auto;">    
  
@@ -74,7 +74,7 @@
 </form>
 </div>
 </center>
-</body>
+</body> -->
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -82,9 +82,23 @@
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
-  var base_url = "http://127.0.0.1:8000/leave/"; 
-  var user = sessionStorage.getItem('user')
-  var id = "&id="+user
+  var base_url = "http://127.0.0.1:8001/leave/"; 
+  // var user = sessionStorage.getItem('user')
+  // var id = "&id="+user
+  var userid = geturl();
+  alert(userid.id);
+  var id="&id="+userid.id; 
+
+    function geturl(varname){
+        var url = window.location.href;
+        var vars = {}
+        var hashes = url.split("?")[1];
+        var hash = hashes.split("&");
+        for (i=0; i<hash.length; i++){
+            params = hash[i].split("=");
+            vars[params[0]] = params[1];
+        }return vars;
+    }
 
     $(document).ready(function() {
 
@@ -104,10 +118,6 @@
        $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
        });
-
-      function back(){
-        window.location='index.html?userid='+id
-      }
 
       $.ajax({
       type : "GET",
@@ -129,6 +139,7 @@
         data[2] = $("#fromDate").val();
         data[3] = $("#toDate").val();  
         data[4] = $("#reason").val(); 
+        console.log("jg"+data);
         $.ajax({
           type: "POST",
           url:  base_url+"apply/",
@@ -145,6 +156,7 @@
             alert("Your Leave Applied");
           },
           error: function (result) {
+            alert("fail");
             console.log(result);
           }
         });
@@ -202,7 +214,6 @@
       <br>
       <center>
         <input class="btn btn-success" value="Apply" onclick="apply()">
-        <input class="btn btn-danger" onclick="back()" value="Back">
       </center>
     </div>   
   </form>

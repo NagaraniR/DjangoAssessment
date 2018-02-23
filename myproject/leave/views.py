@@ -47,7 +47,7 @@ class Apply(APIView):
     
     def post(self, request, format=None):
 
-        #import pdb;pdb.set_trace()
+        import pdb;pdb.set_trace()
         user = Employee.objects.get(name=request.data.get('name'))
         request.data["name"] = user.id
         request.data["reporter"] = user.reporting_senior.id
@@ -63,7 +63,7 @@ class Apply(APIView):
             request.data["no_days"] = no_days
             _status = Status.objects.get(status="Pending")
             request.data["status"]= _status.id
-            serializer = LeaveRequestSerializer(data=request.data, many=False)
+            serializer = LeaveRequestApplySerializer(data=request.data, many=False)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 print "ok"

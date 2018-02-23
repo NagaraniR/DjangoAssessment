@@ -47,7 +47,15 @@ class LeaveRequestSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = LeaveRequest
-		fields = "__all__"				
+		fields = "__all__"	
+
+class LeaveRequestApplySerializer(serializers.ModelSerializer):
+
+	class Meta(object):
+		model = LeaveRequest
+		fields = "__all__"
+			
+
 
 
 	

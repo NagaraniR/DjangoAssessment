@@ -34,7 +34,6 @@
 <script type="text/javascript">
 
   var userid = (geturl()["userid"]);
-  var base_url = "http://127.0.0.1:8001/leave/"; 
   var id="&id="+userid; 
 
     function geturl(varname){
@@ -134,6 +133,13 @@
     window.location = 'menu.html?mgrid='+userid+'&empid='+id;
   }
 
+  function apply(path){
+    link = path + "?id=" + userid;
+    alert(link);
+    window.open(path + '?id=' + userid, '_blank');
+    //window.location = path + '?id=' + userid;
+    }
+
 
   </script>
   </head>
@@ -147,7 +153,7 @@
           </div>
         <div class="wrapper"> <!-- for reasons -->
           <div class="main-content">
-            <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+            <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
             </table> 
               <h6 align="top">Pending Records</h6> 
               <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
@@ -175,7 +181,7 @@
               </table>
             </div>
           <div class="aside" id="WAPPR">
-            <h6><u>Waiting For Approval List</u></h6>
+            <h6>Waiting For Approval</h6>
             <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
                 <table class="table table-bordered" id="waiting_for_approval">
                   <thead>
