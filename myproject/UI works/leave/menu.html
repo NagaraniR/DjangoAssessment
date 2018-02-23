@@ -23,8 +23,8 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
-var manager_id = (geturl()["mgrid"]);
-var employee_id = (geturl()["empid"]);
+var employee_id = (geturl()["userid"]);
+alert(employee_id);
 var base_url = "http://127.0.0.1:8001/leave/"; 
 var id="&id="+employee_id; 
 
@@ -39,28 +39,47 @@ var id="&id="+employee_id;
         }return vars;
     }
 
+
     $(document).ready(function(){
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: base_url+"details/?format=json&id=3",
-            success: function(data){
-                $.each(data, function(key, value){
-                    if(key == 'waiting_for_approval'){
-                        for(var i=0; i<value.length; i++){
-                            if (value[i].id == employee_id){
-                                console.log(value[i].name.name);
-                                $('#name').append(value[i].name);
-                                $('#from_date').append(value[i].from_date);
-                                $('#to_date').append(value[i].to_date);
-                                $('#no_days').append(value[i].no_days);
-                                $('#leave_type').append(value[i].leave_type.catagory);
-                                $('#reason').append(value[i].reason);
-                            }}}
-                        });
-                    }     
-                });
-            });
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: base_url+"pending/requests/?format=json"+id,
+        success: function(data){
+            var leave_id = $("#id").val(data.id)
+            $("#name").val(data.name.name)
+            $("#from_date").val(data.from_date)
+            $("#to_date").val(data.to_date)
+            $("#no_days").val(data.no_days)
+            $("#leave_type").val(data.leave_type.catagory)
+            $("#reason").val(data.reason)
+            }     
+        });
+    });
+
+    // $(document).ready(function(){
+    //     $.ajax({
+    //         type: "GET",
+    //         dataType: "json",
+    //         url: base_url+"details/?format=json&id=3",
+    //         success: function(data){
+    //             $.each(data, function(key, value){
+    //                 if(key == 'waiting_for_approval'){
+    //                     for(var i=0; i<value.length; i++){
+    //                         if (value[i].id == employee_id){
+    //                             console.log(value[i].name.name);
+    //                             $('#name').append(value[i].name);
+    //                             $('#from_date').append(value[i].from_date);
+    //                             $('#to_date').append(value[i].to_date);
+    //                             $('#no_days').append(value[i].no_days);
+    //                             $('#leave_type').append(value[i].leave_type.catagory);
+    //                             $('#reason').append(value[i].reason);
+    //                         }}}
+    //                     });
+    //                 }     
+    //             });
+    //         });
 
     function approve(){
         var arr = {"id": userid}

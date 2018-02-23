@@ -122,15 +122,22 @@
       contentType : 'application/json',
       success : function(data){
         $.each(data, function(index, data){
-          $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
-            "<td>"+data.available+"</td><tr>")
-        })
+          // for(var i=0; i<data.length; i++){
+            if(data.leave_type.catagory != "LOP"){
+              $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
+              "<td>"+data.available+"</td><tr>")
+            }
+          // }
+          // $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
+          //   "<td>"+data.available+"</td><tr>")
+        });
       }
-    })
+    });
   });
 
   function myFunction(id){
-    window.location = 'menu.html?mgrid='+userid+'&empid='+id;
+    alert("sad"+id);
+    window.location = 'menu.html?userid='+id;
   }
 
   function apply(path){

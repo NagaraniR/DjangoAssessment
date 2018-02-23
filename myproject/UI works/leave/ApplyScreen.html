@@ -79,6 +79,8 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"> </script> -->
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
@@ -133,6 +135,13 @@
     });
 
     function apply() {
+      // $('#form').validate({
+      //     rules: {
+      //       Reason: {
+      //         required: true
+      //       },
+      //     }
+      //   });
         var data = new Array();
         data[0] = $("#name").val(); 
         data[1] = $("#type").val();
@@ -162,6 +171,20 @@
         });
 
       }
+      // $(document).ready(function(){
+      //   $('#form').bootstrapvalidator({
+      //     container: '#messages',
+      //     fields:{
+      //       Reason:{
+      //         validators:{
+      //           notEmpty:{
+      //             message:'Please fill the reason'
+      //           }
+      //         }
+      //       }
+      //     }
+      //   });
+      // });
 </script>
 </head>
   <body>
@@ -170,7 +193,7 @@
         <h2 class ="text-center" for="example-text-input" value="name">Leave Application</h2>
         <p class ="text-center"> Leave Apply Form<p>    
   </div>
-  <form>
+  <form id="form" role="form" data-toggle="validator">
     <div class="container">
       <div class="form-group">
         <div class="form-row">
@@ -207,13 +230,25 @@
           <option value="select" class="form-control">select leave</option>
         </select>
       </div>
+
+
+      <!-- <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div> -->
+
+
       <div class="form-row">
-        <label>Reason:</label>
-        <input type="text" class="form-control" id="reason">
+        <label>Reason:</label><br>
+        <textarea rows="4" cols="70" name="comment" required>
+          
+        </textarea>
+        <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>
       <center>
-        <input class="btn btn-success" value="Apply" onclick="apply()">
+        <input class="btn btn-success" value="Apply" onclick="apply()" >
       </center>
     </div>   
   </form>
