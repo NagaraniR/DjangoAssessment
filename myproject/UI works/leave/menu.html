@@ -22,38 +22,45 @@
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
+<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ -->
 <script type="text/javascript">
 var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
 var id="&id="+userid; 
+var user = sessionStorage.getItem('user')
+alert(user)
 
-    function geturl(varname){
-        var url = window.location.href;
-        var vars = {}
-        var hashes = url.split("?")[1];
-        var hash = hashes.split("&");
-        for (i=0; i<hash.length; i++){
-            params = hash[i].split("=");
-            vars[params[0]] = params[1];
-        }return vars;
-    }
+function geturl(varname){
+    var url = window.location.href;
+    var vars = {}
+    var hashes = url.split("?")[1];
+    var hash = hashes.split("&");
+    for (i=0; i<hash.length; i++){
+        params = hash[i].split("=");
+        vars[params[0]] = params[1];
+    }return vars;
+}
 
-    $(document).ready(function(){
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: base_url+"pending/requests/?format=json"+id,
-            success: function(data){
-                var leave_id = $("#id").val(data.id)
-                $("#name").val(data.name.name)
-                $("#from_date").val(data.from_date)
-                $("#to_date").val(data.to_date)
-                $("#no_days").val(data.no_days)
-                $("#leave_type").val(data.leave_type.catagory)
-                $("#reason").val(data.reason)
-                }     
-            });
+$(document).ready(function(){
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: base_url+"pending/requests/?format=json"+id,
+        success: function(data){
+            var leave_id = $("#id").val(data.id)
+            $("#name").val(data.name.name)
+            $("#from_date").val(data.from_date)
+            $("#to_date").val(data.to_date)
+            $("#no_days").val(data.no_days)
+            $("#leave_type").val(data.leave_type.catagory)
+            $("#reason").val(data.reason)
+            }     
         });
+    });
 
     function approve(){
         var arr = {"id": userid}
@@ -67,7 +74,6 @@ var id="&id="+userid;
             async: false,
             success: function(msg) {
                 alert(msg);
-                window.location = "index.html"
             }   
         });
     }
@@ -83,8 +89,8 @@ var id="&id="+userid;
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
-            success: function(msg) {
-                alert();
+            success: function(msg){
+                alert(msg);
             }   
         });
     }

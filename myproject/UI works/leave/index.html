@@ -4,6 +4,7 @@
 <title>Leave App-Home</title>
 <head>
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
 <style>
     .Absolute-Center.is-Responsive {
       width: 100%; 
@@ -19,14 +20,16 @@
         height:30px;
     }
 </style>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
 var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
 var id="&id="+userid;
+
 /*sessionStorage.setItem('key', 'value');*/
 sessionStorage.setItem('user', userid);
+
 function geturl(varname){
   var url = window.location.href;
   var vars = {}
@@ -38,76 +41,148 @@ function geturl(varname){
   }return vars;
 }
 
-/*var base_url = "http://127.0.0.1:8000/leave/"; 
-  $(document).ready(function(){
+
+$(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: base_url+"details/"+id,
+      url: "http://127.0.0.1:8001/leave/details/?format=json&"+id,
+      contentType:'application/json',
       success: function(data){
-        successmessage = data.details.name[]
-        $("label#successmessage").text(successmessage);
-        $.each(data, function(index, data){
-          $('#waiting_for_approval').append("<tr><td>"+data.name.name+"</td>"+
-            "<td>"+data.from_date+"</td>"+
-            "<td>"+data.to_date+"</td>"+
-            "<td>"+data.leave_type.catagory+"</td>"+
-            "<td>"+data.no_days+"</td></tr>")
+        // successmessage = data.details.name[]
+        // $("label#successmessage").text(successmessage);
+        $.each(data, function(key, value){
+          if (data.hasOwnProperty("waiting_for_approval")) {
+            if(key == 'waiting_for_approval'){
+              for(var i=0; i<value.length; i++){
+                $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
+                "<td>"+value[i].from_date+"</td>"+
+                "<td>"+value[i].to_date+"</td>"+
+                "<td>"+value[i].leave_type.catagory+"</td>"+
+                "<td>"+value[i].no_days+"</td>"+
+                "<td>"+value[i].reason+"</td>"+
+                "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
+              }
+            }
+            else if(key == "pending_records"){
+              for(var i=0; i<value.length; i++){
+                $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
+                  "<td>"+value[i].to_date+"</td>"+
+                  "<td>"+value[i].leave_type.catagory+"</td>"+
+                  "<td>"+value[i].no_days+"</td>"+
+                  "<td>"+value[i].reason+"</td>"+
+                  "<td>"+value[i].status.status+"</td></tr>")
+              }
+            }
+        }
+        else{
+          $("#WAPPR").hide();
+          if(key == "pending_records"){
+              for(var i=0; i<value.length; i++){
+                $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
+                  "<td>"+value[i].to_date+"</td>"+
+                  "<td>"+value[i].leave_type.catagory+"</td>"+
+                  "<td>"+value[i].no_days+"</td>"+
+                  "<td>"+value[i].reason+"</td>"+
+                  "<td>"+value[i].status.status+"</td></tr>")
+              }
+            }
+        }
         });
       }     
     });
-  });*/
 
-    /*$(document).ready(function(){
     $.ajax({
-      type:"GET",
-      url:base_url+"pending/requests/",
-      dataType: "json",
-      success: function(data){
-        $tbody = $("#example").find('tbody')
-        $row = $('<tr>');
-        var cols = '';
-        $.each(data, function(key, value){
-            cols += '<td>' + value.name.name + '</td>'
-          }
-        $row.html(cols);
-        $tbody.append($row);
-        /*$("#example").css('visibility', 'visible');*/
-      /*}
+      type : "GET",
+      dataType : "json",
+      url : "http://127.0.0.1:8001/leave/availables/?format=json"+id,
+      contentType : 'application/json',
+      success : function(data){
+        $.each(data, function(index, data){
+          // for(var i=0; i<data.length; i++){
+            if(data.leave_type.catagory != "LOP"){
+              $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
+              "<td>"+data.available+"</td><tr>")
+            }
+          // }
+          // $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
+          //   "<td>"+data.available+"</td><tr>")
+        });
+      }
     });
-  });*/
+  });
 
-  </script>
-  </head>
-    <body>
-      <div class="jumbotron" style="font-family:Georgia">
-        <h2 class ="text-center">Leave Application</h2>    
+  function myFunction(id){
+    window.location = 'menu.html?userid='+id;
+  }
+
+  function apply(path){
+    link = path + "?id=" + userid;
+    alert(link);
+    window.open(path + '?id=' + userid, '_blank');
+    //window.location = path + '?id=' + userid;
+  }
+</script>
+</head>
+  <body>
+    <div class="jumbotron" style="font-family:Georgia">
+      <h2 class ="text-center">Leave Application</h2>    
+    </div>
+    <div class="container">
+      <div>
+        <label id="successmessage"></label>
       </div>
-      <div class="container">
-          <div>
-              <label id="successmessage"></label>
-          </div>
-        <div class="wrapper"> <!-- for reasons -->
-          <div class="main-content">
-            <a href="ApplyScreen.html"><p>Apply Leave</p></a>
-            
-          </div>
-          <div class="aside">
-            <h6><u>Waiting For Approval List</u></h6>
-            <div style="overflow:show; position:relative; width:3px; height: 0px; top: 0px;">
-              <table class="table table-striped" id="waiting_for_approval">
-                <tbody>
-                <tr>
-                <th scope="row">Name</th>
-                <th scope="row">From Date</th>
-                <th scope="row">To Date</th>
-                <th scope="row">Leave Type</th>
-                <th scope="row">Days</th>
-                </tr>
-              </tbody>
-              </table>  
+      <div class="wrapper"> <!-- for reasons -->
+        <div class="main-content">
+          <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+          <h6 align="top">Pending Records</h6> 
+              <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
+                <table class="table table-bordered" id="pending">
+                  <thead>
+                    <tr>
+                      <th scope="row">From</th>
+                      <th scope="row">To</th>
+                      <th scope="row">Type</th>
+                      <th scope="row">Days</th>
+                      <th scope="row">Reason</th>
+                      <th scope="row">Status</th>
+                    </tr>
+                  </thead>
+                </table>
+            </div>
+            <br>
+            <h6>Status</h6>
+              <table class="table table-bordered" id="available" style="width:300px">
+                <thead>
+                  <tr>
+                    <th scope="row">Leave</th>
+                    <th scope="row">Available</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>  
+        </div>
+        <div class="aside">
+            <h6>Waiting For Approval</h6>
+            <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
+                <table class="table table-bordered" id="waiting_for_approval">
+                  <thead>
+                    <tr>
+                    <th scope="row" >Name</th>
+                    <th scope="row">From</th>
+                    <th scope="row">To</th>
+                    <th scope="row">Type</th>
+                    <th scope="row">Days</th>
+                    <th scope="row">Reason</th>
+                    <th scope="row">Status</th>
+                  </tr>
+                </thead>
+              </tr>
+            </tbody>
+          
           </div>
         </div>
       </div>
-    </body>
+    </div>
+  </body>
 </html>
