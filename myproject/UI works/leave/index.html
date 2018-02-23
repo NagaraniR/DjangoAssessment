@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <style>
     .Absolute-Center.is-Responsive {
       width: 100%; 
@@ -20,12 +21,9 @@
         height:30px;
     }
 </style>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-
 <script type="text/javascript">
-
-var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
+var userid = (geturl()["userid"]);
 var id="&id="+userid;
 
 /*sessionStorage.setItem('key', 'value');*/
@@ -43,12 +41,11 @@ function geturl(varname){
 }
 
 $(document).ready(function(){
-  var userid = (geturl()["userid"]);
-  var id="&id="+userid; 
+
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "http://127.0.0.1:8001/leave/details/?format=json&"+id,
+      url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
       contentType:'application/json',
       success: function(data){
         // successmessage = data.details.name[]
@@ -96,7 +93,7 @@ $(document).ready(function(){
     $.ajax({
       type : "GET",
       dataType : "json",
-      url : "http://127.0.0.1:8001/leave/availables/?format=json"+id,
+      url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
       contentType : 'application/json',
       success : function(data){
         $.each(data, function(index, data){
