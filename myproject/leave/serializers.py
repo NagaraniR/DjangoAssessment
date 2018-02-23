@@ -33,20 +33,31 @@ class LeaveCreditSerializer(serializers.ModelSerializer):
 		model = LeaveCredit
 		fields = ['id', 'name', 'leave_type', 'available']
 
-class LeaveRequestSerializer(serializers.ModelSerializer):
-
-	leave_type = LeaveTypeSerializer()
-	name = EmployeeSerializer()
-
-	class Meta:
-		model = LeaveRequest
-		fields = "__all__"				
-
 class StatusSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Status
 		fields = "__all__"
+
+class LeaveRequestSerializer(serializers.ModelSerializer):
+
+	leave_type = LeaveTypeSerializer()
+	name = EmployeeSerializer()
+	status = StatusSerializer()
+
+	class Meta:
+		model = LeaveRequest
+		fields = "__all__"	
+
+class LeaveRequestApplySerializer(serializers.ModelSerializer):
+
+	class Meta(object):
+		model = LeaveRequest
+		fields = "__all__"
+			
+
+
+
 	
 
 			

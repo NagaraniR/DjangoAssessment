@@ -47,7 +47,7 @@ class Apply(APIView):
     
     def post(self, request, format=None):
 
-        #import pdb;pdb.set_trace()
+        import pdb;pdb.set_trace()
         user = Employee.objects.get(name=request.data.get('name'))
         request.data["name"] = user.id
         request.data["reporter"] = user.reporting_senior.id
@@ -55,7 +55,6 @@ class Apply(APIView):
         request.data["leave_type"] = leave.id
         available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
         from_date = datetime.datetime.strptime(request.data.get('from_date'), "%Y-%m-%d")
-        print from_date
         to_date = datetime.datetime.strptime(request.data.get('to_date'), "%Y-%m-%d")
         no_days = abs((to_date-from_date).days)
         if no_days > available.available:
@@ -64,7 +63,7 @@ class Apply(APIView):
             request.data["no_days"] = no_days
             _status = Status.objects.get(status="Pending")
             request.data["status"]= _status.id
-            serializer = LeaveRequestSerializer(data=request.data, many=False)
+            serializer = LeaveRequestApplySerializer(data=request.data, many=False)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 print "ok"

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
-<title>Leave App-Home</title>
 <head>
+<title>Leave App-Home</title>
+
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
 <style>
@@ -23,6 +23,7 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script type="text/javascript">
+
 var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
 var id="&id="+userid;
@@ -41,8 +42,9 @@ function geturl(varname){
   }return vars;
 }
 
-
 $(document).ready(function(){
+  var userid = (geturl()["userid"]);
+  var id="&id="+userid; 
     $.ajax({
       type: "GET",
       dataType: "json",
@@ -85,13 +87,12 @@ $(document).ready(function(){
                   "<td>"+value[i].no_days+"</td>"+
                   "<td>"+value[i].reason+"</td>"+
                   "<td>"+value[i].status.status+"</td></tr>")
+                }
               }
             }
-        }
-        });
-      }     
-    });
-
+          });
+        }     
+      });
     $.ajax({
       type : "GET",
       dataType : "json",
@@ -99,23 +100,19 @@ $(document).ready(function(){
       contentType : 'application/json',
       success : function(data){
         $.each(data, function(index, data){
-          // for(var i=0; i<data.length; i++){
             if(data.leave_type.catagory != "LOP"){
               $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
               "<td>"+data.available+"</td><tr>")
             }
-          // }
-          // $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
-          //   "<td>"+data.available+"</td><tr>")
         });
       }
     });
   });
 
   function myFunction(id){
+    alert("sad"+id);
     window.location = 'menu.html?userid='+id;
   }
-
   function apply(path){
     link = path + "?id=" + userid;
     alert(link);
@@ -162,12 +159,12 @@ $(document).ready(function(){
               </table>
             </div>  
         </div>
-        <div class="aside">
+        <div class="aside" id="WAPPR">
             <h6>Waiting For Approval</h6>
             <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
-                <table class="table table-bordered" id="waiting_for_approval">
-                  <thead>
-                    <tr>
+              <table class="table table-bordered" id="waiting_for_approval">
+                <thead>
+                  <tr>
                     <th scope="row" >Name</th>
                     <th scope="row">From</th>
                     <th scope="row">To</th>
@@ -177,12 +174,44 @@ $(document).ready(function(){
                     <th scope="row">Status</th>
                   </tr>
                 </thead>
-              </tr>
-            </tbody>
-          
+              </table>
           </div>
-        </div>
       </div>
     </div>
   </body>
 </html>
+<!-- <thead>
+            <tr>
+                <th class="col-xs-1">Size</th>
+                <th class="col-xs-3">Bust</th>
+                <th class="col-xs-3">Waist</th>
+                <th class="col-xs-5">Hips</th>
+            </tr>
+        </thead> -->
+
+<!-- <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+        <td>john@example.com</td>
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Moe</td>
+        <td>mary@example.com</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td>Dooley</td>
+        <td>july@example.com</td>
+      </tr>
+    </tbody>
+  </table> -->

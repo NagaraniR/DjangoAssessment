@@ -13,10 +13,94 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 
+    <!-- Bootstrap Date-Picker Plugin -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> -->
+  </head>
+
+  <!-- <body><center>
+    <h1><center>Apply leave</center></h1>
+<div class="container" style="max-width:600px;margin:60px auto;">    
+ 
+
+  <form class="form-horizontal">
+  <div class="form-group">
+    <table border="1">
+      <tr>
+        <th><label  class="col-sm-2 control-label">Name</label></th>
+        <th><input type="text" class="form-control" id="name"></th>
+      </tr>
+      <tr>
+        <th><label  class="col-sm-2 control-label">Reporting Senior</label></th>
+        <th><input type="text" class="form-control" id="reporter" ></th>
+      </tr>
+      <tr>
+        <th><label  class="col-sm-2 control-label">From date:</label></th>
+        <th>  
+          <div class="input-group date" data-provide="datepicker">
+            <input class="datepicker" id='fromDate' data-date-format="yyyy/mm/dd">
+               <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-th"></span>
+              </div>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th><label  class="col-sm-2 control-label">To date:</label></th>
+        <th>  
+          <div class="input-group date" data-provide="datepicker">
+            <input class="datepicker" id='toDate'>
+               <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-th"></span>
+              </div>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th><label class="col-sm-2 control-label">Select leave</label></th>
+          <th><select name="selValue" class="selectpicker" id="type">
+            <option value="select" >select leave</option>
+          </select>
+        </th>
+      </tr>
+      <tr>
+        <th><label  class="col-sm-2 control-label">Reason</label></th>
+        <th><input type="text" class="form-control" id="reason" required></th>
+      </tr>
+      <tr><center>
+        <th colspan="2"><button onclick="apply()" type="button" class="btn btn-default">Apply</button></th></center>
+      </tr>
+    </table>
+  </div>
+</form>
+</div>
+</center>
+</body> -->
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"> </script> -->
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
-  var base_url = "http://127.0.0.1:8000/leave/"; 
-  var user = sessionStorage.getItem('user')
-  var id = "&id="+user
+  var base_url = "http://127.0.0.1:8001/leave/"; 
+  // var user = sessionStorage.getItem('user')
+  // var id = "&id="+user
+  var userid = geturl();
+  alert(userid.id);
+  var id="&id="+userid.id; 
+
+    function geturl(varname){
+        var url = window.location.href;
+        var vars = {}
+        var hashes = url.split("?")[1];
+        var hash = hashes.split("&");
+        for (i=0; i<hash.length; i++){
+            params = hash[i].split("=");
+            vars[params[0]] = params[1];
+        }return vars;
+    }
 
     $(document).ready(function() {
 
@@ -37,10 +121,6 @@
         dateFormat: 'yy-mm-dd'
        });
 
-      function back(){
-        window.location='index.html?userid='+id
-      }
-
       $.ajax({
       type : "GET",
       dataType : "json",
@@ -55,14 +135,20 @@
     });
 
     function apply() {
+      // $('#form').validate({
+      //     rules: {
+      //       Reason: {
+      //         required: true
+      //       },
+      //     }
+      //   });
         var data = new Array();
         data[0] = $("#name").val(); 
         data[1] = $("#type").val();
         data[2] = $("#fromDate").val();
         data[3] = $("#toDate").val();  
-        data[4] = $("#reason").val();
-        
-        alert(data); 
+        data[4] = $("#reason").val(); 
+        console.log("jg"+data);
         $.ajax({
           type: "POST",
           url:  base_url+"apply/",
@@ -79,11 +165,26 @@
             alert("Your Leave Applied");
           },
           error: function (result) {
+            alert("fail");
             console.log(result);
           }
         });
 
       }
+      // $(document).ready(function(){
+      //   $('#form').bootstrapvalidator({
+      //     container: '#messages',
+      //     fields:{
+      //       Reason:{
+      //         validators:{
+      //           notEmpty:{
+      //             message:'Please fill the reason'
+      //           }
+      //         }
+      //       }
+      //     }
+      //   });
+      // });
 </script>
 </head>
   <body>
@@ -92,7 +193,7 @@
         <h2 class ="text-center" for="example-text-input" value="name">Leave Application</h2>
         <p class ="text-center"> Leave Apply Form<p>    
   </div>
-  <form>
+  <form id="form" role="form" data-toggle="validator">
     <div class="container">
       <div class="form-group">
         <div class="form-row">
@@ -127,14 +228,25 @@
           <option value="select" class="form-control">select leave</option>
         </select>
       </div>
+
+
+      <!-- <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div> -->
+
+
       <div class="form-row">
-        <label>Reason:</label>
-        <input type="text" class="form-control" id="reason">
+        <label>Reason:</label><br>
+        <textarea rows="4" cols="70" name="comment" required>
+          
+        </textarea>
+        <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>
       <center>
-        <input class="btn btn-success" value="Apply" onclick="apply()">
-        <input class="btn btn-danger" onclick="back()" value="Back">
+        <input class="btn btn-success" value="Apply" onclick="apply()" >
       </center>
     </div>   
   </form>
