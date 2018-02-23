@@ -171,20 +171,17 @@
         });
 
       }
-      // $(document).ready(function(){
-      //   $('#form').bootstrapvalidator({
-      //     container: '#messages',
-      //     fields:{
-      //       Reason:{
-      //         validators:{
-      //           notEmpty:{
-      //             message:'Please fill the reason'
-      //           }
-      //         }
-      //       }
-      //     }
-      //   });
-      // });
+      $(document).ready(function(){
+        $('#form').validator({
+          comment:{
+            validators:{
+              notEmpty:{
+                message:'Please enter reasonn'
+              }
+            }
+          }
+        })
+      })
 </script>
 </head>
   <body>
@@ -241,7 +238,7 @@
 
       <div class="form-row">
         <label>Reason:</label><br>
-        <textarea rows="4" cols="70" name="comment" required>
+        <textarea rows="4" cols="70" name="comment" placeholder="Reason">
           
         </textarea>
         <!-- <input type="text" class="form-control" id="reason"> -->
