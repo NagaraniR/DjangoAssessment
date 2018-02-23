@@ -5,7 +5,7 @@ from rest_framework import status
 from models import Status, Employee, LeaveType, LeaveRequest, LeaveCredit
 from django.core.serializers.python import Serializer
 from rest_framework.response import Response
-from .serializers import LeaveRequestSerializer, EmployeeSerializer, LeaveTypeSerializer, LeaveCreditSerializer
+from .serializers import LeaveRequestSerializer,LeaveRequestApplySerializer, EmployeeSerializer, LeaveTypeSerializer, LeaveCreditSerializer
 import datetime
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
@@ -47,7 +47,7 @@ class Apply(APIView):
     
     def post(self, request, format=None):
 
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         user = Employee.objects.get(name=request.data.get('name'))
         request.data["name"] = user.id
         request.data["reporter"] = user.reporting_senior.id

@@ -84,7 +84,7 @@
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
-  var base_url = "http://127.0.0.1:8001/leave/"; 
+  var base_url = "http://127.0.0.1:8000/leave/"; 
   // var user = sessionStorage.getItem('user')
   // var id = "&id="+user
   var userid = geturl();
@@ -148,7 +148,8 @@
         data[2] = $("#fromDate").val();
         data[3] = $("#toDate").val();  
         data[4] = $("#reason").val(); 
-        console.log("jg"+data);
+        console.log(data[4]);
+        console.log(data);
         $.ajax({
           type: "POST",
           url:  base_url+"apply/",
@@ -171,17 +172,17 @@
         });
 
       }
-      $(document).ready(function(){
-        $('#form').validator({
-          comment:{
-            validators:{
-              notEmpty:{
-                message:'Please enter reasonn'
-              }
-            }
-          }
-        })
-      })
+      // $(document).ready(function(){
+      //   $('#form').validator({
+      //     comment:{
+      //       validators:{
+      //         notEmpty:{
+      //           message:'Please enter reasonn'
+      //         }
+      //       }
+      //     }
+      //   })
+      // })
 </script>
 </head>
   <body>
@@ -236,9 +237,7 @@
 
       <div class="form-row">
         <label>Reason:</label><br>
-        <textarea rows="4" cols="70" name="comment" placeholder="Reason">
-          
-        </textarea>
+        <textarea rows="4" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
         <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>

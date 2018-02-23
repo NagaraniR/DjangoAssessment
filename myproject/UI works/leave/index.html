@@ -24,12 +24,11 @@
 
 <script type="text/javascript">
 
-var userid = (geturl()["userid"]);
+var userid = geturl();
 var base_url = "http://127.0.0.1:8000/leave/"; 
-var id="&id="+userid;
-
+var id="&id="+userid["userid"];
 /*sessionStorage.setItem('key', 'value');*/
-sessionStorage.setItem('user', userid);
+// sessionStorage.setItem('user', userid);
 
 function geturl(varname){
   var url = window.location.href;
@@ -48,7 +47,7 @@ $(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "http://127.0.0.1:8001/leave/details/?format=json&"+id,
+      url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
       contentType:'application/json',
       success: function(data){
         // successmessage = data.details.name[]
@@ -96,7 +95,7 @@ $(document).ready(function(){
     $.ajax({
       type : "GET",
       dataType : "json",
-      url : "http://127.0.0.1:8001/leave/availables/?format=json"+id,
+      url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
       contentType : 'application/json',
       success : function(data){
         $.each(data, function(index, data){
@@ -110,13 +109,12 @@ $(document).ready(function(){
   });
 
   function myFunction(id){
-    alert("sad"+id);
+    alert(id);
     window.location = 'menu.html?userid='+id;
   }
   function apply(path){
     link = path + "?id=" + userid;
-    alert(link);
-    window.open(path + '?id=' + userid, '_blank');
+    window.open(path + '?id=' + userid["userid"], '_blank');
     //window.location = path + '?id=' + userid;
   }
 </script>
@@ -131,7 +129,7 @@ $(document).ready(function(){
       </div>
       <div class="wrapper"> <!-- for reasons -->
         <div class="main-content">
-          <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+          <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
           <h6 align="top">Pending Records</h6> 
               <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
                 <table class="table table-bordered" id="pending">
