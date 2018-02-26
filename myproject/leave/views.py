@@ -16,8 +16,7 @@ from django.http import JsonResponse
 
 
 class User(APIView):
-
-
+    
     def get(self, request, format=None):
         # import pdb;pdb.set_trace()
         pk = int(request.GET.get('id'))

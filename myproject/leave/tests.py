@@ -145,8 +145,9 @@ class BaseSetUp(APITestCase):
 class EmployeeTest(BaseSetUp):
 	
 	def test_employee(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=3")	
-		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=3), many=True)
+		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=2")	
+		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=2), many=True)
+		print "asd", employee_serializer.data
 		self.assertEqual(response.data, employee_serializer.data)
 
 	def test_invalid_id(self):
