@@ -22,12 +22,13 @@
     }
 </style>
 <script type="text/javascript">
+
+var userid = geturl();
 var base_url = "http://127.0.0.1:8000/leave/"; 
-var userid = (geturl()["userid"]);
-var id="&id="+userid;
+var id="&id="+userid["userid"];
 
 /*sessionStorage.setItem('key', 'value');*/
-sessionStorage.setItem('user', userid);
+// sessionStorage.setItem('user', userid);
 
 function geturl(varname){
   var url = window.location.href;
@@ -48,8 +49,6 @@ $(document).ready(function(){
       url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
       contentType:'application/json',
       success: function(data){
-        // successmessage = data.details.name[]
-        // $("label#successmessage").text(successmessage);
         $.each(data, function(key, value){
           if (data.hasOwnProperty("waiting_for_approval")) {
             if(key == 'waiting_for_approval'){
@@ -107,14 +106,12 @@ $(document).ready(function(){
   });
 
   function myFunction(id){
-    alert("sad"+id);
+    alert(id);
     window.location = 'menu.html?userid='+id;
   }
   function apply(path){
     link = path + "?id=" + userid;
-    alert(link);
-    window.open(path + '?id=' + userid, '_blank');
-    //window.location = path + '?id=' + userid;
+    window.open(path + '?id=' + userid["userid"], '_blank');
   }
 </script>
 </head>
@@ -123,12 +120,9 @@ $(document).ready(function(){
       <h2 class ="text-center">Leave Application</h2>    
     </div>
     <div class="container">
-      <div>
-        <label id="successmessage"></label>
-      </div>
       <div class="wrapper"> <!-- for reasons -->
         <div class="main-content">
-          <a href="ApplyScreen.html"><p>Apply Leave</p></a>
+          <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
           <h6 align="top">Pending Records</h6> 
               <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
                 <table class="table table-bordered" id="pending">
@@ -177,38 +171,3 @@ $(document).ready(function(){
     </div>
   </body>
 </html>
-<!-- <thead>
-            <tr>
-                <th class="col-xs-1">Size</th>
-                <th class="col-xs-3">Bust</th>
-                <th class="col-xs-3">Waist</th>
-                <th class="col-xs-5">Hips</th>
-            </tr>
-        </thead> -->
-
-<!-- <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-    </tbody>
-  </table> -->

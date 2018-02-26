@@ -84,15 +84,13 @@
 <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
-  var base_url = "http://127.0.0.1:8001/leave/"; 
-  var user = sessionStorage.getItem('user')
-  var id = "&id="+user
-  
-  /*var userid = geturl();*/
+  var base_url = "http://127.0.0.1:8000/leave/";   
+  var userid = geturl();
+  alert(userid.id);
+  var id="&id="+userid.id; 
   alert(id);
-
- /*   function geturl(varname){
-        var id="&id="+userid.id; 
+  
+  function geturl(varname){
         var url = window.location.href;
         var vars = {}
         var hashes = url.split("?")[1];
@@ -102,6 +100,10 @@
             vars[params[0]] = params[1];
         }return vars;
     }
+
+ /* 
+  var user = sessionStorage.getItem('user')
+  var id = "&id="+user
 */
     $(document).ready(function() {
 
@@ -136,20 +138,14 @@
     });
 
     function apply() {
-      // $('#form').validate({
-      //     rules: {
-      //       Reason: {
-      //         required: true
-      //       },
-      //     }
-      //   });
         var data = new Array();
         data[0] = $("#name").val(); 
         data[1] = $("#type").val();
         data[2] = $("#fromDate").val();
         data[3] = $("#toDate").val();  
         data[4] = $("#reason").val(); 
-        console.log("jg"+data);
+        console.log(data[4]);
+        console.log(data);
         $.ajax({
           type: "POST",
           url:  base_url+"apply/",
@@ -171,20 +167,6 @@
           }
         });
       }
-      // $(document).ready(function(){
-      //   $('#form').bootstrapvalidator({
-      //     container: '#messages',
-      //     fields:{
-      //       Reason:{
-      //         validators:{
-      //           notEmpty:{
-      //             message:'Please fill the reason'
-      //           }
-      //         }
-      //       }
-      //     }
-      //   });
-      // });
 </script>
 </head>
   <body>
@@ -228,18 +210,9 @@
           <option value="select" class="form-control">select leave</option>
         </select>
       </div>
-
-      <!-- <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
-            <div id="messages"></div>
-        </div>
-    </div> -->
-
       <div class="form-row">
         <label>Reason:</label><br>
-        <textarea rows="4" cols="70" name="comment" required>
-          
-        </textarea>
+        <textarea rows="4" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
         <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>
