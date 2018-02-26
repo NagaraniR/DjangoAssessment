@@ -92,57 +92,43 @@ $(document).ready(function(){
         });
     }
 </script>
-
 </head>
 <body>
-    
     <div class="jumbotron" style="font-family:Georgia">
         <h2 class ="text-center">Leave Application</h2>
         <p class ="text-center"> Leave Request Approval Form<p>    
     </div>
     <form>
         <div class="container">
-            <div class="form-group">
-                <label class="text-center"  for="example-text-input" value="name">Name:</label>
-                <input  class="form-control" id="name">
+            <div class="row">
+                <label class="col-md-2" value="name">Name:</label>
+                <input  class="form-control col-md-4" id="name" readonly>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="text-center" for="example-text-input" value="name">From Date:</label>
-                    <input class="form-control" id="from_date">
+            </br>
+            <div class="row ">
+                <label class="col-md-2" value="from_date">From Date:</label>
+                <input class="form-control col-md-4" id="from_date" readonly>
+                <label class="col-md-2" value="name">To Date:</label>
+                <input class="form-control col-md-4" id="to_date" readonly>
                 </div>
-                <div class="form-group col-md-6">
-                    <label class="text-center" for="example-text-input" value="name">To Date:</label>
-                    <input class="form-control" id="to_date">
-                </div>
+            </br>
+            <div class="row">
+                <label class="col-md-2" value="name">No.Of.Days:</label>
+                <input class="form-control col-md-4" id="no_days" readonly>
+                <label class="col-md-2" for="name" value="name">Leave Type:</label>
+                    <input class="form-control col-md-4" id="leave_type" readonly>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="text-center" for="name" value="name">No.Of.Days:</label>
-                    <input class="form-control" id="no_days">
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="text-center" for="name" value="name">Leave Type:</label>
-                    <input class="form-control" id="leave_type">
-                </div>
+            </br>
+            <div class="row">
+                <label class="col-md-2" value="name">Reason:</label>
+                <textarea class="col-md-4" rows="4" style="resize:none" cols="70" id="reason" name="comment" placeholder="Reason" readonly></textarea>
             </div>
-            <div class="form-group">
-                <label class="text-center exampleTextarea" for="name" value="name">Reason:</label>
-                <input class="form-control" row="3" id="reason">
-            </div>
-    </div>
-    <div id="form">
-        <center>
-            <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
-            <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
-        </center>
-    </div>    
+            </br>
+            <center>
+                <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
+                <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
+            </center>  
+        </div>    
     </form>
-    <div id="footer">
-            <p> Application courtesy
-                <a href="https://fifthgentech.com/">Fifth Genration Technology</a>.
-            </p>
-        </div>
-    </div>
 </body>
 </html>

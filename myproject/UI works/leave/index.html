@@ -46,7 +46,7 @@ $(document).ready(function(){
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
+      url: base_url+"details/?format=json&"+id,
       contentType:'application/json',
       success: function(data){
         $.each(data, function(key, value){
@@ -59,7 +59,7 @@ $(document).ready(function(){
                 "<td>"+value[i].leave_type.catagory+"</td>"+
                 "<td>"+value[i].no_days+"</td>"+
                 "<td>"+value[i].reason+"</td>"+
-                "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
+                "<td>"+"<button id='view' class='btn btn-info btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
               }
             }
             else if(key == "pending_records"){
@@ -92,7 +92,7 @@ $(document).ready(function(){
     $.ajax({
       type : "GET",
       dataType : "json",
-      url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
+      url : base_url+"availables/?format=json"+id,
       contentType : 'application/json',
       success : function(data){
         $.each(data, function(index, data){
@@ -117,12 +117,28 @@ $(document).ready(function(){
 </head>
   <body>
     <div class="jumbotron" style="font-family:Georgia">
-      <h2 class ="text-center">Leave Application</h2>    
+      <h2 class ="text-center">Leave Application</h2>
+      <h6 class = "text-right">Wellcome,</h6>
     </div>
     <div class="container">
+
+      <div class="col-md-11 text-right">
+          <a href="ApplyScreen.html"><div class="btn btn-info btn-xs">Apply Leave</div></a>
+          </div>
+      <div>
+        <label id="successmessage"></label>
+      </div>
       <div class="wrapper"> <!-- for reasons -->
         <div class="main-content">
-          <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
+            <h6>Balance Leave</h6>
+            <table class="table table-bordered" id="available" style="width:300px">
+              <thead>
+                <tr>
+                  <th scope="row">Leave</th>
+                  <th scope="row">Available</th>
+                </tr>
+              </thead>
+            </table>
           <h6 align="top">Pending Records</h6> 
               <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
                 <table class="table table-bordered" id="pending">
@@ -138,31 +154,16 @@ $(document).ready(function(){
                   </thead>
                 </table>
             </div>
-            <br>
-            <h6>Status</h6>
-              <table class="table table-bordered" id="available" style="width:300px">
-                <thead>
-                  <tr>
-                    <th scope="row">Leave</th>
-                    <th scope="row">Available</th>
-                  </tr>
-                </thead>
-              </table>
+          </br>
             </div>  
         </div>
         <div class="aside" id="WAPPR">
-            <h6>Waiting For Approval</h6>
-            <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
+            <h6>Leave Requests</h6>
+            <div style="overflow:scroll; position:relative; width:400px; height:400px; top: 0px;">
               <table class="table table-bordered" id="waiting_for_approval">
                 <thead>
                   <tr>
-                    <th scope="row" >Name</th>
-                    <th scope="row">From</th>
-                    <th scope="row">To</th>
-                    <th scope="row">Type</th>
-                    <th scope="row">Days</th>
-                    <th scope="row">Reason</th>
-                    <th scope="row">Status</th>
+                    <th scope="row">Name</th>
                   </tr>
                 </thead>
               </table>
@@ -171,3 +172,4 @@ $(document).ready(function(){
     </div>
   </body>
 </html>
+

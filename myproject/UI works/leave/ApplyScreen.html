@@ -1,225 +1,149 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Leave Apply</title>
-    <meta charset="utf-8">
+
+<head>
+  <title>Leave Apply</title>
+  <meta charset="utf-8">
 
 
-    <!--  jQuery -->
+  <!--  jQuery -->
 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 
-    <!-- Bootstrap Date-Picker Plugin -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> -->
-  </head>
-
-  <!-- <body><center>
-    <h1><center>Apply leave</center></h1>
-<div class="container" style="max-width:600px;margin:60px auto;">    
- 
-
-  <form class="form-horizontal">
-  <div class="form-group">
-    <table border="1">
-      <tr>
-        <th><label  class="col-sm-2 control-label">Name</label></th>
-        <th><input type="text" class="form-control" id="name"></th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">Reporting Senior</label></th>
-        <th><input type="text" class="form-control" id="reporter" ></th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">From date:</label></th>
-        <th>  
-          <div class="input-group date" data-provide="datepicker">
-            <input class="datepicker" id='fromDate' data-date-format="yyyy/mm/dd">
-               <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
-          </div>
-        </th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">To date:</label></th>
-        <th>  
-          <div class="input-group date" data-provide="datepicker">
-            <input class="datepicker" id='toDate'>
-               <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
-          </div>
-        </th>
-      </tr>
-      <tr>
-        <th><label class="col-sm-2 control-label">Select leave</label></th>
-          <th><select name="selValue" class="selectpicker" id="type">
-            <option value="select" >select leave</option>
-          </select>
-        </th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">Reason</label></th>
-        <th><input type="text" class="form-control" id="reason" required></th>
-      </tr>
-      <tr><center>
-        <th colspan="2"><button onclick="apply()" type="button" class="btn btn-default">Apply</button></th></center>
-      </tr>
-    </table>
-  </div>
-</form>
-</div>
-</center>
-</body> -->
-<!-- 
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> -->
-<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"> </script> -->
-<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
+  <!-- Bootstrap Date-Picker Plugin -->
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> -->
+</head>
 <script type="text/javascript">
-  var base_url = "http://127.0.0.1:8000/leave/";   
+  var base_url = "http://127.0.0.1:8000/leave/";
+  // var user = sessionStorage.getItem('user')
+  // var id = "&id="+user
   var userid = geturl();
   alert(userid.id);
-  var id="&id="+userid.id; 
-  alert(id);
-  
-  function geturl(varname){
-        var url = window.location.href;
-        var vars = {}
-        var hashes = url.split("?")[1];
-        var hash = hashes.split("&");
-        for (i=0; i<hash.length; i++){
-            params = hash[i].split("=");
-            vars[params[0]] = params[1];
-        }return vars;
-    }
+  var id = "&id=" + userid.id;
 
- /* 
-  var user = sessionStorage.getItem('user')
-  var id = "&id="+user
-*/
-    $(document).ready(function() {
+  function geturl(varname) {
+    var url = window.location.href;
+    var vars = {}
+    var hashes = url.split("?")[1];
+    var hash = hashes.split("&");
+    for (i = 0; i < hash.length; i++) {
+      params = hash[i].split("=");
+      vars[params[0]] = params[1];
+    } return vars;
+  }
 
-      $( "#datepicker" ).datepicker();
-
-       $.ajax({
-        type: "GET",
-        dataType: "json",
-        url:  base_url+"employee/?format=json"+id,
-        success: function(data) { 
-          $.each(data, function(index, data){
-              $("#name").val(data.name);
-              $("#reporter").val(data.reporting_senior.name);
-          });
-        }
-      });
-       $('.datepicker').datepicker({
-        dateFormat: 'yy-mm-dd'
-       });
-
-      $.ajax({
-      type : "GET",
-      dataType : "json",
-      url: base_url+"types/?format=json",
-      success : function(data){
-        $.each(data, function(index, result){
-          var credit="<option>"+result.catagory +"</option>";
+  $(document).ready(function () {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: base_url + "employee/?format=json" + id,
+      success: function (data) {
+        $.each(data, function (index, data) {
+          $("#name").val(data.name);
+          $("#reporter").val(data.reporting_senior.name);
+        });
+      }
+    });
+    $('.datepicker').datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: base_url + "types/?format=json",
+      success: function (data) {
+        $.each(data, function (index, result) {
+          var credit = "<option>" + result.catagory + "</option>";
           $(credit).appendTo('.selectpicker');
         });
       }
     });
-    });
+  });
 
-    function apply() {
-        var data = new Array();
-        data[0] = $("#name").val(); 
-        data[1] = $("#type").val();
-        data[2] = $("#fromDate").val();
-        data[3] = $("#toDate").val();  
-        data[4] = $("#reason").val(); 
-        console.log(data[4]);
-        console.log(data);
-        $.ajax({
-          type: "POST",
-          url:  base_url+"apply/",
-          data: JSON.stringify({ 
-            "name": data[0],
-            "leave_type":data[1],
-            "from_date":data[2],
-            "to_date":data[3], 
-            "reason": data[4] 
-          }),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (result) {
-            alert("Your Leave Applied");
-          },
-          error: function (result) {
-            alert("fail");
-            console.log(result);
-          }
-        });
+  function apply() {
+    var data = new Array();
+    data[0] = $("#name").val();
+    data[1] = $("#type").val();
+    data[2] = $("#fromDate").val();
+    data[3] = $("#toDate").val();
+    data[4] = $("#reason").val();
+    console.log(data[4]);
+    console.log(data);
+    $.ajax({
+      type: "POST",
+      url: base_url + "apply/",
+      data: JSON.stringify({
+        "name": data[0],
+        "leave_type": data[1],
+        "from_date": data[2],
+        "to_date": data[3],
+        "reason": data[4]
+      }),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function (result) {
+        alert("Your Leave Applied");
+      },
+      error: function (result) {
+        alert("fail");
+        console.log(result);
       }
+    });
+  }
 </script>
 </head>
-  <body>
-    <center>
-    <div class="jumbotron" style="font-family:Georgia">
-        <h2 class ="text-center" for="example-text-input" value="name">Leave Application</h2>
-        <p class ="text-center"> Leave Apply Form<p>    
+
+<body>
+  <div class="jumbotron" style="font-family:Georgia">
+    <h2 class="text-center" for="example-text-input" value="name">Leave Application</h2>
+    <p class="text-center"> Leave Apply Form
+      <p>
   </div>
   <form id="form" role="form" data-toggle="validator">
     <div class="container">
-      <div class="form-group">
-        <div class="form-row">
-          <label class="text-center">Name:</label>
-          <input type="text" class="form-control" id="name">
-        </div>
+      <div class="row">
+        <label class=" col-md-2">Name:</label>
+        <input type="text" class="form-control col-md-4" id="name" readonly>
+        <label class=" col-md-2">Reporting Senior:</label>
+        <input type="text" class="form-control col-md-4" id="reporter" readonly>
       </div>
-      <div class="form-row">
-        <label  class="text-center">Reporting Senior:</label>
-        <input type="text" class="form-control" id="reporter" >
+      <br/>
+      <div class="row">
+          <label class="col-md-2">From date:</label>
+          <input class="datepicker form-control col-md-4" id='fromDate' data-date-format="yyyy/mm/dd">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+          </span>
+          <label class=" col-md-2">To date:</label>
+            <input class="datepicker form-control col-md-4" id='toDate'>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+            </span>
       </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-6">
-              <label class="text-center">From date:</label>
-              <input class="datepicker form-control" id='fromDate' data-date-format="yyyy/mm/dd">
-              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-              </span>
-        </div>
-        <div class="form-group col-md-6"> 
-            <label class="text-center">To date:</label>
-            <div class="input-group date" data-provide="datepicker">
-              <input class="datepicker form-control" id='toDate'>
-              <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <label class="text-center">Select leave:</label>
+          <br/>
+      <div class="row">
+        <label class="col-md-2">Select leave:</label>
         <select name="selValue" class="selectpicker" id="type">
           <option value="select" class="form-control">select leave</option>
         </select>
       </div>
-      <div class="form-row">
-        <label>Reason:</label><br>
-        <textarea rows="4" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
+      <!-- <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div> -->
+      <br/>
+      <div class="row">
+        <label class="col-md-2">Reason:</label><br>
+        <textarea class="col-md-4" rows="4" style="resize:none" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
         <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>
       <center>
-        <input class="btn btn-success" value="Apply" onclick="apply()" >
+        <input class="btn btn-success" value="Apply" onclick="apply()">
       </center>
-    </div>   
+    </div>
   </form>
 </body>
 </html>
