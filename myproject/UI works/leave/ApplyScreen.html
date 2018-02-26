@@ -1,92 +1,20 @@
-
+<!-- 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Leave Apply</title>
     <meta charset="utf-8">
-
-
-    <!--  jQuery -->
-
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
-
-    <!-- Bootstrap Date-Picker Plugin -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script> -->
   </head>
-
-  <!-- <body><center>
-    <h1><center>Apply leave</center></h1>
-<div class="container" style="max-width:600px;margin:60px auto;">    
- 
-
-  <form class="form-horizontal">
-  <div class="form-group">
-    <table border="1">
-      <tr>
-        <th><label  class="col-sm-2 control-label">Name</label></th>
-        <th><input type="text" class="form-control" id="name"></th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">Reporting Senior</label></th>
-        <th><input type="text" class="form-control" id="reporter" ></th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">From date:</label></th>
-        <th>  
-          <div class="input-group date" data-provide="datepicker">
-            <input class="datepicker" id='fromDate' data-date-format="yyyy/mm/dd">
-               <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
-          </div>
-        </th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">To date:</label></th>
-        <th>  
-          <div class="input-group date" data-provide="datepicker">
-            <input class="datepicker" id='toDate'>
-               <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
-          </div>
-        </th>
-      </tr>
-      <tr>
-        <th><label class="col-sm-2 control-label">Select leave</label></th>
-          <th><select name="selValue" class="selectpicker" id="type">
-            <option value="select" >select leave</option>
-          </select>
-        </th>
-      </tr>
-      <tr>
-        <th><label  class="col-sm-2 control-label">Reason</label></th>
-        <th><input type="text" class="form-control" id="reason" required></th>
-      </tr>
-      <tr><center>
-        <th colspan="2"><button onclick="apply()" type="button" class="btn btn-default">Apply</button></th></center>
-      </tr>
-    </table>
-  </div>
-</form>
-</div>
-</center>
-</body> -->
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"> </script> -->
-<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">   -->
 <script type="text/javascript">
   var base_url = "http://127.0.0.1:8000/leave/"; 
-  // var user = sessionStorage.getItem('user')
-  // var id = "&id="+user
   var userid = geturl();
   alert(userid.id);
   var id="&id="+userid.id; 
@@ -135,13 +63,6 @@
     });
 
     function apply() {
-      // $('#form').validate({
-      //     rules: {
-      //       Reason: {
-      //         required: true
-      //       },
-      //     }
-      //   });
         var data = new Array();
         data[0] = $("#name").val(); 
         data[1] = $("#type").val();
@@ -164,6 +85,7 @@
           dataType: "json",
           success: function (result) {
             alert("Your Leave Applied");
+            window.close();
           },
           error: function (result) {
             alert("fail");
@@ -172,17 +94,6 @@
         });
 
       }
-      // $(document).ready(function(){
-      //   $('#form').validator({
-      //     comment:{
-      //       validators:{
-      //         notEmpty:{
-      //           message:'Please enter reasonn'
-      //         }
-      //       }
-      //     }
-      //   })
-      // })
 </script>
 </head>
   <body>
@@ -226,19 +137,9 @@
           <option value="select" class="form-control">select leave</option>
         </select>
       </div>
-
-
-      <!-- <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
-            <div id="messages"></div>
-        </div>
-    </div> -->
-
-
       <div class="form-row">
         <label>Reason:</label><br>
         <textarea rows="4" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
-        <!-- <input type="text" class="form-control" id="reason"> -->
       </div>
       <br>
       <center>
@@ -247,4 +148,286 @@
     </div>   
   </form>
 </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Leave Apply</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
+
+    <style>
+* {
+    box-sizing: border-box;
+}
+
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.container { 
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    height: 110%;
+    justify-content: center;
+    align-items: center;
+}
+
+.col-25 {
+    font-size: 15px;
+    float: left;
+    width: 25%;
+    margin-top: 10px;
+}
+
+.col-75 {
+    float: left;
+    width: 65%;
+    margin-top: 10px;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+/*@media (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}*/
+@media (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+.button {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+/*  height: 5px
+*/}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>
+
+</head>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script type="text/javascript">
+  var base_url = "http://127.0.0.1:8000/leave/"; 
+  // var user = sessionStorage.getItem('user')
+  // var id = "&id="+user
+  var userid = geturl();
+  alert(userid.id);
+  var id="&id="+userid.id; 
+  alert("er"+id);
+
+    function geturl(varname){
+        var url = window.location.href;
+        var vars = {}
+        var hashes = url.split("?")[1];
+        var hash = hashes.split("&");
+        for (i=0; i<hash.length; i++){
+            params = hash[i].split("=");
+            vars[params[0]] = params[1];
+        }return vars;
+    }
+
+    $(document).ready(function() {
+
+      $( "#datepicker" ).datepicker();
+
+       $.ajax({
+        type: "GET",
+        dataType: "json",
+        url:  base_url+"employee/?format=json"+id,
+        success: function(data) { 
+          $.each(data, function(index, data){
+              $("#name").val(data.name);
+              $("#reporter").val(data.reporting_senior.name);
+          });
+        }
+      });
+       $('.datepicker').datepicker({
+        dateFormat: 'yy-mm-dd'
+       });
+
+      $.ajax({
+      type : "GET",
+      dataType : "json",
+      url: base_url+"types/?format=json",
+      success : function(data){
+        $.each(data, function(index, result){
+          var credit="<option>"+result.catagory +"</option>";
+          $(credit).appendTo('.selectpicker');
+        });
+      }
+    });
+    });
+
+    function apply() {
+        var data = new Array();
+        data[0] = $("#name").val(); 
+        data[1] = $("#type").val();
+        data[2] = $("#fromDate").val();
+        data[3] = $("#toDate").val();  
+        data[4] = $("#reason").val(); 
+        console.log(data[3]);
+        console.log(data);
+        $.ajax({
+          type: "POST",
+          url:  base_url+"apply/",
+          data: JSON.stringify({ 
+            "name": data[0],
+            "leave_type":data[1],
+            "from_date":data[2],
+            "to_date":data[3], 
+            "reason": data[4] 
+          }),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (result) {
+            alert("Your Leave Applied");
+          },
+          error: function (result) {
+            alert("fail");
+            console.log(result);
+          }
+        });
+      }
+</script>
+</head>
+  <body>
+    <div class="container">
+      <form id="form" role="form" data-toggle="validator">
+        <center>
+          <div class="jumbotron" style="font-family:Georgia">
+            <h2 class ="text-center" for="example-text-input" value="name">Apply leave</h2>    
+          </div>
+        </center>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-25">
+              <label  class="text-center"><strong>Name:</strong></label>
+            </div>
+            <div class="col-75">
+              <input type="text" class="form-control" id="name" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-25">
+              <label  class="text-center"><strong>Reporting Senior:</strong></label>
+            </div>
+            <div class="col-75">
+              <input type="text" class="form-control" id="reporter" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-25">
+              <div class="form-group col-md-6">
+                <label class="text-center"><strong>From </strong></label>
+              </div>
+            </div>
+              <div class="col-75">
+                <input class="datepicker form-control" id='fromDate' data-date-format="yyyy/mm/dd" readonly>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-25">
+            <div class="form-group col-md-6">
+                <label class="text-center"><strong>To </strong></label>
+              </div>
+            </div>
+              <div class="col-75">
+                <input class="datepicker form-control" id='toDate' data-date-format="yyyy/mm/dd" readonly>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-25">
+            <label for="leave"><strong>Select leave:</strong></label>
+          </div>
+          <div class="col-75">
+            <select name="selValue" class="selectpicker" id="type">
+              <option value="select" class="form-control">select leave</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-25">
+            <label><strong>Reason</strong></label>
+          </div>
+          <div class="col-75">
+            <textarea class="form-control" rows="4" cols="70" id="reason" name="comment" placeholder="Reason"> </textarea>
+          </div>
+        </div>
+      </div>
+      <center>
+        <!-- <button class="button" value="apply" onclick="apply()">Apply</button> -->
+        <input class="btn btn-success" value="Apply" onclick="apply()" >
+      </center>
+    </form>
+  </div>
+</body>
 </html>
+

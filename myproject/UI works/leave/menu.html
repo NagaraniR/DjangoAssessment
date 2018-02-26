@@ -18,6 +18,14 @@
         width:200px;
         height:30px;
     }
+    .container { 
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    height: 85%;
+    justify-content: center;
+    align-items: center;
+}
 </style>
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -105,50 +113,49 @@ $(document).ready(function(){
 
 </head>
 <body>
-    
-    <div class="jumbotron" style="font-family:Georgia">
-        <h2 class ="text-center">Leave Application</h2>
-        <p class ="text-center"> Leave Request Approval Form<p>    
-    </div>
-    <form>
-        <div class="container">
+    <div class="container">
+        <div class="jumbotron" style="font-family:Georgia">
+            <h1 class ="text-center"> Leave Request Approval Form</h1>    
+        </div>
+        <form>
+        <!-- <div class="container"> -->
             <div class="form-group">
                 <label class="text-center"  for="example-text-input" value="name">Name:</label>
-                <input  class="form-control" id="name">
+                <input  class="form-control" id="name" readonly>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-center" for="example-text-input" value="name">From Date:</label>
-                    <input class="form-control" id="from_date">
+                    <input class="form-control" id="from_date" readonly>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-center" for="example-text-input" value="name">To Date:</label>
-                    <input class="form-control" id="to_date">
+                    <input class="form-control" id="to_date" readonly>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-center" for="name" value="name">No.Of.Days:</label>
-                    <input class="form-control" id="no_days">
+                    <input class="form-control" id="no_days" readonly>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-center" for="name" value="name">Leave Type:</label>
-                    <input class="form-control" id="leave_type">
+                    <input class="form-control" id="leave_type" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="text-center exampleTextarea" for="name" value="name">Reason:</label>
-                <input class="form-control" row="3" id="reason">
+                <input class="form-control" row="3" id="reason" readonly>
             </div>
-    </div>
-    <div id="form">
-        <center>
-            <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
-            <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
-        </center>
-    </div>    
-    </form>
-    <div id="footer">
+    <!-- </div> -->
+            <div id="form">
+                <center>
+                    <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
+                    <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
+                </center>
+            </div>    
+        </form>
+        <div id="footer">
             <p> Application courtesy
                 <a href="https://fifthgentech.com/">Fifth Genration Technology</a>.
             </p>

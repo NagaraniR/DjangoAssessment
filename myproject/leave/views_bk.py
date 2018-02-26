@@ -27,6 +27,7 @@ class User(APIView):
             return Response(serializer.data)
         else:
             return Response("Invalid id")
+                
 
 class Leave(APIView):
 
@@ -42,7 +43,7 @@ class Leave(APIView):
         
 class Apply(APIView):  
 
-
+    
     def post(self, request, format=None):
 
         # import pdb;pdb.set_trace()
@@ -73,41 +74,42 @@ class Apply(APIView):
                     print "error"
                     return JsonResponse(serializer.errors, safe=False)
         else:
-            return Response("Invalid date")     
+            return Response("Invalid date")        
      
 class Detail(APIView):
 
     def get(self, request, format=None):
-        # import pdb;pdb.set_trace()
+        import pdb;pdb.set_trace()
         pk = int(request.GET.get('id'))
-        print pk
         try:
-            employee = Employee.objects.get(id=pk)
-            print employee.id
-            reporter = Employee.objects.filter(reporting_senior=employee)
-            if reporter:
-                details = LeaveRequest.objects.filter(name=employee)
-                details_serializer =  LeaveRequestSerializer(details, many=True)
-                employees = Employee.objects.filter(reporting_senior=employee).values_list("id", flat=True)
-                status = Status.objects.get(status="Pending")
-                waiting_for_approval = LeaveRequest.objects.filter(name__in=employees, status=status.id)
-                waiting_for_approval_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
-                pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
-                return Response({
-                                "details":details_serializer.data, 
-                                "waiting_for_approval":waiting_for_approval_serializer.data,
-                                "pending_records":pending_records_serializer.data
-                                })
+            employee = Employee.objects.filter(id=pk)
+            if employee:
+                reporter = Employee.objects.filter(reporting_senior=employee)
+                if reporter:
+                    details = LeaveRequest.objects.filter(name=employee)
+                    details_serializer =  LeaveRequestSerializer(details, many=True)
+                    employees = Employee.objects.filter(reporting_senior=employee).values_list("id", flat=True)
+                    status = Status.objects.get(status="Pending")
+                    waiting_for_approval = LeaveRequest.objects.filter(name__in=employees, status=status.id)
+                    waiting_for_approval_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
+                    pending_records = LeaveRequest.objects.filter(name=employee, status=Status.objects.get(status="Pending"))
+                    pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
+                    return Response({
+                                    "details":details_serializer.data, 
+                                    "waiting_for_approval":waiting_for_approval_serializer.data,
+                                    "pending_records":pending_records_serializer.data
+                                    })
+                else:
+                    details = LeaveRequest.objects.filter(name=employee)
+                    details_serializer =  LeaveRequestSerializer(details, many=True)
+                    pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
+                    pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
+                    return Response({
+                                    "details":details_serializer.data,
+                                    "pending_records":pending_records_serializer.data
+                                    })
             else:
-                details = LeaveRequest.objects.filter(name=employee)
-                details_serializer =  LeaveRequestSerializer(details, many=True)
-                pending_records = LeaveRequest.objects.filter(name=employee.id, status=Status.objects.get(status="Pending"))
-                pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
-                return Response({
-                                "details":details_serializer.data,
-                                "pending_records":pending_records_serializer.data
-                                })
+                return Response("Invalid id")
         except Exception as exception:
                 template = template = "An exception of function {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(exception).__name__, exception.args)
@@ -119,11 +121,14 @@ class LeaveBalance(APIView):
     def get(self, request, format=None):
         pk = request.GET.get('id')
         try:
-            # import pdb;pdb.set_trace()
-            employee = Employee.objects.get(id=pk)
-            credits = LeaveCredit.objects.filter(name=employee)
-            serializer = LeaveCreditSerializer(credits, many=True)
-            return Response(serializer.data)
+            # import pdb;pdb.set_trace()s
+            employee = Employee.objects.filter(id=pk)
+            if employee:
+                credits = LeaveCredit.objects.filter(name=employee)
+                serializer = LeaveCreditSerializer(credits, many=True)
+                return Response(serializer.data)
+            else:
+                return Response("Invalid id")
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
