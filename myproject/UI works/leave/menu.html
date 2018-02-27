@@ -18,15 +18,26 @@
         width:200px;
         height:30px;
     }
+    .container { 
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    height: 85%;
+    justify-content: center;
+    align-items: center;
+}
 </style>
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ -->
 <script type="text/javascript">
 var base_url = "http://127.0.0.1:8000/leave/"; 
-
 var leave_id = (geturl()["leave_id"]);
 var userid = (geturl()["user_id"]);
-/*alert(userid)*/
 var id="&id="+leave_id; 
 var user = sessionStorage.getItem('user')
 
@@ -40,10 +51,6 @@ function geturl(varname){
         vars[params[0]] = params[1];
     }return vars;
 }
-/*file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/index.html?userid=2
-
-file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/menu.html?comment=Fever
-*/
 $(document).ready(function(){
 
     $.ajax({
@@ -141,11 +148,12 @@ $(document).ready(function(){
                 <label class="col-md-2" value="name">Reason:</label>
                 <textarea class="col-md-6" rows="4" style="resize:none" cols="70" id="reason" placeholder="Reason" readonly></textarea>
             </div>
-            </br>
-            <center>
-                <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
-                <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
-            </center>  
+            <div id="form">
+                <center>
+                    <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
+                    <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
+                </center>
+            </div>
         </div>    
     </form>
 </body>
