@@ -18,14 +18,29 @@ from django.http import JsonResponse
 class User(APIView):
     
     def get(self, request, format=None):
-        # import pdb;pdb.set_trace()
-        pk = int(request.GET.get('id'))
+        pk = request.GET.get('id')
         employee = Employee.objects.filter(id=pk)
         if employee:
             serializer = EmployeeSerializer(employee, many=True)
             return Response(serializer.data)
         else:
             return Response("Invalid id")
+        
+class LoginCheck(APIView):
+    def get(self, request, format=None):        
+        pk = request.GET.get("id")
+        employee = Employee.objects.filter(id=pk)
+        if employee:
+            reporter = Employee.objects.filter(reporting_senior=employee)
+            if reporter:
+                message={"user":"reporter"}
+                return Response(message)
+            else:
+                message={"user":"employee"}
+                return Response(message)
+        else:
+            message={"user":"invalid"}
+            return Response(message)
 
 class Leave(APIView):
 
@@ -41,9 +56,7 @@ class Leave(APIView):
         
 class Apply(APIView):  
 
-
     def post(self, request, format=None):
-
         # import pdb;pdb.set_trace()
         user = Employee.objects.get(name=request.data.get('name'))
         request.data["name"] = user.id

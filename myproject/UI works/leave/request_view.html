@@ -76,10 +76,10 @@ $(document).ready(function(){
             dataType: 'json',
             async: false,
             success: function(msg) {
-                alert(arr["reporter"]);
+                alert("Leave Approved");
+                 window.location = "index.html?userid="+userid;
             }   
         });
-        window.location.href = "/index.html?userid=2";
     }
 
     function deny(){
@@ -97,11 +97,10 @@ $(document).ready(function(){
             dataType: 'json',
             async: false,
             success: function(msg){
-                alert(msg);
+                alert("Leave Deny");
+                 window.location = "index.html?userid="+userid;
             }   
         });
-        window.location = window.location.href("index.html?userid="+user);
-        /*window.location.href*/
     }
 </script>
 </head>
@@ -143,8 +142,8 @@ $(document).ready(function(){
             </div>
             </br>
             <center>
-                <input type="submit" class="btn btn-success" value="Approve" onclick=approve()>
-                <input type="submit" class="btn btn-danger" value= "Deny" onclick=deny()>
+                <input type="button" class="btn btn-success" value="Approve" onclick=approve()>
+                <input type="button" class="btn btn-danger" value= "Deny" onclick=deny()>
             </center>  
         </div>    
     </form>

@@ -2,23 +2,34 @@
 <html>
 <meta charset="utf-8">
 <title>Login</title>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js">
-	function getusername() {
-		if($('#userid').val() == ''){
-        	alert('Please fill out your id.');
-        	}
-        	return false;
-        else 
-			var userid = getValue("userid");
-			document.write(userid);
-			return userid
-	}
-	/*function IsEmpty(){
-		if(document.forms['login'].question.value === "")
-  		{
-    		alert("empty");
-    		return false;
-  		}*/
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+function myFunction(){
+	var user_id = $("#userid").val();
+	var base_url = "http://127.0.0.1:8000/leave/"; 
+	$(document).ready(function(){
+		$.ajax({
+			type : "GET",
+			dataType : "json",
+			url : base_url+"login/?format=json&id="+user_id,
+			contentType : 'application/json',
+			success : function(data){
+			    $.each(data, function(index, data){
+			       var user_type = data;
+			       if(user_type == "invalid"){
+			 			alert("Sorry worng user")
+			       }
+			       else{
+			       		window.location = "index.html?user_id="+user_id+"&user="+user_type; 
+			       }
+			    });
+			}
+		});
+	});	
+}
+
+	
 </script>
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <style>
@@ -47,13 +58,12 @@
 		<div class="row">
 			<div class="Absolute-Center is-Responsive">
 			<div class="col-sm-6 col-md-10 col-md-offset-1">
-				<form action="index.html" name=login method="get">
-				<form id="login" action="index.html" name=login method="get">
+				<form id="login" method="get">
 					<div class="text-center" style="font-family:Georgia">
 						<label>Search</label>
-						<input type="text" id="userid" name=userid placeholder="User id"><br><br>
+						<input type="text" id="userid" placeholder="User id"><br><br>
 						<center>
-							<button class="btn btn btn-default" onClick="getusername();" type="submit">Search</button>
+							<button class="btn btn btn-default" onclick="myFunction()" type="button">Search</button>
 						</center>
 					</div>
 				</form>

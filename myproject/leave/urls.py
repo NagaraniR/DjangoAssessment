@@ -5,7 +5,8 @@ from leave import views
 
 urlpatterns = [
 
-url(r'^employee/$', views.User.as_view(), name= 'employee'),
+url(r'^employees/$', views.User.as_view(), name= 'employee'),
+url(r'^login/$', views.LoginCheck.as_view(), name= 'login'),
 url(r'^types/$', views.Leave.as_view(), name= 'leave_types'),
 url(r'^apply/$', views.Apply.as_view(), name = 'apply'),
 url(r'^details/$', views.Detail.as_view(), name = 'details'),
