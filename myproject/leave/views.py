@@ -153,19 +153,20 @@ class DenyView(APIView):
     
     def put(self,request, format=None):
         try:
-            user = LeaveRequest.objects.get(id=request.data["id"])
-            if user:
+            leave = LeaveRequest.objects.get(id=request.data["id"])
+            reporter = Employee.objects.get(id=request.data["reporter"])
+            if leave.reporter == reporter:
                 status = Status.objects.get(code=101)
-                if user.status == status:
-                    serializer = LeaveRequestSerializer(user)
+                if leave.status == status:
+                    serializer = LeaveRequestSerializer(leave)
                     return Response(serializer.data)
                 else:
-                    user.status = status
-                    user.save()
-                    serializer = LeaveRequestSerializer(user)
+                    leave.status = status
+                    leave.save()
+                    serializer = LeaveRequestSerializer(leave)
                     return Response(serializer.data)
             else:
-                return Response(serializer.errors)
+                return Response("Wrong user")
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
@@ -174,18 +175,20 @@ class DenyView(APIView):
 class ApproveView(APIView):
 
     def put(self,request,format=None):
+        # import pdb;pdb.set_trace()
         try:
-            user = LeaveRequest.objects.get(id=request.data["id"])
-            if user:
+            leave = LeaveRequest.objects.get(id=request.data["id"])
+            reporter = Employee.objects.get(id=request.data["reporter"])
+            if leave.reporter == reporter:
                 status = Status.objects.get(code=100)
-                if user.status != status:
-                    user_data = self.check_leave_type(user)
-                    user.status = status
-                    user.save()
+                if leave.status != status:
+                    user_data = self.check_leave_type(leave)
+                    leave.status = status
+                    leave.save()
                     serializer = LeaveRequestSerializer(user_data)
                     return Response(serializer.data)              
             else:
-                return Response(serializer.errors)
+                return Response("Wrong user")
         except Exception as exception:
             template = "An exception of type function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)

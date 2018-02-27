@@ -22,12 +22,13 @@
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
-
-var userid = (geturl()["userid"]);
 var base_url = "http://127.0.0.1:8000/leave/"; 
-var id="&id="+userid; 
+
+var leave_id = (geturl()["leave_id"]);
+var userid = (geturl()["user_id"]);
+/*alert(userid)*/
+var id="&id="+leave_id; 
 var user = sessionStorage.getItem('user')
-alert(user)
 
 function geturl(varname){
     var url = window.location.href;
@@ -39,7 +40,10 @@ function geturl(varname){
         vars[params[0]] = params[1];
     }return vars;
 }
+/*file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/index.html?userid=2
 
+file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/menu.html?comment=Fever
+*/
 $(document).ready(function(){
 
     $.ajax({
@@ -59,7 +63,10 @@ $(document).ready(function(){
     });
 
     function approve(){
-        var arr = {"id": userid}
+        var arr = {
+            "id": leave_id,
+            "reporter": userid
+        }
         $.ajax({
             type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
             dataType: 'json', // Set datatype - affects Accept header
@@ -69,13 +76,17 @@ $(document).ready(function(){
             dataType: 'json',
             async: false,
             success: function(msg) {
-                alert(msg);
+                alert(arr["reporter"]);
             }   
         });
+        window.location.href = "/index.html?userid=2";
     }
 
     function deny(){
-        var arr = {"id": userid}
+        var arr = {
+            "id":leave_id ,
+            "reporter":userid
+        }
         console.log( JSON.stringify(arr));
         $.ajax({
             type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
@@ -85,11 +96,12 @@ $(document).ready(function(){
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
-
             success: function(msg){
                 alert(msg);
             }   
         });
+        window.location = window.location.href("index.html?userid="+user);
+        /*window.location.href*/
     }
 </script>
 </head>
@@ -102,26 +114,32 @@ $(document).ready(function(){
         <div class="container">
             <div class="row">
                 <label class="col-md-2" value="name">Name:</label>
-                <input  class="form-control col-md-4" id="name" readonly>
+                <input  class="form-control col-md-6" id="name" readonly>
             </div>
             </br>
             <div class="row ">
                 <label class="col-md-2" value="from_date">From Date:</label>
-                <input class="form-control col-md-4" id="from_date" readonly>
+                <input class="form-control col-md-6" id="from_date" readonly>
+                </div>
+            </br>
+            <div class="row ">
                 <label class="col-md-2" value="name">To Date:</label>
-                <input class="form-control col-md-4" id="to_date" readonly>
+                <input class="form-control col-md-6" id="to_date" readonly>
                 </div>
             </br>
             <div class="row">
                 <label class="col-md-2" value="name">No.Of.Days:</label>
-                <input class="form-control col-md-4" id="no_days" readonly>
-                <label class="col-md-2" for="name" value="name">Leave Type:</label>
-                    <input class="form-control col-md-4" id="leave_type" readonly>
+                <input class="form-control col-md-6" id="no_days" readonly>
+            </div>
+            </br>
+            <div class="row">
+                <label class="col-md-2" value="name">Leave Type:</label>
+                <input class="form-control col-md-6" id="leave_type" readonly>
             </div>
             </br>
             <div class="row">
                 <label class="col-md-2" value="name">Reason:</label>
-                <textarea class="col-md-4" rows="4" style="resize:none" cols="70" id="reason" name="comment" placeholder="Reason" readonly></textarea>
+                <textarea class="col-md-6" rows="4" style="resize:none" cols="70" id="reason" placeholder="Reason" readonly></textarea>
             </div>
             </br>
             <center>

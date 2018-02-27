@@ -39,14 +39,14 @@ class BaseSetUp(APITestCase):
 								)
 		
 		raveena = Employee.objects.create(
-										code=1,
-										name="Raveena",
-										email="raveena@gmail.com",
-										join_date="2018-02-13",
-										mode=1,
-										designation=software_developer,
-										reporting_senior=None
-										)
+								code=1,
+								name="Raveena",
+								email="raveena@gmail.com",
+								join_date="2018-02-13",
+								mode=1,
+								designation=software_developer,
+								reporting_senior=None
+								)
 
 		nagarani = Employee.objects.create(
 								code=2,
@@ -90,56 +90,56 @@ class BaseSetUp(APITestCase):
 								)
 		
 		pending = Status.objects.create(
-							code=1,
-							status="Pending"
-							)
+								code=1,
+								status="Pending"
+								)
 
 		approved = Status.objects.create(
-							code=2,
-							status="Approved"
-							)
+								code=2,
+								status="Approved"
+								)
 		
 		rejected = Status.objects.create(
-							code=3,
-							status="Rejected"
-							)
+								code=3,
+								status="Rejected"
+								)
 		
 		LeaveRequest.objects.create(
-									name=nagarani,
-									reporter=nagarani.reporting_senior,
-									leave_type=personal,
-									from_date="2018-12-12",
-									to_date="2018-12-13",
-									no_days=2,
-									reason="marriage",
-									status=pending
-									)
+								name=nagarani,
+								reporter=nagarani.reporting_senior,
+								leave_type=personal,
+								from_date="2018-12-12",
+								to_date="2018-12-13",
+								no_days=2,
+								reason="marriage",
+								status=pending
+								)
 		
 		LeaveRequest.objects.create(
-									name=nithya,
-									reporter=nithya.reporting_senior,
-									leave_type=personal,
-									from_date="2018-12-12",
-									to_date="2018-12-13",
-									no_days=2,
-									reason="marriage",
-									status=pending
-									)
+								name=nithya,
+								reporter=nithya.reporting_senior,
+								leave_type=personal,
+								from_date="2018-12-12",
+								to_date="2018-12-13",
+								no_days=2,
+								reason="marriage",
+								status=pending
+								)
 		LeaveCredit.objects.create(
-									name=nagarani,
-									leave_type=personal,
-									available=11
-									)
+								name=nagarani,
+								leave_type=personal,
+								available=11
+								)
 		LeaveCredit.objects.create(
-									name=nagarani,
-									leave_type=sick,
-									available=11
-									)
+								name=nagarani,
+								leave_type=sick,
+								available=11
+								)
 		LeaveCredit.objects.create(
-									name=omprakash,
-									leave_type=personal,
-									available=11
-									)
+								name=omprakash,
+								leave_type=personal,
+								available=11
+								)
 
 	# def tearDown(self):
  #        del self.a
