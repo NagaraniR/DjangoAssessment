@@ -67,12 +67,6 @@ input[type=submit]:hover {
     display: table;
     clear: both;
 }
-/*@media (max-width: 600px) {
-    .col-25, .col-75, input[type=submit] {
-        width: 100%;
-        margin-top: 0;
-    }
-}*/
 @media (max-width: 600px) {
     .col-25, .col-75, input[type=submit] {
         width: 100%;
@@ -109,8 +103,6 @@ input[type=submit]:hover {
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script type="text/javascript">
   var base_url = "http://127.0.0.1:8000/leave/"; 
-  // var user = sessionStorage.getItem('user')
-  // var id = "&id="+user
   var userid = geturl();
   alert(userid.id);
   var id="&id="+userid.id; 
@@ -268,7 +260,6 @@ input[type=submit]:hover {
         </div>
       </div>
       <center>
-        <!-- <button class="button" value="apply" onclick="apply()">Apply</button> -->
         <input class="btn btn-success" value="Apply" onclick="apply()" >
       </center>
     </form>
