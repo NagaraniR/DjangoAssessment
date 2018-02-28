@@ -30,6 +30,21 @@ class User(APIView):
         except Exception as exception:
             template = "An exception of function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
+        
+class LoginCheck(APIView):
+    def get(self, request, format=None):        
+        pk = request.GET.get("id")
+        employee = Employee.objects.filter(id=pk)
+        if employee:
+            reporter = Employee.objects.filter(reporting_senior=employee)
+            if reporter:
+                message={"user":"reporter"}
+                return Response(message)
+            else:
+                message={"user":"employee"}
+                return Response(message)
+        else:
+            message={"user":"invalid"}
             return Response(message)
 
 class Leave(APIView):
@@ -45,7 +60,6 @@ class Leave(APIView):
             return Response(message)
         
 class Apply(APIView):  
-
 
     def post(self, request, format=None):
 
@@ -183,54 +197,56 @@ class DenyView(APIView):
     def put(self,request, format=None):
 
         try:
-            # import pdb;pdb.set_trace()
-            reporter = Employee.objects.get(id=request.data["mgr_id"])
+            reporter = Employee.objects.get(id=request.data["reporter_id"])
             if reporter:
                 requester = LeaveRequest.objects.get(id=request.data["request_id"])
                 if requester:
-                    if requester.reporter.name == reporter.name:
+                    if leave.reporter == reporter:
                         status = Status.objects.get(code=101)
-                        requester.status = status
-                        requester.save()
-                        serializer = LeaveRequestSerializer(requester)
-                        return Response(serializer.data)
+                        if leave.status == status:
+                            serializer = LeaveRequestSerializer(leave)
+                            return Response(serializer.data)
+                        else:
+                            leave.status = status
+                            leave.save()
+                            serializer = LeaveRequestSerializer(leave)
+                            return Response(serializer.data)
                     else:
-                        return Response("Invalid request id")
+                        return Response("Invalid Reporter")
                 else:
-                    return Response("Invalid id")
+                    return Response("Invalid request id")
             else:
-                return Response("Invalid id")
+                return Response("Invalid Id")
         except Exception as exception:
             template = "{0}:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
             return Response(message)
 
-
 class ApproveView(APIView):
 
     def put(self,request,format=None):
-
-        # import pdb;pdb.set_trace()
         try:
-            reporter = Employee.objects.get(id=request.data["mgr_id"])
+            reporter = Employee.objects.get(id=request.data["reporter_id"])
             if reporter:
                 requester = LeaveRequest.objects.get(id=request.data["request_id"])
                 if requester:
-                    if requester.reporter.name == reporter.name:
+                    if leave.reporter == reporter:
                         status = Status.objects.get(code=100)
-                        requester_data = self.check_leave_type(requester)
-                        requester.status = status
-                        requester.save()
-                        serializer = LeaveRequestSerializer(requester_data)
-                        return Response(serializer.data)
-
+                        if leave.status == status:
+                            serializer = LeaveRequestSerializer(leave)
+                            return Response(serializer.data)
+                        else:
+                            leave.status = status
+                            leave.save()
+                            serializer = LeaveRequestSerializer(leave)
+                            return Response(serializer.data)
                     else:
-                        return Response("Invalid request id")
-
+                        return Response("Invalid Reporter")
                 else:
-                    return Response("Invalid id")
+                    return Response("Invalid request id")
             else:
-                return Response("Invalid id")
+                return Response("Invalid Id")
+
         except Exception as exception:
             template = "{0}:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
