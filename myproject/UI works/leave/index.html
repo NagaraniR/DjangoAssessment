@@ -19,6 +19,15 @@
         width:200px;
         height:30px;
     }
+    .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
@@ -26,60 +35,140 @@
 
 var userid = geturl();
 var base_url = "http://127.0.0.1:8000/leave/"; 
-var id="&id="+userid["userid"];
+var id="&id="+userid[0];
+var user = userid[1];
 /*sessionStorage.setItem('key', 'value');*/
 // sessionStorage.setItem('user', userid);
 
 function geturl(varname){
   var url = window.location.href;
-  var vars = {}
+  var vars = [];
+  var params;
   var hashes = url.split("?")[1];
   var hash = hashes.split("&");
   for (i=0; i<hash.length; i++){
     params = hash[i].split("=");
-    vars[params[0]] = params[1];
-  }return vars;
+    // console.log(params);
+    vars.push(params[1]);
+   // vars[params[0]] = params[1];
+  }
+  return vars;
 }
 
+
+// $(document).ready(function(){
+//   var userid = (geturl()["userid"]);
+//   var id="&id="+userid; 
+//     $.ajax({
+//       type: "GET",
+//       dataType: "json",
+//       url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
+//       contentType:'application/json',
+//       success: function(data){
+//         // successmessage = data.details.name[]
+//         // $("label#successmessage").text(successmessage);
+//         $.each(data, function(key, value){
+//           if (data.hasOwnProperty("waiting_for_approval")) {
+//             if(key == 'waiting_for_approval'){
+//               for(var i=0; i<value.length; i++){
+//                 $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
+//                 "<td>"+value[i].from_date+"</td>"+
+//                 "<td>"+value[i].to_date+"</td>"+
+//                 "<td>"+value[i].leave_type.catagory+"</td>"+
+//                 "<td>"+value[i].no_days+"</td>"+
+//                 "<td>"+value[i].reason+"</td>"+
+//                 "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
+//               }
+//             }
+//             else if(key == "pending_records"){
+//               for(var i=0; i<value.length; i++){
+//                 $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
+//                   "<td>"+value[i].to_date+"</td>"+
+//                   "<td>"+value[i].leave_type.catagory+"</td>"+
+//                   "<td>"+value[i].no_days+"</td>"+
+//                   "<td>"+value[i].reason+"</td>"+
+//                   "<td>"+value[i].status.status+"</td></tr>")
+//               }
+//             }
+//         }
+//         else{
+//           $("#WAPPR").hide();
+//           if(key == "pending_records"){
+//               for(var i=0; i<value.length; i++){
+//                 $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
+//                   "<td>"+value[i].to_date+"</td>"+
+//                   "<td>"+value[i].leave_type.catagory+"</td>"+
+//                   "<td>"+value[i].no_days+"</td>"+
+//                   "<td>"+value[i].reason+"</td>"+
+//                   "<td>"+value[i].status.status+"</td></tr>")
+//                 }
+//               }
+//             }
+//           });
+//         }     
+//       });
+  //   $.ajax({
+  //     type : "GET",
+  //     dataType : "json",
+  //     url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
+  //     contentType : 'application/json',
+  //     success : function(data){
+  //       $.each(data, function(index, data){
+  //           if(data.leave_type.catagory != "LOP"){
+  //             $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
+  //             "<td>"+data.available+"</td><tr>")
+  //           }
+  //       });
+  //     }
+  //   });
+  // });
+
+
 $(document).ready(function(){
-  var userid = (geturl()["userid"]);
-  var id="&id="+userid; 
+
+  if(user == "reporter"){
     $.ajax({
-      type: "GET",
-      dataType: "json",
-      url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
-      contentType:'application/json',
-      success: function(data){
-        // successmessage = data.details.name[]
-        // $("label#successmessage").text(successmessage);
-        $.each(data, function(key, value){
-          if (data.hasOwnProperty("waiting_for_approval")) {
-            if(key == 'waiting_for_approval'){
-              for(var i=0; i<value.length; i++){
-                $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
-                "<td>"+value[i].from_date+"</td>"+
-                "<td>"+value[i].to_date+"</td>"+
-                "<td>"+value[i].leave_type.catagory+"</td>"+
-                "<td>"+value[i].no_days+"</td>"+
-                "<td>"+value[i].reason+"</td>"+
-                "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
-              }
-            }
-            else if(key == "pending_records"){
-              for(var i=0; i<value.length; i++){
-                $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
-                  "<td>"+value[i].to_date+"</td>"+
-                  "<td>"+value[i].leave_type.catagory+"</td>"+
-                  "<td>"+value[i].no_days+"</td>"+
-                  "<td>"+value[i].reason+"</td>"+
-                  "<td>"+value[i].status.status+"</td></tr>")
-              }
-            }
+      type:"GET",
+      dataType:"json",
+      url: base_url + "requests/waiting/?format=json"+id,
+      contentType:'json',
+      success:function(data){
+        if(typeof data == 'object'){
+          if (data.length > 0){
+            $.each(data, function(index, datas){
+               $('#waiting_for_approval').append("<tr><td>"+datas.name.name+"</td>"+
+                "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+datas.id+")'>view</button></td></tr>"); 
+            });
+          } else{
+                $('#WAPPR').hide();
+                $("#message").text("No incoming requests");
+          }
+        } else {
+          alert(data)
         }
-        else{
-          $("#WAPPR").hide();
-          if(key == "pending_records"){
-              for(var i=0; i<value.length; i++){
+      } 
+    });
+  }
+  else{
+    $('#WAPPR').hide();
+  }
+
+  $.ajax({
+    type: "GET",
+    dataType:"json",
+    url: base_url + "details/?format=json" + id,
+    contentType:'application/json',
+    success: function(data){
+      if(typeof data =='object'){
+        $.each(data, function(key, value){
+        if(key == "pending_records"){
+          if(value.length==0){
+            $("#heading").hide();
+            $("#records").hide();
+            $("#no_pending").text("No pending records");
+          }
+          else{
+            for(var i=0; i<value.length; i++){
                 $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
                   "<td>"+value[i].to_date+"</td>"+
                   "<td>"+value[i].leave_type.catagory+"</td>"+
@@ -90,9 +179,22 @@ $(document).ready(function(){
               }
             }
           });
-        }     
-      });
-    $.ajax({
+      }
+      else{
+        $("#heading").hide();
+        $("#records").hide();
+        alert("pending"+data);
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $('#WAPPR').hide();
+      alert(jqXHR.status + jqXHR.statusText);
+          }
+
+
+  });
+
+  $.ajax({
       type : "GET",
       dataType : "json",
       url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
@@ -106,7 +208,7 @@ $(document).ready(function(){
         });
       }
     });
-  });
+});
 
   function myFunction(id){
     alert(id);
@@ -114,7 +216,7 @@ $(document).ready(function(){
   }
   function apply(path){
     link = path + "?id=" + userid;
-    window.open(path + '?id=' + userid["userid"], '_blank');
+    window.open(path + '?id=' + id, '_blank');
     //window.location = path + '?id=' + userid;
   }
 </script>
@@ -130,8 +232,9 @@ $(document).ready(function(){
       <div class="wrapper"> <!-- for reasons -->
         <div class="main-content">
           <a href="ApplyScreen.html" onclick='apply(this.href);'><p>Apply Leave</p></a>
-          <h6 align="top">Pending Records</h6> 
-              <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
+          <p id="no_pending"></p>
+          <h6 align="top" id="heading">Pending Records</h6> 
+              <div id="records" style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
                 <table class="table table-bordered" id="pending">
                   <thead>
                     <tr>
@@ -157,26 +260,23 @@ $(document).ready(function(){
               </table>
             </div>  
         </div>
-        <div class="aside" id="WAPPR">
-            <h6>Waiting For Approval</h6>
-            <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
-              <table class="table table-bordered" id="waiting_for_approval">
-                <thead>
-                  <tr>
-                    <th scope="row" >Name</th>
-                    <th scope="row">From</th>
-                    <th scope="row">To</th>
-                    <th scope="row">Type</th>
-                    <th scope="row">Days</th>
-                    <th scope="row">Reason</th>
-                    <th scope="row">Status</th>
-                  </tr>
-                </thead>
-              </table>
+        <div class="aside">
+          <p id="message"></p>
+            <div id="WAPPR">
+              <h6>Waiting For Approval</h6>
+                <div style="overflow:scroll; position:relative; width:400px; height: 500px; top: 0px;">
+                  <table class="table table-bordered" id="waiting_for_approval">
+                    <thead>
+                      <tr>
+                        <th scope="row" >Name</th>
+                        <th scope="row">Status</th>
+                      </tr>
+                    </thead>
+                  </table>
+              </div>
           </div>
-      </div>
-    </div>
-  </body>
-</html>
+        </div>
+      </body>
+    </html>
 
 

@@ -145,10 +145,9 @@ class BaseSetUp(APITestCase):
 class EmployeeTest(BaseSetUp):
 	
 	def test_employee(self):
+		# print Employee.objects.all()
 		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=2")	
-		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=2), many=True)
-		print "asd", employee_serializer.data
-		self.assertEqual(response.data, employee_serializer.data)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_invalid_id(self):
 		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=10")
@@ -158,8 +157,6 @@ class LeaveTypeTest(BaseSetUp):
 
 	def test_leave_types(self):
 		response = self.client.get("http://127.0.0.1:8000/leave/types/")	
-		# leave_types = LeaveType.objects.all()
-		# leave_type_serializer = LeaveTypeSerializer(leave_types, many=True)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class  ApplyTest(BaseSetUp):
@@ -186,117 +183,92 @@ class  ApplyTest(BaseSetUp):
 		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
 		self.assertEqual(response.data,"Invalid date")
 
-	# def tearDown(self):
- #        del self.a
+	def test_from_date(self):
+		request_data = {
+	 					"name": "Nagarani",
+						"leave_type": "Personal",
+	 					"from_date": "",
+	 					"to_date": "2018-04-10",
+	 					"reason": "fever"
+	 					}
+		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
+		self.assertEqual(response.data,"Please fill from date")
 
-# class ApplyGetTestCase(BaseSetUp):
-	
-# 	def test_user_data(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/1/")	
-# 		print "hjgf", response.content
-# 		employee_serializer = EmployeeSerializer(Employee.objects.filter(id=1), many=True)
-# 		leave_serializer = LeaveTypeSerializer(LeaveType.objects.all(), many=True)
-# 		expected = {"employee":employee_serializer.data, "leave_types":leave_serializer.data}
-# 		self.assertEqual(response.data, expected)
+	def test_to_date(self):
+		request_data = {
+	 					"name": "Nagarani",
+						"leave_type": "Personal",
+	 					"from_date": "2018-04-10",
+	 					"to_date": "",
+	 					"reason": "fever"
+	 					}
+		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
+		self.assertEqual(response.data,"Please fill to date")
 
-# 	def test_response_bad_request(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/user/apply/3/")			
-# 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+class ApproveTest(BaseSetUp):
 
-# 	def test_request_not_found(self):	
-# 		response = self.client.get("http://127.0.0.1:8000/leave/applmployee/2/")	
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-		
-# class ApplyPostTestCase(BaseSetUp):	
-	
-# 	def test_post_leave_response(self):
-# 		request_data = {
-# 	 					"name": "Nagarani",
-# 						"leave_type": "Personal",
-# 	 					"from_date": "2018-04-17",
-# 	 					"to_date": "2018-04-20",
-# 	 					"reason": "fever"
-# 	 					}
-# 	 	self.response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-# 		self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+	def test_approve(self):
+		data = {
+				"mgr_id": 1,
+				"request_id": 2
+		}
+		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_request_not_found(self):
-# 		request_data = {
-# 	 					"name": "Nagarani",
-# 						"leave_type": "Personal",
-# 	 					"from_date": "2018-04-17",
-# 	 					"to_date": "2018-04-20",
-# 	 					"reason": "fever"
-# 	 					}
-# 	 	response = self.client.post("http://127.0.0.1:8000/apply/",request_data, format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+	def test_invalid_reporter(self):
+		data = {
+				"mgr_id": 7,
+				"request_id": 2
+		}
+		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
 
-# 	def test_response_format(self):
-# 		request_data = {
-# 	 					"name": "Nagarani",
-# 						"leave_type": "Personal",
-# 	 					"from_date": "2018-04-17",
-# 	 					"to_date": "2018-04",
-# 	 					"reason": "fever"
-# 	 					}
-# 	 	response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-# 		self.assertNotEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+	def test_invalid_requester(self):
+		data = {
+				"mgr_id": 1,
+				"request_id": 10
+		}
+		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
 
-# class LeaveHistoryTestCase(BaseSetUp):
+class DenyTest(BaseSetUp):
 
-# 	def test_user_history(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/user/history/2/", format='json')
+	def test_deny(self):
+		data = {
+				"mgr_id": 1,
+				"request_id": 2
+		}
+		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+	def test_invalid_reporter(self):
+		data = {
+				"mgr_id": 7,
+				"request_id": 2
+		}
+		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
+		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
+
+
+# class DetailTest(BaseSetUp):
+
+# 	def test_details(self):
+# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=2")
 # 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_unknown_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/user/history/20", format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+# 	def test_invalid_id(self):
+# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=10")
+# 		self.assertEqual(response.data, "Invalid id")
 
-# 	def test_request_not_found(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/user/leave/history=h/20", format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+# class LeaveBalanceTest(BaseSetUp):
 
-# class ReportingSeniorsRequestsTestCase(BaseSetUp):
-
-# 	def test_ReportingSeniors_requests(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/1/", format='json')
+# 	def test_balance(self):
+# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=1")
 # 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_unknown_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/WAPPR/10/", format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-# 	def test_request_not_found(self):
-# 		response = self.client.get("http://127.0.0.1:8000/WAPPR/6/", format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-# class LeaveApprovalTest(BaseSetUp):
-# 	# Test leave approval
-#     def test_approve(self):
-#         response = self.client.put('http://127.0.0.1:8000/leave/deny/', {"id": 1}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-#     #Test wrong url
-#     def test_worng_url_approve(self):
-#     	response = self.client.put('http://127.0.0.1:8000/leave/approved/', {"id": 1}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-#     #Test wrong data
-#     def test_wrong_data_approve(self):
-#     	response = self.client.get('http://127.0.0.1:8000/leave/approve/', 
-#     		{
-#     		"id": 1, 
-#     		"status":"Approved"
-#     		}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-#     def test_unexist_id(self):
-#     	response = self.client.get('http://127.0.0.1:8000/leave/approve/', {"id": 0}, 
-#         	format='json')
-#         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+# 	def test_invalid_id(self):
+# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=10")
+# 		self.assertEqual(response.data, "Invalid id")
 
 # class  LeaveBalanceTest(BaseSetUp):
 
