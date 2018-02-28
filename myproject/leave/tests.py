@@ -261,14 +261,12 @@ class ApproveTest(BaseSetUp):
 		response = cls.client.put("/leave/approve/", data, format='json')
 		cls.assertEqual(response.data, "Invalid Id")
 
-
-
 class DenyTest(BaseSetUp):
 
 	def test_deny(cls):
 		data = {
-				"mgr_id": 1,
-				"request_id": 2
+				"request_id": 1,
+				"reporter": 2
 		}
 		response = cls.client.put("/leave/deny/", data, format='json')
 		cls.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -318,3 +316,18 @@ class LeaveBalanceTest(BaseSetUp):
 	def test_invalid_id(cls):
 		response = cls.client.get("/leave/availables/?format=json&id=10")
 		cls.assertEqual(response.data, "Invalid id")
+
+class LoginTest(BaseSetUp):
+
+	def test_reporter_login(cls):
+		response = cls.client.get("/leave/login?id=1")
+		cls.assertEqual(response.data,"{user:reporter}")
+
+	def test_employee_login(cls):
+		response = cls.client.get("/leave/login?id=4")
+		cls.assertEqual(response.data,"{user:employee}")
+
+	def test_invalid_login(cls):
+		response = cls.client.get("/leave/login?id=0")
+		cls.assertEqual(response.data,"{user:invalid}")
+

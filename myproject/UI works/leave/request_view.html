@@ -23,12 +23,9 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
 var base_url = "http://127.0.0.1:8000/leave/"; 
-
 var leave_id = (geturl()["leave_id"]);
 var userid = (geturl()["user_id"]);
-/*alert(userid)*/
 var id="&id="+leave_id; 
-var user = sessionStorage.getItem('user')
 
 function geturl(varname){
     var url = window.location.href;
@@ -40,18 +37,14 @@ function geturl(varname){
         vars[params[0]] = params[1];
     }return vars;
 }
-/*file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/index.html?userid=2
 
-file:///home/linuxuser/Desktop/omprakash_Git/LeaveApplication/DjangoAssessment/myproject/UI%20works/leave/menu.html?comment=Fever
-*/
 $(document).ready(function(){
-
     $.ajax({
         type: "GET",
         dataType: "json",
         url: base_url+"pending/requests/?format=json"+id,
         success: function(data){
-            var leave_id = $("#id").val(data.id)
+            $("#id").val(data.id)
             $("#name").val(data.name.name)
             $("#from_date").val(data.from_date)
             $("#to_date").val(data.to_date)
@@ -61,11 +54,10 @@ $(document).ready(function(){
             }     
         });
     });
-
     function approve(){
         var arr = {
-            "id": leave_id,
-            "reporter": userid
+            "request_id": leave_id,
+            "reporter_id": userid
         }
         $.ajax({
             type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
@@ -84,8 +76,8 @@ $(document).ready(function(){
 
     function deny(){
         var arr = {
-            "id":leave_id ,
-            "reporter":userid
+            "request_id":leave_id,
+            "reporter_id":userid
         }
         console.log( JSON.stringify(arr));
         $.ajax({

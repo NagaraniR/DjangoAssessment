@@ -33,7 +33,7 @@ class User(APIView):
             return Response(message)
         
 class LoginCheck(APIView):
-    def get(self, request, format=None):        
+    def get(self, request, format=None):       
         pk = request.GET.get("id")
         employee = Employee.objects.filter(id=pk)
         if employee:
@@ -131,7 +131,7 @@ class Approval(APIView):
 
     def get(self, request, format=None):
 
-        pk = int(request.GET.get('id'))
+        pk = request.GET.get('id')
         try:
             # import pdb;pdb.set_trace()
             employee = Employee.objects.filter(id=pk)
@@ -144,7 +144,7 @@ class Approval(APIView):
                     waiting_for_approval_serializer = LeaveRequestSerializer(waiting_for_approval, many=True)
                     return Response(waiting_for_approval_serializer.data)
                 else:
-                    return Response("Invalid id")
+                    return Response("Invalid id1")
             else:
                 return Response("Invalid id")
         except Exception as exception:
@@ -196,8 +196,7 @@ class LeaveRequestView(APIView):
 
 class DenyView(APIView):
     
-    def put(self,request, format=None):
-
+    def put(self, request, format=None):
         try:
             reporter = Employee.objects.filter(id=request.data["reporter_id"])
             if reporter:
@@ -205,13 +204,13 @@ class DenyView(APIView):
                 if requester:
                     if leave.reporter == reporter:
                         status = Status.objects.get(code=101)
-                        if leave.status == status:
-                            serializer = LeaveRequestSerializer(leave)
+                        if requester.status == status:
+                            serializer = LeaveRequestSerializer(requester)
                             return Response(serializer.data)
                         else:
-                            leave.status = status
-                            leave.save()
-                            serializer = LeaveRequestSerializer(leave)
+                            requester.status = status
+                            requester.save()
+                            serializer = LeaveRequestSerializer(requester)
                             return Response(serializer.data)
                     else:
                         return Response("Invalid Id")
@@ -234,16 +233,16 @@ class ApproveView(APIView):
                 if requester:
                     if leave.reporter == reporter:
                         status = Status.objects.get(code=100)
-                        if leave.status == status:
-                            serializer = LeaveRequestSerializer(leave)
+                        if requester.status == status:
+                            serializer = LeaveRequestSerializer(requester)
                             return Response(serializer.data)
                         else:
-                            leave.status = status
-                            leave.save()
-                            serializer = LeaveRequestSerializer(leave)
+                            requester.status = status
+                            requester.save()
+                            serializer = LeaveRequestSerializer(requester)
                             return Response(serializer.data)
                     else:
-                        return Response("Invalid Id")
+                        return Response("Invalid request id")
                 else:
                     return Response("Invalid request id")
             else:
