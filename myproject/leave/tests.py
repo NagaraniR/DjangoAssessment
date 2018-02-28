@@ -141,7 +141,6 @@ class BaseSetUp(APITestCase):
 								available=11
 								)
 
-
 class EmployeeTest(BaseSetUp):
 	
 	def test_employee(self):
@@ -209,74 +208,60 @@ class ApproveTest(BaseSetUp):
 
 	def test_approve(self):
 		data = {
-				"mgr_id": 1,
-				"request_id": 2
+				"request_id": 1,
+				"reporter": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		response = self.client.put("leave/approve/", data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_invalid_reporter(self):
 		data = {
-				"mgr_id": 7,
-				"request_id": 2
+				"request_id": 7,
+				"reporter": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		response = self.client.put("approve/", data, format='json')
 		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
 
 	def test_invalid_requester(self):
 		data = {
-				"mgr_id": 1,
-				"request_id": 10
+				"request_id": 1,
+				"reporter": 10
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
+		response = self.client.put("approve/", data, format='json')
 		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
 
 class DenyTest(BaseSetUp):
 
 	def test_deny(self):
 		data = {
-				"mgr_id": 1,
-				"request_id": 2
+				"request_id": 1,
+				"reporter": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
+		response = self.client.put("leave/deny/", data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 	def test_invalid_reporter(self):
 		data = {
-				"mgr_id": 7,
-				"request_id": 2
+				"request_id": 7,
+				"reporter": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
+		response = self.client.put("leave/deny/", data, format='json')
 		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
 
+class LoginTest(BaseSetUp):
 
-# class DetailTest(BaseSetUp):
+	def test_reporter_login(self):
+		response = self.client.put("/leave/login?id=1")
+		self.assertEqual(response.data,"{user:reporter}")
 
-# 	def test_details(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=2")
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_employee_login(self):
+		response = self.client.put("/leave/login?id=4")
+		self.assertEqual(response.data,"{user:employee}")
 
-# 	def test_invalid_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=10")
-# 		self.assertEqual(response.data, "Invalid id")
+	def test_invalid_login(self):
+		response = self.client.put("/leave/login?id=0")
+		self.assertEqual(response.data,"{user:invalid}")
 
-# class LeaveBalanceTest(BaseSetUp):
 
-# 	def test_balance(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=1")
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_invalid_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=10")
-# 		self.assertEqual(response.data, "Invalid id")
 
-# class  LeaveBalanceTest(BaseSetUp):
-
-# 	def test_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/available/57/', format='json')
-# 		self.assertEqual(response.content, '{"Leave available":[{"id":34,"available":11,"name":57,"leave_type":34},{"id":35,"available":11,"name":57,"leave_type":35}]}')
-
-# 	def test_badurl_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-		

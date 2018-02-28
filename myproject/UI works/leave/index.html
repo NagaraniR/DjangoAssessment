@@ -12,8 +12,7 @@ var userid = geturl();
 var base_url = "http://127.0.0.1:8000/leave/"; 
 var id="&id="+userid[0];
 var user = userid[1];
-/*sessionStorage.setItem('key', 'value');*/
-// sessionStorage.setItem('user', userid);
+
 function geturl(varname){
   var url = window.location.href;
   var vars = [];
@@ -22,87 +21,15 @@ function geturl(varname){
   var hash = hashes.split("&");
   for (i=0; i<hash.length; i++){
     params = hash[i].split("=");
-    // console.log(params);
     vars.push(params[1]);
-   // vars[params[0]] = params[1];
   }
   return vars;
 }
-
-
-// $(document).ready(function(){
-//   var userid = (geturl()["userid"]);
-//   var id="&id="+userid; 
-//     $.ajax({
-//       type: "GET",
-//       dataType: "json",
-//       url: "http://127.0.0.1:8000/leave/details/?format=json&"+id,
-//       contentType:'application/json',
-//       success: function(data){
-//         // successmessage = data.details.name[]
-//         // $("label#successmessage").text(successmessage);
-//         $.each(data, function(key, value){
-//           if (data.hasOwnProperty("waiting_for_approval")) {
-//             if(key == 'waiting_for_approval'){
-//               for(var i=0; i<value.length; i++){
-//                 $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
-//                 "<td>"+value[i].from_date+"</td>"+
-//                 "<td>"+value[i].to_date+"</td>"+
-//                 "<td>"+value[i].leave_type.catagory+"</td>"+
-//                 "<td>"+value[i].no_days+"</td>"+
-//                 "<td>"+value[i].reason+"</td>"+
-//                 "<td>"+"<button id='view' class='btn btn-primary btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
-//               }
-//             }
-//             else if(key == "pending_records"){
-//               for(var i=0; i<value.length; i++){
-//                 $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
-//                   "<td>"+value[i].to_date+"</td>"+
-//                   "<td>"+value[i].leave_type.catagory+"</td>"+
-//                   "<td>"+value[i].no_days+"</td>"+
-//                   "<td>"+value[i].reason+"</td>"+
-//                   "<td>"+value[i].status.status+"</td></tr>")
-//               }
-//             }
-//         }
-//         else{
-//           $("#WAPPR").hide();
-//           if(key == "pending_records"){
-//               for(var i=0; i<value.length; i++){
-//                 $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
-//                   "<td>"+value[i].to_date+"</td>"+
-//                   "<td>"+value[i].leave_type.catagory+"</td>"+
-//                   "<td>"+value[i].no_days+"</td>"+
-//                   "<td>"+value[i].reason+"</td>"+
-//                   "<td>"+value[i].status.status+"</td></tr>")
-//                 }
-//               }
-//             }
-//           });
-//         }     
-//       });
-  //   $.ajax({
-  //     type : "GET",
-  //     dataType : "json",
-  //     url : "http://127.0.0.1:8000/leave/availables/?format=json"+id,
-  //     contentType : 'application/json',
-  //     success : function(data){
-  //       $.each(data, function(index, data){
-  //           if(data.leave_type.catagory != "LOP"){
-  //             $("#available").append("<tr><td>"+data.leave_type.catagory+"</td>"+
-  //             "<td>"+data.available+"</td><tr>")
-  //           }
-  //       });
-  //     }
-  //   });
-  // });
-
 $(document).ready(function(){
-
   $.ajax({
     type : "GET",
     dataType : "json",
-    url : base_url+"employees/?format=json"+id,
+    url : base_url+"employee/?format=json"+id,
     contentType : 'application/json',
     success : function(data){
        $.each(data, function(index, data){
@@ -110,7 +37,6 @@ $(document).ready(function(){
       });
     }
   });
-
   if(user == "reporter"){
     $.ajax({
       type:"GET",
@@ -137,7 +63,6 @@ $(document).ready(function(){
   else{
     $('#WAPPR').hide();
   }
-
   $.ajax({
     type: "GET",
     dataType:"json",
@@ -148,7 +73,6 @@ $(document).ready(function(){
         $.each(data, function(key, value){
         if(key == "pending_records"){
           if(value.length==0){
-            alert("length");
             $("#heading").hide();
             $("#records").hide();
             $("#no_pending").text("No pending records");
@@ -175,11 +99,8 @@ $(document).ready(function(){
     error: function (jqXHR, textStatus, errorThrown) {
       $('#WAPPR').hide();
       alert(jqXHR.status + jqXHR.statusText);
-          }
-
-
+    }
   });
-
   $.ajax({
       type : "GET",
       dataType : "json",
@@ -194,54 +115,9 @@ $(document).ready(function(){
         });
       }
     });
-
-  // $.ajax({
-  //   type: "GET",
-  //   dataType: "json",
-  //   url: base_url+"details/?format=json&"+id,
-  //   contentType:'application/json',
-  //   success: function(data){
-  //     $.each(data, function(key, value){
-  //       if (data.hasOwnProperty("waiting_for_approval")){
-  //         if(key == 'waiting_for_approval'){
-  //           for(var i=0; i<value.length; i++){
-  //             $('#waiting_for_approval').append("<tr><td>"+value[i].name.name+"</td>"+
-  //               "<td>"+"<button id='view' class='btn btn-info btn-xs' onclick='myFunction("+value[i].id+")'>view</button></td></tr>");
-  //             }
-  //           }
-  //         else if(key == "pending_records"){
-  //           for(var i=0; i<value.length; i++){
-  //             $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
-  //               "<td>"+value[i].to_date+"</td>"+
-  //               "<td>"+value[i].leave_type.catagory+"</td>"+
-  //               "<td>"+value[i].no_days+"</td>"+
-  //               "<td>"+value[i].reason+"</td>"+
-  //               "<td>"+value[i].status.status+"</td></tr>"
-  //             )
-  //           }
-  //         }
-  //       }
-  //       else{
-  //         $("#WAPPR").hide();
-  //         if(key == "pending_records"){
-  //           for(var i=0; i<value.length; i++){
-  //             $("#pending").append("<tr><td>"+value[i].from_date+"</td>"+
-  //               "<td>"+value[i].to_date+"</td>"+
-  //               "<td>"+value[i].leave_type.catagory+"</td>"+
-  //               "<td>"+value[i].no_days+"</td>"+
-  //               "<td>"+value[i].reason+"</td>"+
-  //               "<td>"+value[i].status.status+"</td></tr>"
-  //             )
-  //           }
-  //         }
-  //       }
-  //     });
-  //   }     
-  // });
 });
-
 function myFunction(id){
-  window.location = 'request_view.html?leave_id='+ id +"&user_id="+userid;
+  window.location = 'request_view.html?leave_id='+ id +"&user_id="+userid[0];
 }
 function apply(path){
   link = path + "?id=" + userid;
@@ -250,9 +126,12 @@ function apply(path){
 </script>
 </head>
   <body>
-    <div class="jumbotron" style="font-family:Georgia">
-      <h2 class ="text-center">Leave Application</h2>
-      <div class="col-md-12 text-right"  id="name">Welcome, </div>
+      <div class="jumbotron style="font-family:Georgia"">
+        <h3 class ="text-center">Leave Application</h3>
+        <h6 class ="text-center">Status</h6>
+          <a href="login.html"><p class="alignleft">Home</p></a>
+          <p id="name" class="alignright">Welcome, </p>
+      
     </div>
     <div class="container">
       <div class="col-md-12 text-right">
@@ -270,7 +149,7 @@ function apply(path){
           </thead>
         </table>
         <h6 align="top">Pending records</h6> 
-        <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
+        <div style="overflow:scroll; position:relative; width:auto; height:200px; top: 0px;">
           <table class="table table-bordered" id="pending">
             <thead>
               <tr>
@@ -287,7 +166,7 @@ function apply(path){
       </div>
         <div class="aside" id="WAPPR">
           <h6>Incoming leave requests</h6>
-          <div style="overflow:scroll; position:relative; width:400px; height:400px; top: 0px;">
+          <div style="overflow:scroll; position:relative; width:400px; height:auto: 0px;">
             <table class="table table-bordered" id="waiting_for_approval">
               <thead>
               <tr>

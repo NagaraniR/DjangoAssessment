@@ -26,6 +26,12 @@
 .wrapper, html, body{
     height: 100%;
 }
+.alignleft {
+	float: left;
+}
+.alignright {
+	float: right;
+}
 .btn-success{color:#fff;background-color:#28a745;border-color:#28a745}
 .btn-success:hover{color:#fff;background-color:#218838;border-color:#1e7e34}
 .btn-success.focus,.btn-success:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}
