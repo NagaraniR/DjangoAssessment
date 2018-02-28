@@ -114,8 +114,6 @@ input[type=submit]:hover {
   var userid = geturl();
   alert(userid.id);
   var id="&id="+userid.id; 
-  alert("er"+id);
-
     function geturl(varname){
         var url = window.location.href;
         var vars = {}
@@ -181,12 +179,12 @@ input[type=submit]:hover {
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function (result) {
-            alert("Your Leave Applied");
+            alert(result);
           },
-          error: function (result) {
-            alert("fail");
-            console.log(result);
-          }
+          // error: function (result) {
+          //   alert(result);
+          //   console.log(result);
+          // }
         });
       }
 </script>

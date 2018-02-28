@@ -19,5 +19,5 @@ from leave import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^leave/', include('leave.urls')),
+    url(r'^leave/', include('leave.urls', namespace='leave')),
 ]

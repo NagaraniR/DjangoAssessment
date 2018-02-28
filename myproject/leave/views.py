@@ -30,6 +30,7 @@ class User(APIView):
         except Exception as exception:
             template = "An exception of function {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
+            return Response(message)
         
 class LoginCheck(APIView):
     def get(self, request, format=None):        
@@ -87,10 +88,8 @@ class Apply(APIView):
                             serializer = LeaveRequestApplySerializer(data=request.data, many=False)
                             if serializer.is_valid(raise_exception=True):
                                 serializer.save()
-                                print "ok"
-                                return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+                                return Response("Applied successfully")
                             else:
-                                print "error"
                                 return JsonResponse(serializer.errors, safe=False)
                     else:
                         return Response("Invalid date")
@@ -159,10 +158,13 @@ class LeaveBalance(APIView):
         pk = request.GET.get('id')
         try:
             # import pdb;pdb.set_trace()
-            employee = Employee.objects.get(id=pk)
-            credits = LeaveCredit.objects.filter(name=employee)
-            serializer = LeaveCreditSerializer(credits, many=True)
-            return Response(serializer.data)
+            employee = Employee.objects.filter(id=pk)
+            if employee:
+                credits = LeaveCredit.objects.filter(name=employee)
+                serializer = LeaveCreditSerializer(credits, many=True)
+                return Response(serializer.data)
+            else:
+                return Response("Invalid id")
         except Exception as exception:
             template = "{0}:\n{1!r}"
             message = template.format(type(exception).__name__, exception.args)
@@ -197,9 +199,9 @@ class DenyView(APIView):
     def put(self,request, format=None):
 
         try:
-            reporter = Employee.objects.get(id=request.data["reporter_id"])
+            reporter = Employee.objects.filter(id=request.data["reporter_id"])
             if reporter:
-                requester = LeaveRequest.objects.get(id=request.data["request_id"])
+                requester = LeaveRequest.objects.filter(id=request.data["request_id"])
                 if requester:
                     if leave.reporter == reporter:
                         status = Status.objects.get(code=101)
@@ -212,9 +214,9 @@ class DenyView(APIView):
                             serializer = LeaveRequestSerializer(leave)
                             return Response(serializer.data)
                     else:
-                        return Response("Invalid Reporter")
+                        return Response("Invalid Id")
                 else:
-                    return Response("Invalid request id")
+                    return Response("Invalid Id")
             else:
                 return Response("Invalid Id")
         except Exception as exception:
@@ -226,9 +228,9 @@ class ApproveView(APIView):
 
     def put(self,request,format=None):
         try:
-            reporter = Employee.objects.get(id=request.data["reporter_id"])
+            reporter = Employee.objects.filter(id=request.data["reporter_id"])
             if reporter:
-                requester = LeaveRequest.objects.get(id=request.data["request_id"])
+                requester = LeaveRequest.objects.filter(id=request.data["request_id"])
                 if requester:
                     if leave.reporter == reporter:
                         status = Status.objects.get(code=100)
@@ -241,7 +243,7 @@ class ApproveView(APIView):
                             serializer = LeaveRequestSerializer(leave)
                             return Response(serializer.data)
                     else:
-                        return Response("Invalid Reporter")
+                        return Response("Invalid Id")
                 else:
                     return Response("Invalid request id")
             else:

@@ -7,161 +7,182 @@ from models import LeaveRequest,Employee, LeaveType, LeaveCredit, Status, Design
 from .serializers import EmployeeSerializer, LeaveTypeSerializer
 from rest_framework import status
 import json
-from django.http import HttpResponsePermanentRedirect
+from django.urls import reverse
 
 
 class BaseSetUp(APITestCase):
+	
+	@classmethod
+	def setUpClass(cls):
 
-	def setUp(self):
-		self.client = APIClient()
+		cls.client = APIClient()
 
-		software_developer = Designation.objects.create(
+		cls.software_developer = Designation.objects.create(
 								code=1,
 								name="Software Developer"
 								)
-		software_trainee = Designation.objects.create(
+		cls.software_trainee = Designation.objects.create(
 								code=2,
 								name="software Traineer"
 								)
 		
-		personal = LeaveType.objects.create(
+		cls.personal = LeaveType.objects.create(
 								code=1,
 								catagory="Personal"
 								)
 		
-		sick = LeaveType.objects.create(
+		cls.sick = LeaveType.objects.create(
 								code=2, 
 								catagory="Sick")
 		
-		earned = LeaveType.objects.create(
+		cls.earned = LeaveType.objects.create(
 								code=3,
 								catagory="Earned"
 								)
 		
-		raveena = Employee.objects.create(
+		cls.raveena = Employee.objects.create(
 								code=1,
 								name="Raveena",
 								email="raveena@gmail.com",
 								join_date="2018-02-13",
 								mode=1,
-								designation=software_developer,
+								designation=cls.software_developer,
 								reporting_senior=None
 								)
 
-		nagarani = Employee.objects.create(
+		cls.nagarani = Employee.objects.create(
 								code=2,
 								name="Nagarani",
 								email="nagarani@gmail.com",
 								join_date="2018-02-13",
 								mode=1,
-								designation=software_developer,
-								reporting_senior=raveena
+								designation=cls.software_developer,
+								reporting_senior=cls.raveena
 								)
 		
-		nithya = Employee.objects.create(
+		cls.nithya = Employee.objects.create(
 								code=3,
 								name="Nithya",
 								email="nithya@gmail.com",
 								join_date="2018-02-13",
 								mode=1,
-								designation=software_developer,
-								reporting_senior=raveena
+								designation=cls.software_developer,
+								reporting_senior=cls.raveena
 								)
 
-		omprakash = Employee.objects.create(
+		cls.omprakash = Employee.objects.create(
 								code=4, 
 								name="OmPrakash", 
 								email="om@gmail.com", 
 								join_date="2016-05-10", 
 								mode=1, 
-								designation=software_trainee,
-								reporting_senior=raveena
+								designation=cls.software_trainee,
+								reporting_senior=cls.raveena
 								)
 		
 		
-		prabu = Employee.objects.create(
+		cls.prabu = Employee.objects.create(
 								code=5, 
 								name="Prabu", 
 								email="prabu@gmail.com", 
 								join_date="2016-04-10", 
 								mode=1, 
-								designation=software_trainee,
-								reporting_senior=nagarani
+								designation=cls.software_trainee,
+								reporting_senior=cls.nagarani
 								)
 		
-		pending = Status.objects.create(
+		cls.pending = Status.objects.create(
 								code=1,
 								status="Pending"
 								)
 
-		approved = Status.objects.create(
+		cls.approved = Status.objects.create(
 								code=2,
 								status="Approved"
 								)
 		
-		rejected = Status.objects.create(
+		cls.rejected = Status.objects.create(
 								code=3,
 								status="Rejected"
 								)
 		
-		LeaveRequest.objects.create(
-								name=nagarani,
-								reporter=nagarani.reporting_senior,
-								leave_type=personal,
+		cls.request_one = LeaveRequest.objects.create(
+								name=cls.nagarani,
+								reporter=cls.nagarani.reporting_senior,
+								leave_type=cls.personal,
 								from_date="2018-12-12",
 								to_date="2018-12-13",
 								no_days=2,
 								reason="marriage",
-								status=pending
+								status=cls.pending
 								)
 		
-		LeaveRequest.objects.create(
-								name=nithya,
-								reporter=nithya.reporting_senior,
-								leave_type=personal,
+		cls.request_two = LeaveRequest.objects.create(
+								name=cls.nithya,
+								reporter=cls.nithya.reporting_senior,
+								leave_type=cls.personal,
 								from_date="2018-12-12",
 								to_date="2018-12-13",
 								no_days=2,
 								reason="marriage",
-								status=pending
+								status=cls.pending
 								)
-		LeaveCredit.objects.create(
-								name=nagarani,
-								leave_type=personal,
+		cls.naga_personal = LeaveCredit.objects.create(
+								name=cls.nagarani,
+								leave_type=cls.personal,
 								available=11
 								)
-		LeaveCredit.objects.create(
-								name=nagarani,
-								leave_type=sick,
+		cls.naga_sick = LeaveCredit.objects.create(
+								name=cls.nagarani,
+								leave_type=cls.sick,
 								available=11
 								)
-		LeaveCredit.objects.create(
-								name=omprakash,
-								leave_type=personal,
+		cls.om_peronal = LeaveCredit.objects.create(
+								name=cls.omprakash,
+								leave_type=cls.personal,
 								available=11
 								)
-
+	@classmethod
+	def tearDownClass(cls):
+		cls.software_developer.delete()
+		cls.software_trainee.delete()
+		cls.personal.delete()
+		cls.sick.delete()
+		cls.earned.delete()
+		cls.raveena.delete()
+		cls.nagarani.delete()
+		cls.nithya .delete()
+		cls.omprakash.delete()
+		cls.prabu.delete()
+		cls.pending.delete()
+		cls.approved.delete()
+		cls.rejected.delete()
+		cls.request_one.delete()
+		cls.request_two.delete()
+		cls.naga_personal.delete()
+		cls.om_peronal.delete()
 
 class EmployeeTest(BaseSetUp):
 	
-	def test_employee(self):
-		# print Employee.objects.all()
-		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=2")	
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_employee(cls):
+		
+		# user_id = cls.Employee.objects.first().id
+		response = cls.client.get("/leave/employee/?id={0}".format(cls.raveena.id))
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-	def test_invalid_id(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/employee/?id=10")
-		self.assertEqual(response.data, "Invalid id")
+	def test_invalid_id(cls):
+		response = cls.client.get("/leave/employee/?id={0}".format(30))
+		cls.assertEqual(response.data, "Invalid id")
 
 class LeaveTypeTest(BaseSetUp):
 
-	def test_leave_types(self):
-		response = self.client.get("http://127.0.0.1:8000/leave/types/")	
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_leave_types(cls):
+		response = cls.client.get("/leave/types/")	
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class  ApplyTest(BaseSetUp):
 
-	def test_apply(self):
+	def test_apply(cls):
 		request_data = {
 	 					"name": "Nagarani",
 						"leave_type": "Personal",
@@ -169,10 +190,10 @@ class  ApplyTest(BaseSetUp):
 	 					"to_date": "2018-04-20",
 	 					"reason": "fever"
 	 					}
-	 	response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	 	response = cls.client.post("/leave/apply/",request_data, format='json')
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-	def test_date_format(self):
+	def test_date_format(cls):
 		request_data = {
 	 					"name": "Nagarani",
 						"leave_type": "Personal",
@@ -180,10 +201,10 @@ class  ApplyTest(BaseSetUp):
 	 					"to_date": "2018-04-10",
 	 					"reason": "fever"
 	 					}
-		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-		self.assertEqual(response.data,"Invalid date")
+		response = cls.client.post("/leave/apply/",request_data, format='json')
+		cls.assertEqual(response.data,"Invalid date")
 
-	def test_from_date(self):
+	def test_from_date(cls):
 		request_data = {
 	 					"name": "Nagarani",
 						"leave_type": "Personal",
@@ -191,10 +212,10 @@ class  ApplyTest(BaseSetUp):
 	 					"to_date": "2018-04-10",
 	 					"reason": "fever"
 	 					}
-		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-		self.assertEqual(response.data,"Please fill from date")
+		response = cls.client.post("/leave/apply/",request_data, format='json')
+		cls.assertEqual(response.data,"Please fill from date")
 
-	def test_to_date(self):
+	def test_to_date(cls):
 		request_data = {
 	 					"name": "Nagarani",
 						"leave_type": "Personal",
@@ -202,81 +223,98 @@ class  ApplyTest(BaseSetUp):
 	 					"to_date": "",
 	 					"reason": "fever"
 	 					}
-		response = self.client.post("http://127.0.0.1:8000/leave/apply/",request_data, format='json')
-		self.assertEqual(response.data,"Please fill to date")
+		response = cls.client.post("/leave/apply/",request_data, format='json')
+		cls.assertEqual(response.data,"Please fill to date")
 
 class ApproveTest(BaseSetUp):
 
-	def test_approve(self):
+	def test_approve(cls):
 		data = {
-				"mgr_id": 1,
+				"reporter_id": 1,
 				"request_id": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		response = cls.client.put("/leave/approve/", data, format='json')
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-	def test_invalid_reporter(self):
+	def test_invalid_reporter(cls):
 		data = {
-				"mgr_id": 7,
+				"reporter_id": 30,
 				"request_id": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
-		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
+		response = cls.client.put("/leave/approve/", data)
+		cls.assertEqual(response.data, "Invalid Id")
 
-	def test_invalid_requester(self):
+	def test_invalid_requester(cls):
 		data = {
-				"mgr_id": 1,
-				"request_id": 10
+				"reporter_id": 1,
+				"request_id": 40
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/approve/", data, format='json')
-		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
+		response = cls.client.put("/leave/approve/", data, format='json')
+		cls.assertEqual(response.data, "Invalid Id")
+
+	def test_wrong_requester(cls):
+
+		data = {
+				"reporter_id": 1,
+				"request_id": 5
+		}
+		response = cls.client.put("/leave/approve/", data, format='json')
+		cls.assertEqual(response.data, "Invalid Id")
+
+
 
 class DenyTest(BaseSetUp):
 
-	def test_deny(self):
+	def test_deny(cls):
 		data = {
 				"mgr_id": 1,
 				"request_id": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		response = cls.client.put("/leave/deny/", data, format='json')
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-	def test_invalid_reporter(self):
+	def test_invalid_reporter(cls):
 		data = {
-				"mgr_id": 7,
+				"reporter_id": 30,
 				"request_id": 2
 		}
-		response = self.client.put("http://127.0.0.1:8000/leave/deny/", data, format='json')
-		self.assertEqual(response.data, "DoesNotExist:\n('Employee matching query does not exist.',)")
+		response = cls.client.put("/leave/deny/", data, format='json')
+		cls.assertEqual(response.data, "Invalid Id")
+
+	def test_invalid_requester(cls):
+		data = {
+				"reporter_id": 1,
+				"request_id": 40
+		}
+		response = cls.client.put("/leave/deny/", data, format='json')
+		cls.assertEqual(response.data, "Invalid Id")
+
+	def test_wrong_requester(cls):
+
+		data = {
+				"reporter_id": 1,
+				"request_id": 5
+		}
+		response = cls.client.put("/leave/deny/", data, format='json')
+		cls.assertEqual(response.data, "Invalid Id")
 
 
-# class DetailTest(BaseSetUp):
+class DetailTest(BaseSetUp):
 
-# 	def test_details(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=2")
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_details(cls):
+		response = cls.client.get("/leave/details/?format=json&&id=2")
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_invalid_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/details/?format=json&&id=10")
-# 		self.assertEqual(response.data, "Invalid id")
+	def test_invalid_id(cls):
+		response = cls.client.get("/leave/details/?format=json&&id=10")
+		cls.assertEqual(response.data, "Invalid id")
 
-# class LeaveBalanceTest(BaseSetUp):
+class LeaveBalanceTest(BaseSetUp):
 
-# 	def test_balance(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=1")
-# 		self.assertEqual(response.status_code, status.HTTP_200_OK)
+	def test_balance(cls):
+		response = cls.client.get("/leave/availables/?format=json&id=1")
+		cls.assertEqual(response.status_code, status.HTTP_200_OK)
 
-# 	def test_invalid_id(self):
-# 		response = self.client.get("http://127.0.0.1:8000/leave/availables/?format=json&id=10")
-# 		self.assertEqual(response.data, "Invalid id")
-
-# class  LeaveBalanceTest(BaseSetUp):
-
-# 	def test_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/available/57/', format='json')
-# 		self.assertEqual(response.content, '{"Leave available":[{"id":34,"available":11,"name":57,"leave_type":34},{"id":35,"available":11,"name":57,"leave_type":35}]}')
-
-# 	def test_badurl_leave_balance(self):
-# 		response = self.client.get('http://127.0.0.1:8000/leave/avail/0/', format='json')
-# 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-		
+	def test_invalid_id(cls):
+		response = cls.client.get("/leave/availables/?format=json&id=10")
+		cls.assertEqual(response.data, "Invalid id")

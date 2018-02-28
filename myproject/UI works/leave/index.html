@@ -147,8 +147,8 @@ $(document).ready(function(){
       if(typeof data =='object'){
         $.each(data, function(key, value){
         if(key == "pending_records"){
+          // console.log(value.length);
           if(value.length==0){
-            alert("length");
             $("#heading").hide();
             $("#records").hide();
             $("#no_pending").text("No pending records");
@@ -241,11 +241,11 @@ $(document).ready(function(){
 });
 
 function myFunction(id){
-  window.location = 'request_view.html?leave_id='+ id +"&user_id="+userid;
+  window.location = 'request_view.html?leave_id='+ id +"&user_id="+userid[0];
 }
-function apply(path){
-  link = path + "?id=" + userid;
-  window.open(path + '?id=' + userid["userid"], '_blank');
+function apply(){
+  link = "ApplyScreen.html" + "?id=" + userid[0];
+  window.open("ApplyScreen.html" + "?id=" + userid[0], '_blank');
 }
 </script>
 </head>
@@ -256,7 +256,8 @@ function apply(path){
     </div>
     <div class="container">
       <div class="col-md-12 text-right">
-        <a href="ApplyScreen.html"><div class="btn btn-info btn-xs">Apply leave</div></a>
+        <input class="btn btn-info btn-xs" value="Apply" onclick="apply()" >
+        <!-- <a href="ApplyScreen.html"><div class="btn btn-info btn-xs" onclick='apply(this.href);'>Apply leave</div></a> -->
       </div>
       <div class="wrapper"> <!-- for reasons -->
       <!-- <div class="main-content"> -->
@@ -269,8 +270,9 @@ function apply(path){
             </tr>
           </thead>
         </table>
-        <h6 align="top">Pending records</h6> 
-        <div style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
+        <p id="no_pending"></p>
+        <h6 align="top" id="heading">Pending records</h6> 
+        <div id="records" style="overflow:scroll; position:relative; width:400px; height: 200px; top: 0px;">
           <table class="table table-bordered" id="pending">
             <thead>
               <tr>
@@ -285,6 +287,7 @@ function apply(path){
           </table>
         </div></br><!--  </div>   -->
       </div>
+      <p id="message"></p>
         <div class="aside" id="WAPPR">
           <h6>Incoming leave requests</h6>
           <div style="overflow:scroll; position:relative; width:400px; height:400px; top: 0px;">
