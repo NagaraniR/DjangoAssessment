@@ -41,7 +41,7 @@ $(document).ready(function(){
     $.ajax({
       type:"GET",
       dataType:"json",
-      url: base_url + "requests/waiting/?format=json"+id,
+      url: base_url + "approval/awaiting/?format=json"+id,
       contentType:'json',
       success:function(data){
         if(typeof data == 'object'){
