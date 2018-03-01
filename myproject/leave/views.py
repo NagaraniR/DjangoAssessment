@@ -13,8 +13,6 @@ from rest_framework.generics import GenericAPIView
 from django.db.models.query import QuerySet
 from django.http import JsonResponse
 
-
-
 class User(APIView):
     
     def get(self, request, format=None):
@@ -33,20 +31,26 @@ class User(APIView):
             return Response(message)
         
 class LoginCheck(APIView):
+
     def get(self, request, format=None):
-        #import pdb;pdb.set_trace()       
-        pk = request.GET.get("id")
-        employee = Employee.objects.filter(id=pk)
-        if employee:
-            reporter = Employee.objects.filter(reporting_senior=employee)
-            if reporter:
-                message={"user":"reporter"}
-                return Response(message)
+        try:
+           
+            pk = request.GET.get("id")
+            employee = Employee.objects.filter(id=pk)
+            if employee:
+                reporter = Employee.objects.filter(reporting_senior=employee)
+                if reporter:
+                    message={"user":"reporter"}
+                    return Response(message)
+                else:
+                    message={"user":"employee"}
+                    return Response(message)
             else:
-                message={"user":"employee"}
+                message={"user":"invalid"}
                 return Response(message)
-        else:
-            message={"user":"invalid"}
+        except Exception as exception:
+            template = "An exception of function {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(exception).__name__, exception.args)
             return Response(message)
 
 class Leave(APIView):
@@ -64,7 +68,6 @@ class Leave(APIView):
 class Apply(APIView):  
 
     def post(self, request, format=None):
-
         try:
             # import pdb;pdb.set_trace()
             user = Employee.objects.get(name=request.data.get('name'))
@@ -103,14 +106,11 @@ class Apply(APIView):
                 message = template.format(type(exception).__name__, exception.args)
                 return Response(message)
 
-     
 class Detail(APIView):
 
     def get(self, request, format=None):
-
         pk = int(request.GET.get('id'))
         try:
-
             employee = Employee.objects.filter(id=pk)
             if employee:
                 details = LeaveRequest.objects.filter(name=employee)
@@ -118,9 +118,9 @@ class Detail(APIView):
                 pending_records = LeaveRequest.objects.filter(name=employee, status=Status.objects.get(status="Pending"))
                 pending_records_serializer =  LeaveRequestSerializer(pending_records, many=True)
                 return Response({
-                                    "details":details_serializer.data, 
-                                    "pending_records":pending_records_serializer.data
-                                    })
+                    "details":details_serializer.data, 
+                    "pending_records":pending_records_serializer.data
+                })
             else:
                 return Response("Invalid id")
         except Exception as exception:
@@ -131,7 +131,6 @@ class Detail(APIView):
 class Approval(APIView):
 
     def get(self, request, format=None):
-
         pk = request.GET.get('id')
         try:
             # import pdb;pdb.set_trace()
@@ -183,7 +182,6 @@ class LeaveRequestView(APIView):
                 template = "{0}:\n{1!r}"
                 message = template.format(type(exception).__name__, exception.args)
                 return Response(message)
-        
         elif request.GET.get('id'):
             try:
                 pk = request.GET.get('id')
@@ -212,7 +210,7 @@ class DenyView(APIView):
                             requester.status = status
                             requester.save()
                             serializer = LeaveRequestSerializer(requester)
-                            return Response(serializer.data)
+                            return Response("Leave Denied" )
                     else:
                         return Response("Invalid Id")
                 else:
@@ -241,7 +239,7 @@ class ApproveView(APIView):
                             requester.status = status
                             requester.save()
                             serializer = LeaveRequestSerializer(requester)
-                            return Response(serializer.data)
+                            return Response("Leave Approved")
                     else:
                         return Response("Invalid request id")
                 else:

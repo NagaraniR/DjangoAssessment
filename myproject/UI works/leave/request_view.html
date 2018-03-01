@@ -53,8 +53,8 @@ $(document).ready(function(){
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
-            success: function(msg) {
-                alert("Leave Approved");
+            success: function(message) {
+                alert(message);
                  window.location ="index.html?user_id="+userid+"&user="+user_type;
             }   
         });
@@ -73,8 +73,8 @@ $(document).ready(function(){
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
-            success: function(msg){
-                alert("Leave Deny");
+            success: function(message){
+                alert(message);
                  window.location ="index.html?user_id="+userid+"&user="+user_type;
             }   
         });
