@@ -13,6 +13,8 @@ var base_url = "http://127.0.0.1:8000/leave/";
 var id="&id="+userid[0];
 var user = userid[1];
 
+sessionStorage.setItem('user_type', user);
+
 function geturl(varname){
   var url = window.location.href;
   var vars = [];
