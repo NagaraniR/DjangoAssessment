@@ -69,7 +69,7 @@ class Apply(APIView):
 
     def post(self, request, format=None):
         try:
-            import pdb;pdb.set_trace()
+            # import pdb;pdb.set_trace()
             user = Employee.objects.get(name=request.data.get('name'))
             request.data["name"] = user.id
             request.data["reporter"] = user.reporting_senior.id
