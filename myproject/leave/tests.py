@@ -320,14 +320,14 @@ class LeaveBalanceTest(BaseSetUp):
 class LoginTest(BaseSetUp):
 
 	def test_reporter_login(cls):
-		response = cls.client.get("/leave/login?id=1")
+		response = cls.client.get("/leave/login/?format=json&id=1")
 		cls.assertEqual(response.data,"{user:reporter}")
 
 	def test_employee_login(cls):
-		response = cls.client.get("/leave/login?id=4")
+		response = cls.client.get("/leave/login/?format=json&id=4")
 		cls.assertEqual(response.data,"{user:employee}")
 
 	def test_invalid_login(cls):
-		response = cls.client.get("/leave/login?id=0")
-		cls.assertEqual(response.data,"{user:invalid}")
+		response = cls.client.get("/leave/login/?format=json&id=0")
+		cls.assertEqual(response.data,"{u'user': u'invalid'}")
 

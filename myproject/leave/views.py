@@ -33,7 +33,8 @@ class User(APIView):
             return Response(message)
         
 class LoginCheck(APIView):
-    def get(self, request, format=None):       
+    def get(self, request, format=None):
+        #import pdb;pdb.set_trace()       
         pk = request.GET.get("id")
         employee = Employee.objects.filter(id=pk)
         if employee:
@@ -198,11 +199,11 @@ class DenyView(APIView):
     
     def put(self, request, format=None):
         try:
-            reporter = Employee.objects.filter(id=request.data["reporter_id"])
+            reporter = Employee.objects.get(id=request.data["reporter_id"])
             if reporter:
-                requester = LeaveRequest.objects.filter(id=request.data["request_id"])
+                requester = LeaveRequest.objects.get(id=request.data["request_id"])
                 if requester:
-                    if leave.reporter == reporter:
+                    if requester.reporter == reporter:
                         status = Status.objects.get(code=101)
                         if requester.status == status:
                             serializer = LeaveRequestSerializer(requester)
@@ -227,11 +228,11 @@ class ApproveView(APIView):
 
     def put(self,request,format=None):
         try:
-            reporter = Employee.objects.filter(id=request.data["reporter_id"])
-            if reporter:
-                requester = LeaveRequest.objects.filter(id=request.data["request_id"])
+            reporter_id = Employee.objects.get(id=request.data["reporter_id"])
+            if reporter_id:
+                requester = LeaveRequest.objects.get(id=request.data["request_id"])
                 if requester:
-                    if leave.reporter == reporter:
+                    if requester.reporter == reporter_id:
                         status = Status.objects.get(code=100)
                         if requester.status == status:
                             serializer = LeaveRequestSerializer(requester)
@@ -254,7 +255,6 @@ class ApproveView(APIView):
             return Response(message)
 
     def check_leave_type(self, user):
-        import pdb;pdb.set_trace()
         lop = LeaveType.objects.get(code=100)
         if user.leave_type == lop:
             user = self.add_lop(user)
@@ -263,7 +263,6 @@ class ApproveView(APIView):
         return user
 
     def reduce_leave_balance(self, user):
-        import pdb;pdb.set_trace()
         leave_balance = LeaveCredit.objects.get(name=user.name, leave_type=user.leave_type)
         if leave_balance.available >= user.no_days:
             available = int(leave_balance.available)
