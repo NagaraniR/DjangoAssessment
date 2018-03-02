@@ -74,7 +74,7 @@ class Apply(APIView):
             request.data["name"] = user.id
             request.data["reporter"] = user.reporting_senior.id
             leave = LeaveType.objects.get(catagory = request.data["leave_type"])
-            request.data["leave_type"] = leave.id
+            
             available = LeaveCredit.objects.get(name=request.data["name"], leave_type=leave)
             # no_days = self.validate_date(from_date, to_date)
             if request.data.get('from_date'):
@@ -84,17 +84,20 @@ class Apply(APIView):
                     if from_date < to_date:
                         no_days = abs((from_date-to_date).days)+1
                         if no_days > available.available:
-                            return JsonResponse("Sorry the no of days that you applied is not available in your balance", safe=False)
+                            lop = LeaveType.objects.get(catagory = "LOP")
+                            request.data["leave_type"] = lop.id
                         else:
-                            request.data["no_days"] = no_days
-                            _status = Status.objects.get(status="Pending")
-                            request.data["status"]= _status.id
-                            serializer = LeaveRequestApplySerializer(data=request.data, many=False)
-                            if serializer.is_valid(raise_exception=True):
-                                serializer.save()
-                                return Response("Applied successfully")
-                            else:
-                                return JsonResponse(serializer.errors, safe=False)
+                            request.data["leave_type"] = leave.id
+                        request.data["no_days"] = no_days
+                        _status = Status.objects.get(status="Pending")
+                        request.data["status"]= _status.id
+                        print "request", request.data
+                        serializer = LeaveRequestApplySerializer(data=request.data, many=False)
+                        if serializer.is_valid(raise_exception=True):
+                            serializer.save()
+                            return Response("Applied successfully")
+                        else:
+                            return JsonResponse(serializer.errors, safe=False)
                     else:
                         return Response("Invalid date")
                 else:
@@ -105,7 +108,7 @@ class Apply(APIView):
                 template = template = "An exception of function {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(exception).__name__, exception.args)
                 return Response(message)
-
+                
 class Detail(APIView):
 
     def get(self, request, format=None):
