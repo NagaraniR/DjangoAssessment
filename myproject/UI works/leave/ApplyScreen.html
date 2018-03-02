@@ -171,6 +171,7 @@ input[type=submit]:hover {
           dataType: "json",
           success: function (result) {
             alert(result);
+            window.history.back();
           },
         });
       }

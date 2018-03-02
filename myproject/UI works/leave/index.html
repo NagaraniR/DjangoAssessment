@@ -6,13 +6,63 @@
 <link rel="stylesheet" type="text/css" href="../stylesheet/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"/>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<style>
+* {box-sizing: border-box;}
+
+body { 
+  margin: 0;
+  font-family: Arial;
+}
+
+.header {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  padding: 20px 10px;
+}
+
+.header a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/*.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}*/
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .header-right {
+    float: none;
+  }
+}
+</style>
 
 <script type="text/javascript">
 var userid = geturl();
 var base_url = "http://127.0.0.1:8000/leave/"; 
 var id="&id="+userid[0];
 var user = userid[1];
-
+var query=userid[0];
 sessionStorage.setItem('user_type', user);
 
 function geturl(varname){
@@ -43,7 +93,7 @@ $(document).ready(function(){
     $.ajax({
       type:"GET",
       dataType:"json",
-      url: base_url + "requests/waiting/?format=json"+id,
+      url: base_url + "approval/awaiting/?format=json"+id,
       contentType:'json',
       success:function(data){
         if(typeof data == 'object'){
@@ -74,7 +124,6 @@ $(document).ready(function(){
       if(typeof data =='object'){
         $.each(data, function(key, value){
         if(key == "pending_records"){
-          // console.log(value.length);
           if(value.length==0){
             $("#heading").hide();
             $("#records").hide();
@@ -123,25 +172,27 @@ function myFunction(id){
   window.location = 'request_view.html?leave_id='+ id +"&user_id="+userid[0];
 }
 function apply(){
-  link = "ApplyScreen.html" + "?id=" + userid[0];
-  window.location = "ApplyScreen.html" + "?id=" + userid[0];
-  // window.open("ApplyScreen.html" + "?id=" + userid[0], '_blank');
+  window.location = "ApplyScreen.html?id=" + userid[0];
+}
+function company(){
+  window.open("https://www.fifthgentech.com/", '_blank');
+}
+function history(){
+  window.location = "history.html?id=" + userid[0];
 }
 </script>
 </head>
   <body>
-      <div class="jumbotron style="font-family:Georgia"">
-        <h3 class ="text-center">Leave Application</h3>
-        <h6 class ="text-center">Status</h6>
-          <a href="login.html"><p class="alignleft">Home</p></a>
-          <p id="name" class="alignright">Welcome, </p>
-      
+    <div class="header">
+      <img class="hidden-xs" src="/home/linuxuser/Desktop/GIT/DjangoAssessment/myproject/UI works/leave/5G_logo.png" style="width:50px; height: 50px; top: 0px;" onclick="company()">
+    <div class="header-right">
+      <a class="active" href="login.html">Logout</a>
+      <a onclick="apply()">Apply</a>
+      <!-- <button onclick="apply()">Apply</button> -->
+      <a onclick = "history()">History</a>
     </div>
+  </div>
     <div class="container">
-      <div class="col-md-12 text-right">
-        <input class="btn btn-info btn-xs" value="Apply" onclick="apply()" >
-        <!-- <a href="ApplyScreen.html"><div class="btn btn-info btn-xs" onclick='apply(this.href);'>Apply leave</div></a> -->
-      </div>
       <div class="wrapper"> <!-- for reasons -->
       <!-- <div class="main-content"> -->
         <h6>Leave credits</h6>
