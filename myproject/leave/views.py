@@ -86,8 +86,6 @@ class Apply(APIView):
                         if no_days > available.available:
                             lop = LeaveType.objects.get(catagory = "LOP")
                             request.data["leave_type"] = lop.id
-                            print "lop", lop
-                            # return JsonResponse("Sorry no available balance", safe=False)
                         else:
                             request.data["leave_type"] = leave.id
                         request.data["no_days"] = no_days
